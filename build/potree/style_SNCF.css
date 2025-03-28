@@ -934,3 +934,21 @@ html, body {
   margin: 0;
   cursor: pointer;
 }
+
+/* Style pour le logo positionné en bas à droite */
+#logo {
+    position: absolute;
+    bottom: 10px;  /* 10 pixels du bord inférieur */
+    right: 10px;   /* 10 pixels du bord droit */
+    width: 100px;  /* Ajustez la largeur selon vos besoins */
+    z-index: 1000; /* S'assure que le logo est au-dessus des autres éléments */
+  }
+
+#potree_languages {
+  display: none !important;
+}
+
+  #menu_filters,
+#menu_filters + div {
+    display: none !important;
+}

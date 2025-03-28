@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>PAR Sud-Est</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Feuilles de styles Potree et personnalisées -->
+  <link rel="stylesheet" type="text/css" href="../build/potree/potree.css">
+  <link rel="stylesheet" type="text/css" href="../libs/jquery-ui/jquery-ui.min.css">
+  <link rel="stylesheet" type="text/css" href="../libs/openlayers3/ol.css">
+  <link rel="stylesheet" type="text/css" href="../libs/spectrum/spectrum.css">
+  <link rel="stylesheet" type="text/css" href="../libs/jstree/themes/mixed/style.css">
+  <link rel="stylesheet" type="text/css" href="../build/potree/custom.css">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #1e2b34;
+      font-family: 'Roboto', Arial, sans-serif;
+    }
+
+    /* Splash screen centré via Flexbox */
+    #splash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #1e2b34;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .loader {
+      border: 16px solid #f3f3f3;
+      border-top: 16px solid #3498db;
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      animation: spin 2s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .potree_container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    /* Zone Potree */
+    #verticalGallery {
+      position: fixed;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      z-index: 3000;
+    }
+    .galleryItem {
+      cursor: pointer;
+      width: 100px;
+      height: 100px;
+      border: 2px solid #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: none;
+    }
+    .galleryItem img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.9);
+    }
+    .galleryItem:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Bulle globale pour le titre */
+    #globalTitleBubble {
+      position: fixed;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      padding: 6px 10px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 20px;
+      white-space: nowrap;
+      display: none;
+      z-index: 3100;
+    }
+    #globalTitleBubble::after {
+      content: "";
+      position: absolute;
+      right: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 6px solid rgba(0, 0, 0, 0.7);
+    }
+
+    .arrow {
+      color: #dadada;
+      font-size: 30px;
+      cursor: pointer;
+      margin: 5px;
+      user-select: none;
+      transition: transform 0.2s ease;
+    }
+    .arrow:active {
+      transform: scale(0.8);
+    }
+
+    /* Popup pour images */
+    #imagePopup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    #popupContent {
+      background: #fff;
+      border-radius: 8px;
+      max-width: 800px;
+      width: 90%;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+    .closePopup {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      color: #fff;
+      background-color: #000;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      z-index: 10000;
+    }
+    .closePopup:hover {
+      background-color: #444;
+    }
+    #popupImage {
+      width: 100%;
+      height: auto;
+      max-height: 80vh;
+      object-fit: contain;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+    #popupText {
+      color: #000;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    /* Fenêtre de bienvenue avec choix de version */
+    #welcomePopup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.9);
+      z-index: 9998;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    #welcomePopupContent {
+      background: #fff;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 90%;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+    #welcomePopupContent button {
+      background: linear-gradient(145deg, #9c0390, #e10b0b);
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      margin: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 6px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      transition: transform 0.2s;
+    }
+    #welcomePopupContent button:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Popup pour vidéo */
+    #videoPopup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    #videoPopupContent {
+      background: #fff;
+      border-radius: 8px;
+      max-width: 800px;
+      width: 90%;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+    .closeVideoPopup {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      color: #fff;
+      background-color: #000;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      z-index: 10000;
+    }
+    .closeVideoPopup:hover {
+      background-color: #444;
+    }
+    #popupVideo {
+      width: 100%;
+      height: auto;
+      max-height: 80vh;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+    #videoPopupText {
+      color: #000;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    /* Popup pour instructions */
+    #instructionPopup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.7);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    #instructionPopupContent {
+      background: #fff;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 90%;
+      padding: 20px;
+      text-align: left;
+      position: relative;
+    }
+    .closeInstructionPopup {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      color: #fff;
+      background-color: #000;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      z-index: 10000;
+    }
+    .closeInstructionPopup:hover {
+      background-color: #444;
+    }
+    #instructionContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .instructionRow {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .instructionImage {
+      width: 80px;
+      height: auto;
+      flex-shrink: 0;
+    }
+    .instructionText h3 {
+      margin: 0;
+      font-size: 1.2em;
+    }
+    .instructionText p {
+      margin: 5px 0 0 0;
+      font-size: 1em;
+    }
+
+    /* Slidebar */
+    #slidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 350px;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(45, 62, 80, 0.95), rgba(28, 37, 48, 0.95));
+      color: #ecf0f1;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      z-index: 2900;
+      display: flex;
+      flex-direction: column;
+      padding-top: 10px;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+    #slidebar.open {
+      transform: translateX(0);
+    }
+    #slidebarToggle {
+      position: absolute;
+      top: 10px;
+      right: -40px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+    }
+    #slidebarToggle img {
+      width: 40px;
+      height: 40px;
+    }
+    .slidebar-header {
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+    .slidebar-header a {
+      color: #aab7b8;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .slidebar-version {
+      color: #ccc;
+      font-size: 12px;
+    }
+    .slidebar-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 20px 20px 20px;
+      text-align: justify;
+      -webkit-hyphens: auto;
+      -moz-hyphens: auto;
+      hyphens: auto;
+    }
+    .accordion-item {
+      border-bottom: 1px solid #7f8c8d;
+    }
+    .accordion-header {
+      padding: 15px 0;
+      font-size: 1.1em;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .accordion-header::after {
+      content: "\25BC";
+      font-size: 0.8em;
+      transition: transform 0.3s ease;
+    }
+    .accordion-header.active::after {
+      transform: rotate(-180deg);
+    }
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .accordion-content p {
+      margin: 10px 0;
+      line-height: 1.4;
+      text-align: justify;
+    }
+
+    /* Conteneur d'actions */
+    #splat_buttons {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 6px;
+    }
+    #splat_buttons button {
+      background: linear-gradient(145deg, #9c0390, #e10b0b);
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      font-size: 11px;
+      cursor: pointer;
+      border-radius: 6px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    #splat_buttons button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+    }
+    /* Slider du budget de points */
+    #pointBudgetContainer {
+      text-align: center;
+      color: #fff;
+      font-size: 11px;
+    }
+    #pointBudgetContainer input[type="range"] {
+      width: 100%;
+      margin-top: 5px;
+    }
+    /* Position de la caméra */
+    #cameraPosition {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      z-index: 110;
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+    }
+    #cameraPosition::before {
+      content: "";
+      background-image: url('../build/potree/resources/icons/perspective-camera.svg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+    }
+    /* Conteneur boutons caméra */
+    #buttonAndCameraContainer {
+      position: fixed;
+      top: 60px;
+      left: 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      z-index: 2000;
+    }
+    #buttonsContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .buttonFrame {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 5px 10px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+    .buttonFrame img {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Logo SNCF */
+    #logo {
+      width: 120px;
+    }
+
+    /* Tooltips */
+    .tooltip-container {
+      position: relative;
+    }
+    .custom-tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-bottom: 6px;
+      padding: 4px 8px;
+      background: rgba(0, 0, 0, 0.75);
+      color: #fff;
+      font-size: 12px;
+      border-radius: 4px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease-in-out;
+    }
+    .tooltip-container:hover .custom-tooltip {
+      opacity: 1;
+    }
+    /* Assurer que les tooltips dans les boutons flèche soient en blanc */
+    .arrow-button .custom-tooltip {
+      color: #fff;
+    }
+    .custom-tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: rgba(0, 0, 0, 0.75) transparent transparent transparent;
+    }
+    .tooltip-right .custom-tooltip {
+      bottom: auto;
+      top: 50%;
+      left: 100%;
+      transform: translateY(-50%);
+      margin-left: 6px;
+      margin-bottom: 0;
+    }
+    .tooltip-right .custom-tooltip::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: -10px;
+      transform: translateY(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent rgba(0, 0, 0, 0.75) transparent transparent;
+    }
+
+    /* Barre de visite guidée */
+    .hotspot-controls-bar {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      background-color: rgba(0,0,0,0.7);
+      border: 2px solid #3498db;
+      border-radius: 20px;
+      padding: 10px 20px;
+      z-index: 5000;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+    /* Boutons flèche */
+    .arrow-button {
+      cursor: pointer;
+      padding: 10px;
+      margin: 0 10px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+    }
+    .arrow-button img {
+      filter: brightness(0) saturate(100%) invert(26%) sepia(87%) saturate(482%) hue-rotate(184deg) brightness(92%) contrast(88%);
+    }
+    .arrow-button:hover {
+      transform: scale(1.1);
+    }
+    /* Label central (bouton de visite guidée) */
+    .hotspot-label {
+      font-size: 20px;
+      color: #fff;
+      font-weight: bold;
+      margin: 0 20px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Liste déroulante des hotspots - cachée par défaut */
+    .hotspot-list {
+      position: absolute;
+      bottom: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #000;
+      border: 2px solid #3498db;
+      border-radius: 10px;
+      padding: 10px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      display: none;
+    }
+    /* Classe pour afficher la liste */
+    .hotspot-list.active {
+      display: block;
+    }
+    .hotspot-list ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .hotspot-list li {
+      margin: 10px 0;
+    }
+    .hotspot-list li a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 16px;
+    }
+    .hotspot-list li a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Forcer les annotations Potree à être au-dessus et actives */
+    .annotation,
+    .potree_annotation {
+      z-index: 7000 !important;
+      pointer-events: auto !important;
+    }
+
+    /* Barre de son ajoutée pour gérer les audios et le seek */
+    #audioBar {
+      position: fixed;
+      bottom: 120px; /* Ajustez la position verticale si nécessaire */
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      padding: 5px 10px;  /* Moins d'espace pour une barre plus petite */
+      border-radius: 5px;
+      z-index: 6000;
+      display: flex;
+      align-items: center;
+      gap: 5px;  /* Réduction de l'espacement entre les éléments */
+    }
+
+    #audioBar input[type="range"] {
+      width: 150px; /* Réduit la largeur du slider */
+    }
+
+    #audioBar button {
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Splash screen -->
+  <div id="splash">
+    <div class="loader"></div>
+  </div>
+
+  <!-- Boutons d'actions (affichés en version Expert) -->
+  <div id="splat_buttons">
+    <div id="pointBudgetContainer">
+      <label for="pointBudgetSlider">Points affichés : <span id="pointBudgetValue">2 000 000</span></label>
+      <input type="range" id="pointBudgetSlider" min="100000" max="10000000" step="100000" value="1000000">
+    </div>
+    <button id="toggleLissage">Désactiver lissage</button>
+    <button id="toggleOBJ">Désactiver OBJ</button>
+  </div>
+
+  <!-- Boutons de contrôle (affichés en version Expert) -->
+  <div id="buttonAndCameraContainer">
+    <div id="cameraPosition" class="tooltip-container">
+      X: 0, Y: 0, Z: 0
+      <span class="custom-tooltip">Position de la caméra</span>
+    </div>
+    <div id="buttonsContainer">
+      <div id="measureButton" class="buttonFrame tooltip-container tooltip-right">
+        <img src="../build/potree/resources/icons/point.svg" alt="Mesurer">
+        <span class="custom-tooltip">Mesurer un Point</span>
+      </div>
+      <div id="deleteButton" class="buttonFrame tooltip-container tooltip-right">
+        <img src="../build/potree/resources/icons/reset_tools.svg" alt="Supprimer">
+        <span class="custom-tooltip">Supprimer les Points</span>
+      </div>
+      <div id="recenterButton" class="buttonFrame tooltip-container tooltip-right">
+        <img src="../build/potree/resources/icons/eye_2.svg" alt="Recentrer">
+        <span class="custom-tooltip">Recentrer la vue</span>
+      </div>
+      <div id="instructionButton" class="buttonFrame tooltip-container tooltip-right">
+        <img src="../build/potree/resources/icons/navigation_cube.svg" alt="Instructions">
+        <span class="custom-tooltip">Instructions de déplacement</span>
+      </div>
+      <div id="fullscreenButton" class="buttonFrame tooltip-container tooltip-right">
+        <img src="../build/potree/resources/icons/focus.svg" alt="Plein écran">
+        <span class="custom-tooltip">Plein écran</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slidebar -->
+  <div id="slidebar">
+    <div id="slidebarToggle">
+      <img src="http://localhost:8080/build/potree/resources/icons/menu_button.svg" class="potree_menu_toggle">
+    </div>
+    <div class="slidebar-header">
+      <a href="https://potree.org" target="_blank">potree.org - github</a>
+      <span class="slidebar-version">1.8.0</span>
+    </div>
+    <div class="slidebar-content">
+      <div class="accordion-item">
+        <div class="accordion-header">Informations sur le projet</div>
+        <div class="accordion-content">
+          <p>
+            Le projet est né d'une collaboration entre la SNCF, l'INSA de Strasbourg et Charles Balland, alliant l'expertise du secteur ferroviaire à l'innovation technologique académique. Ensemble, ils ont imaginé une solution innovante pour visualiser et analyser des données 3D, visant à optimiser la gestion des infrastructures.
+          </p>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <div class="accordion-header">Informations sur Potree</div>
+        <div class="accordion-content">
+          <p>
+            Potree est une bibliothèque open source qui permet de visualiser de grands nuages de points en 3D directement dans votre navigateur grâce à la technologie WebGL. Conçu pour gérer des ensembles de données volumineux (comme ceux issus de relevés LiDAR), Potree offre une navigation fluide et interactive, idéale pour explorer, analyser et partager des modèles 3D détaillés.
+          </p>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <div class="accordion-header">Une journée au PAR</div>
+        <div class="accordion-content">
+          <p>
+            Plongez au cœur d'une journée captivante au PAR de la ligne à grande vitesse Paris-Lyon, située au centre Henri Lang à Paris. Découvrez en immersion totale les coulisses d'une infrastructure moderne et innovante, où chaque instant révèle les défis et les succès d'une technologie de pointe. Vivez une expérience unique qui vous connecte au futur de la mobilité, entre passion et ingénierie de haut vol.
+          </p>
+          <img id="videoThumbnail" src="../build/potree/resources/images/Miniature.jpeg" alt="Miniature vidéo" style="width:100%; cursor:pointer;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Zone Potree -->
+  <div class="potree_container">
+    <div id="potree_render_area"></div>
+    <div id="potree_sidebar_container"></div>
+  </div>
+
+  <!-- Popup images -->
+  <div id="imagePopup">
+    <div id="popupContent">
+      <span class="closePopup">&times;</span>
+      <img id="popupImage" src="" alt="Image agrandie">
+      <div id="popupText"></div>
+    </div>
+  </div>
+
+  <!-- Fenêtre de bienvenue avec choix de version -->
+  <div id="welcomePopup">
+    <div id="welcomePopupContent">
+      <h2>Bienvenue au Poste d'Aiguillage et de Régulation de la ligne Paris-Lyon !</h2>
+      <p>Choisissez votre mode d'utilisation :</p>
+      <button id="btnExpert">Explorer (Version Expert)</button>
+      <button id="btnSimplified">Visite guidée (Version Simplifiée)</button>
+    </div>
+  </div>
+
+  <!-- Popup vidéo -->
+  <div id="videoPopup">
+    <div id="videoPopupContent">
+      <span class="closeVideoPopup">&times;</span>
+      <video id="popupVideo" controls style="width:100%; max-height:80vh; border-radius:4px;">
+        <source src="" type="video/mp4">
+        Votre navigateur ne supporte pas la vidéo.
+      </video>
+      <div id="popupVideoText" style="color:#000; font-size:14px; line-height:1.4;"></div>
+    </div>
+  </div>
+
+  <!-- Popup instructions -->
+  <div id="instructionPopup">
+    <div id="instructionPopupContent">
+      <span class="closeInstructionPopup">&times;</span>
+      <div id="instructionContainer">
+        <div class="instructionRow">
+          <img src="../build/potree/resources/images/clicgauche.png" alt="Rotation" class="instructionImage">
+          <div class="instructionText">
+            <h3>Déplacement</h3>
+            <p>Cliquez avec le bouton droit et faites glisser pour déplacer la vue.</p>
+          </div>
+        </div>
+        <div class="instructionRow">
+          <img src="../build/potree/resources/images/clicmolette.png" alt="Zoom" class="instructionImage">
+          <div class="instructionText">
+            <h3>Zoom</h3>
+            <p>Utilisez la molette pour zoomer et dézoomer.</p>
+          </div>
+        </div>
+        <div class="instructionRow">
+          <img src="../build/potree/resources/images/clicdroit.png" alt="Rotation" class="instructionImage">
+          <div class="instructionText">
+            <h3>Rotation</h3>
+            <p>Cliquez et faites glisser pour faire pivoter la vue.<br>Double-cliquez pour accélérer.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Galerie d'images -->
+  <div id="verticalGallery">
+    <span class="arrow" id="scrollUp">&#9650;</span>
+    <div class="galleryItem" data-full="../build/potree/resources/images/TGV- Mitterand.jpg" data-info="Inauguration du TGV par François Mitterand en 1981" style="display: block;">
+      <img src="../build/potree/resources/images/TGV- Mitterand.jpg" alt="Vue du TGV">
+    </div>
+    <span class="arrow" id="scrollDown">&#9660;</span>
+  </div>
+    
+  <!-- Logo SNCF -->
+  <a href="https://www.sncf-reseau.com/fr" target="_blank">
+    <img id="logo" src="../build/potree/resources/images/Logo_SNCF.png" alt="Logo SNCF">
+  </a>
+
+  <!-- Bulle globale -->
+  <div id="globalTitleBubble"></div>
+
+  <!-- Hotspot controls (Barre de visite guidée) -->
+  <div class="hotspot-controls-bar">
+    <div id="prev" class="arrow-button tooltip-container">
+      <img src="../build/potree/resources/icons/arrow_left.svg" alt="Gauche" />
+      <span class="custom-tooltip">Vue précédente</span>
+    </div>
+    <div id="hotspots" class="hotspot-label">
+      <span id="hotspotName">Commencez la visite guidée</span>
+    </div>
+    <div id="next" class="arrow-button tooltip-container">
+      <img src="../build/potree/resources/icons/arrow_right.svg" alt="Droite" />
+      <span class="custom-tooltip">Vue suivante</span>
+    </div>
+    <div id="hotspotList" class="hotspot-list">
+      <ul>
+        <li><a href="#" data-hotspot-index="0">TCO</a></li>
+        <li><a href="#" data-hotspot-index="1">Tableau 1</a></li>
+        <li><a href="#" data-hotspot-index="2">Ile de France</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Barre de son pour contrôler les audios, leur position et le play/pause -->
+  <div id="audioBar">
+    <input type="range" id="audioSeek" min="0" max="100" step="0.1" value="0">
+    <button id="playPauseButton">
+      <img id="playPauseIcon" src="../build/potree/resources/icons/pause.svg" alt="Pause" style="width:16px; height:16px;">
+    </button>
+    <button id="muteButton">
+      <img id="muteIcon" src="../build/potree/resources/icons/volume-medium-white-icon.svg" alt="Mute" style="width:16px; height:16px;">
+    </button>
+  </div>
+
+  <!-- Balises audio pour les hotspots (cachées) -->
+  <audio id="audioHotspot0" src="../build/potree/resources/audio/01.mp3" preload="auto"></audio>
+  <audio id="audioHotspot1" src="../build/potree/resources/audio/02.mp3" preload="auto"></audio>
+  <audio id="audioHotspot2" src="../build/potree/resources/audio/03.mp3" preload="auto"></audio>
+
+  <!-- Inclusion des scripts externes -->
+  <script src="../libs/jquery/jquery-3.1.1.min.js"></script>
+  <script src="../libs/jquery-ui/jquery-ui.min.js"></script>
+  <script src="../libs/spectrum/spectrum.js"></script>
+  <script src="../libs/other/BinaryHeap.js"></script>
+  <script src="../libs/tween/tween.min.js"></script>
+  <script src="../libs/d3/d3.js"></script>
+  <script src="../libs/proj4/proj4.js"></script>
+  <script src="../libs/openlayers3/ol.js"></script>
+  <script src="../libs/i18next/i18next.js"></script>
+  <script src="../libs/jstree/jstree.js"></script>
+  <script src="../build/potree/potree.js"></script>
+  <script src="../libs/plasio/js/laslaz.js"></script>
+
+  <!-- Initialisation du nuage de points, annotations, OBJ, etc. -->
+  <script type="module">
+    import * as THREE from "../libs/three.js/build/three.module.js";
+    import {OBJLoader} from "../libs/three.js/loaders/OBJLoader.js";
+    import {MTLLoader} from "../libs/three.js/loaders/MTLLoader.js";
+    
+    let initialPosition = new THREE.Vector3(25, 1.3, 19);
+    let initialTarget = new THREE.Vector3(8.5, 7.9, 4.5);
+    // Variable qui contiendra la dernière vue hotspot (définie via la barre)
+    let lastHotspotView = { position: initialPosition, target: initialTarget };
+
+    window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
+    viewer.setPointBudget(1000000);
+    viewer.setFOV(60);
+    viewer.loadSettingsFromURL();
+    viewer.setDescription("TCO du PAR de la ligne à grande vitesse Paris-Lyon");
+    
+    viewer.setEDLEnabled(true);
+    viewer.setEDLRadius(1);
+    viewer.setEDLStrength(0);
+    viewer.setEDLOpacity(1);
+    
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+    viewer.scene.scene.add(ambientLight);
+    
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(10, 10, 10);
+    viewer.scene.scene.add(directionalLight);
+    
+    Potree.loadPointCloud("../pointclouds/Salle_TCO/metadata.json", "Salle_TCO", function(e){
+      viewer.scene.addPointCloud(e.pointcloud);
+      let material = e.pointcloud.material;
+      material.size = 1.3;
+      material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
+      e.pointcloud.position.set(0, 0, 0);
+    
+      viewer.scene.view.setView(initialPosition, initialTarget);
+    
+      viewer.useHQ = false;
+      document.getElementById("toggleLissage").textContent = "Activer lissage";
+    
+      // Annotation texte
+      let annotationTexte1 = new Potree.Annotation({
+        position: new THREE.Vector3(4.84, 8.69, 1.83),
+        title: "PRS",
+        description: "Un « poste tout relais à transit souple » désigne un dispositif de commande ferroviaire reposant exclusivement sur des relais électromécaniques (d'où l'expression « tout relais ») et conçu pour permettre une gestion flexible du transit, c'est-à-dire la commutation entre différents circuits ou itinéraires de façon adaptable aux besoins opérationnels. En d'autres termes, ce type de poste assure la distribution et la redirection des signaux ou des circuits dans un système de signalisation ferroviaire, en offrant une souplesse dans la gestion des flux de trains, tout en garantissant robustesse et fiabilité grâce à une technologie éprouvée.",
+        cameraPosition: new THREE.Vector3(5.8, 8.5, 1.86),
+        cameraTarget: new THREE.Vector3(4.8, 8.7, 1.4)
+      });
+      annotationTexte1.visible = true;
+      viewer.scene.annotations.add(annotationTexte1);
+    
+      // Annotation image 1
+      let iconImage1 = $(` 
+        <span>
+          <img src="../build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      iconImage1.find("img").click((event) => {
+        event.stopPropagation();
+        // En cliquant sur l'image, on change la vue
+        viewer.scene.view.setView(annotationImage1.cameraPosition, annotationImage1.cameraTarget, 1000);
+        setTimeout(() => {
+          const imageUrl = "../build/potree/resources/images/175A0701.JPG";
+          const imageDescription = "Poste tout relais à transit souple";
+          $("#popupImage").attr("src", imageUrl);
+          $("#popupText").text(imageDescription);
+          $("#imagePopup").css("display", "flex");
+        }, 2000);
+      });
+      let annotationImage1 = new Potree.Annotation({
+        position: new THREE.Vector3(5.52, 10.17, 1.82),
+        title: iconImage1,
+        description: "PRS 3",
+        cameraPosition: new THREE.Vector3(6.34, 9.56, 2.02),
+        cameraTarget: new THREE.Vector3(5.53, 10.15, 1.40)
+      });
+      annotationImage1.visible = true;
+      viewer.scene.annotations.add(annotationImage1);
+    
+      // Annotation image 2
+      let iconImage2 = $(` 
+        <span>
+          <img src="../build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      iconImage2.find("img").click((event) => {
+        event.stopPropagation();
+        viewer.scene.view.setView(annotationImage2.cameraPosition, annotationImage2.cameraTarget, 1000);
+        setTimeout(() => {
+          const imageUrl = "../build/potree/resources/images/175A0763.JPG";
+          const imageDescription = "Région Ile de France";
+          $("#popupImage").attr("src", imageUrl);
+          $("#popupText").text(imageDescription);
+          $("#imagePopup").css("display", "flex");
+        }, 2000);
+      });
+      let annotationImage2 = new Potree.Annotation({
+        position: new THREE.Vector3(7.48, 2, 2.10),
+        title: iconImage2,
+        description: "Région Ile de France",
+        cameraPosition: new THREE.Vector3(7.78, 3.33, 2.03),
+        cameraTarget: new THREE.Vector3(7.47, 1.99, 1.66)
+      });
+      annotationImage2.visible = true;
+      viewer.scene.annotations.add(annotationImage2);
+    
+      const distanceThresholdText = 5;
+      const distanceThresholdImage = 5;
+    
+      viewer.addEventListener("update", () => {
+        let cameraPos = viewer.scene.getActiveCamera().position;
+        let distTexte1 = cameraPos.distanceTo(annotationTexte1.position);
+        annotationTexte1.visible = (distTexte1 < distanceThresholdText);
+    
+        let distImage1 = cameraPos.distanceTo(annotationImage1.position);
+        annotationImage1.visible = (distImage1 < distanceThresholdImage);
+    
+        let distImage2 = cameraPos.distanceTo(annotationImage2.position);
+        annotationImage2.visible = (distImage2 < distanceThresholdImage);
+      });
+    });
+    
+    // Chargement du modèle OBJ
+    {
+      let manager = new THREE.LoadingManager();
+      manager.onProgress = function ( item, loaded, total ) {
+        console.log( item, loaded, total );
+      };
+      let onProgress = function ( xhr ) {
+        if ( xhr.lengthComputable ) {
+          let percentComplete = xhr.loaded / xhr.total * 100;
+          console.log( Math.round(percentComplete, 2) + '% downloaded' );
+        }
+      };
+      let onError = function ( xhr ) {};
+    
+      let mtlLoader = new MTLLoader(manager);
+      mtlLoader.setPath('../model3D/');
+      mtlLoader.load('Model_TCO.mtl', function(materials) {
+        materials.preload();
+    
+        let objLoader = new OBJLoader(manager);
+        objLoader.setMaterials(materials);
+        objLoader.setPath('../model3D/');
+        objLoader.load('Model_TCO.obj', function ( object ) {
+          object.position.set(0, 0, 0);
+          object.scale.set(1, 1, 1);
+          object.rotation.set(0, 0, 0);
+          viewer.scene.scene.add( object );
+          window.objMesh = object;
+        }, onProgress, onError );
+      });
+    }
+    
+    // Gestion du bouton pour l'OBJ (version Expert)
+    document.getElementById("toggleOBJ").addEventListener("click", function () {
+      if (window.objMesh) {
+        window.objMesh.visible = !window.objMesh.visible;
+        this.textContent = window.objMesh.visible ? "Désactiver OBJ" : "Activer OBJ";
+      }
+    });
+    
+    // Fonction pour jouer l'audio correspondant à un hotspot (mise à jour pour gérer le seek)
+    function playHotspotAudio(index) {
+      for (let i = 0; i < 3; i++) {
+        let audioElem = document.getElementById("audioHotspot" + i);
+        if (audioElem) {
+          audioElem.pause();
+          audioElem.currentTime = 0;
+        }
+      }
+      let currentAudio = document.getElementById("audioHotspot" + index);
+      if (currentAudio) {
+        window.currentHotspotAudio = currentAudio;
+        currentAudio.play();
+      }
+    }
+    
+    // Gestion des hotspots
+    const hotspots = [
+      { name: "Tableau de Contrôle Optique (TCO)", position: new THREE.Vector3(8, 8, 4), target: new THREE.Vector3(1, 11, 1) },
+      { name: "Tableau 1", position: new THREE.Vector3(7.9, 11, 2.27), target: new THREE.Vector3(9.24, 11.47, 1.94) },
+      { name: "Ile de France", position: new THREE.Vector3(7.3, 4, 2.2), target: new THREE.Vector3(6.5, 2, 1.5) }
+    ];
+    function goToHotspot(i) {
+      if (i < 0 || i >= hotspots.length) return;
+      const hp = hotspots[i];
+      document.getElementById("hotspotName").textContent = hp.name;
+      viewer.scene.view.setView(hp.position, hp.target, 3000);
+      lastHotspotView = { position: hp.position, target: hp.target, name: hp.name };
+      playHotspotAudio(i);
+    }
+    let currentHotspotIndex = 0;
+    window.hotspots = hotspots;
+    window.goToHotspot = goToHotspot;
+    window.currentHotspotIndex = currentHotspotIndex;
+  </script>
+  
+  <!-- Interactions générales -->
+  <script>
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+    $(document).ready(function () {
+      $("#slidebarToggle").click(function () {
+        $("#slidebar").toggleClass("open");
+      });
+      $(".accordion-header").click(function () {
+        $(this).toggleClass("active");
+        var content = $(this).next(".accordion-content");
+        content.css("max-height", content.css("max-height") !== "0px" ? "0px" : content.prop("scrollHeight") + "px");
+      });
+    });
+    document.getElementById("toggleLissage").addEventListener("click", function () {
+      viewer.useHQ = !viewer.useHQ;
+      this.textContent = viewer.useHQ ? "Désactiver lissage" : "Activer lissage";
+    });
+    document.getElementById("pointBudgetSlider").addEventListener("input", function (e) {
+      let val = parseInt(e.target.value);
+      document.getElementById("pointBudgetValue").textContent = formatNumber(val);
+      viewer.setPointBudget(val);
+    });
+    setInterval(function() {
+      let cam = viewer.scene.getActiveCamera();
+      if(cam && cam.position) {
+        let x = cam.position.x.toFixed(2).replace('.', ',');
+        let y = cam.position.y.toFixed(2).replace('.', ',');
+        let z = cam.position.z.toFixed(2).replace('.', ',');
+        document.getElementById("cameraPosition").childNodes[0].textContent =
+          "X: " + x + " ; Y: " + y + " ; Z: " + z;
+      }
+    }, 100);
+  </script>
+  
+  <!-- Point Measurement -->
+  <script>
+    $(document).ready(function () {
+      let measurements = [];
+      $('#measureButton').click(function () {
+        if (viewer.measuringTool) {
+          let newMeasurement = viewer.measuringTool.startInsertion({
+            showDistances: false,
+            showAngles: false,
+            showCoordinates: true,
+            showArea: false,
+            closed: false,
+            maxMarkers: 1,
+            name: 'Point'
+          });
+          measurements.push(newMeasurement);
+        }
+      });
+      $('#deleteButton').click(function () {
+        if (viewer.scene) {
+          viewer.scene.removeAllMeasurements();
+          measurements = [];
+          $('#cameraPosition').text("Toutes les mesures ont été supprimées");
+        }
+      });
+      document.getElementById("recenterButton").addEventListener("click", function(){
+        viewer.fitToScreen();
+      });
+      document.getElementById("instructionButton").addEventListener("click", function(){
+        document.getElementById("instructionPopup").style.display = "flex";
+      });
+      document.getElementById("fullscreenButton").addEventListener("click", function(){
+        toggleFullScreen();
+      });
+    });
+  </script>
+  
+  <!-- Plein écran -->
+  <script>
+    function toggleFullScreen() {
+      if ((document.fullScreenElement && document.fullScreenElement !== null) ||
+          (!document.mozFullScreen && !document.webkitIsFullScreen)) {
+        if (document.documentElement.requestFullScreen) {
+          document.documentElement.requestFullScreen();
+        } else if (document.documentElement.mozRequestFullScreen) {
+          document.documentElement.mozRequestFullScreen();
+        } else if (document.documentElement.webkitRequestFullScreen) {
+          document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+        }
+      } else {
+        if (document.cancelFullScreen) {
+          document.cancelFullScreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.webkitCancelFullScreen) {
+          document.webkitCancelFullScreen();
+        }
+      }
+    }
+  </script>
+  
+  <!-- Fermeture de la popup d'instructions -->
+  <script>
+    document.querySelector(".closeInstructionPopup").addEventListener("click", function(){
+      document.getElementById("instructionPopup").style.display = "none";
+    });
+    document.getElementById("instructionPopup").addEventListener("click", function(e){
+      if(e.target === this){
+        document.getElementById("instructionPopup").style.display = "none";
+      }
+    });
+  </script>
+  
+  <!-- Hotspot controls -->
+  <script>
+    document.getElementById("hotspots").addEventListener("click", function() {
+      if (this.textContent.trim() === "Commencez la visite guidée") {
+          currentHotspotIndex = 0;
+          goToHotspot(currentHotspotIndex);
+      } else {
+          // Réinitialise la vue aux coordonnées initiales du hotspot actif sans relancer l'audio
+          let hp = hotspots[currentHotspotIndex];
+          viewer.scene.view.setView(hp.position, hp.target, 1000);
+      }
+
+      // Flèches "vue précédente" et "vue suivante" qui lancent goToHotspot, déclenchant l'audio
+      document.getElementById("prev").addEventListener("click", function() {
+          currentHotspotIndex--;
+          if (currentHotspotIndex < 0) {
+              currentHotspotIndex = hotspots.length - 1;
+          }
+          goToHotspot(currentHotspotIndex);
+      });
+      document.getElementById("next").addEventListener("click", function() {
+          currentHotspotIndex++;
+          if (currentHotspotIndex >= hotspots.length) {
+              currentHotspotIndex = 0;
+          }
+          goToHotspot(currentHotspotIndex);
+      });
+    });
+  </script>
+  
+  <!-- Galerie d'images -->
+  <script>
+    const images = [
+      { src: "../build/potree/resources/images/TGV- Mitterand.jpg", info: "Inauguration du TGV par François Mitterand en 1981" },
+      { src: "../build/potree/resources/images/TGV_Train_à_Grande_Vitesse.jpg", info: "Le TGV sur la Ligne-Paris-Lyon" },
+      { src: "../build/potree/resources/images/centreLANG.jpg", info: "Centre Henri Lang, Paris" },
+      { src: "../build/potree/resources/images/PAR_Paris_Sud_Est-Vue_d'ensemble.jpg", info: "Le PAR (2021)" }
+    ];
+    let currentIndex = 0;
+    function updateGallery() {
+      const galleryItem = document.querySelector('.galleryItem');
+      galleryItem.querySelector('img').src = images[currentIndex].src;
+      galleryItem.setAttribute('data-info', images[currentIndex].info);
+      galleryItem.setAttribute('data-full', images[currentIndex].src);
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('scrollUp').addEventListener('click', function () {
+        currentIndex = (currentIndex === 0) ? images.length - 1 : currentIndex - 1;
+        updateGallery();
+      });
+      document.getElementById('scrollDown').addEventListener('click', function () {
+        currentIndex = (currentIndex === images.length - 1) ? 0 : currentIndex + 1;
+        updateGallery();
+      });
+      const galleryItems = document.querySelectorAll('.galleryItem');
+      const popup = document.getElementById('imagePopup');
+      const popupImage = document.getElementById('popupImage');
+      const popupText = document.getElementById('popupText');
+      const closeBtn = document.querySelector('.closePopup');
+      const globalTitleBubble = document.getElementById('globalTitleBubble');
+      galleryItems.forEach(function (item) {
+        item.addEventListener('click', function () {
+          const fullSrc = item.getAttribute('data-full');
+          const infoText = item.getAttribute('data-info');
+          popupImage.src = fullSrc;
+          popupText.textContent = infoText;
+          popup.style.display = 'flex';
+        });
+        item.addEventListener('mouseenter', function () {
+          const info = item.getAttribute('data-info');
+          globalTitleBubble.textContent = info;
+          globalTitleBubble.style.display = 'block';
+          const rect = item.getBoundingClientRect();
+          const bubbleRect = globalTitleBubble.getBoundingClientRect();
+          const left = rect.left - bubbleRect.width - 5;
+          const top = rect.top + (rect.height / 2) - (bubbleRect.height / 2);
+          globalTitleBubble.style.left = left + 'px';
+          globalTitleBubble.style.top = top + 'px';
+        });
+        item.addEventListener('mouseleave', function () {
+          globalTitleBubble.style.display = 'none';
+        });
+      });
+      closeBtn.addEventListener('click', function () {
+        popup.style.display = 'none';
+        popupImage.src = '';
+        popupText.textContent = '';
+      });
+      popup.addEventListener('click', function (e) {
+        if (e.target === popup) {
+          closeBtn.click();
+        }
+      });
+    });
+  </script>
+  
+  <!-- Vidéo -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const videoThumbnail = document.getElementById('videoThumbnail');
+      const videoPopup = document.getElementById('videoPopup');
+      const popupVideo = document.getElementById('popupVideo');
+      const closeVideoPopup = document.querySelector('.closeVideoPopup');
+      
+      let savedPointBudget = viewer ? viewer.pointBudget : 1000000;
+      let savedUseHQ = viewer ? viewer.useHQ : false;
+      
+      if(videoThumbnail){
+        videoThumbnail.addEventListener('click', function () {
+          savedPointBudget = viewer.pointBudget;
+          savedUseHQ = viewer.useHQ;
+          viewer.setPointBudget(100000);
+          viewer.useHQ = false;
+          videoPopup.style.display = 'flex';
+          popupVideo.querySelector('source').src = "../build/potree/resources/videos/Version Courte PAR.mp4";
+          popupVideo.load();
+          popupVideo.play();
+        });
+      }
+      
+      if(closeVideoPopup){
+        closeVideoPopup.addEventListener('click', function () {
+          videoPopup.style.display = 'none';
+          popupVideo.pause();
+          popupVideo.currentTime = 0;
+          popupVideo.querySelector('source').src = '';
+          viewer.setPointBudget(savedPointBudget);
+          viewer.useHQ = savedUseHQ;
+        });
+      }
+      
+      if(videoPopup){
+        videoPopup.addEventListener('click', function (e) {
+          if (e.target === videoPopup) {
+            closeVideoPopup.click();
+          }
+        });
+      }
+    });
+  </script>
+  
+  <!-- Fenêtre de bienvenue et choix de mode -->
+  <script>
+    document.getElementById('btnExpert').addEventListener('click', function() {
+      document.getElementById('welcomePopup').style.display = 'none';
+    });
+    
+    document.getElementById('btnSimplified').addEventListener('click', function() {
+      document.getElementById('splat_buttons').style.display = 'none';
+      document.getElementById('buttonAndCameraContainer').style.display = 'none';
+      viewer.useHQ = true;
+      window.guidedMode = true;
+      document.getElementById('welcomePopup').style.display = 'none';
+      
+      const potreeContainer = document.querySelector(".potree_container");
+      ["mousedown", "mousemove", "mouseup", "wheel", "click"].forEach(evtType => {
+        potreeContainer.addEventListener(evtType, function(e) {
+          if (!e.target.closest(".annotation") && !e.target.closest(".potree_annotation")) {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+          }
+        }, true);
+      });
+      
+      let currentPointBudget = 1000000;
+      viewer.setPointBudget(currentPointBudget);
+      let lastTime = performance.now();
+      let frameCount = 0;
+      viewer.addEventListener("update", function() {
+        frameCount++;
+      });
+      setInterval(function() {
+        if (window.guidedMode) {
+          let now = performance.now();
+          let delta = (now - lastTime) / 1000;
+          let fps = frameCount / delta;
+          console.log("FPS mesuré : " + fps.toFixed(2));
+          if (fps < 15) {
+            currentPointBudget = Math.max(currentPointBudget * 0.8, 100000);
+            console.log("Réduction du pointBudget à " + currentPointBudget);
+            viewer.setPointBudget(currentPointBudget);
+          } else if (fps > 30) {
+            currentPointBudget = Math.min(currentPointBudget * 1.2, 10000000);
+            console.log("Augmentation du pointBudget à " + currentPointBudget);
+            viewer.setPointBudget(currentPointBudget);
+          }
+          frameCount = 0;
+          lastTime = now;
+        }
+      }, 1000);
+    });
+  </script>
+  
+  <!-- Gestion du splash -->
+  <script>
+    window.addEventListener('load', function () {
+      setTimeout(function(){
+        document.getElementById('splash').style.display = 'none';
+      }, 1500);
+    });
+  </script>
+  
+  <!-- Script de la barre de son, du seek et du bouton play/pause -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const audioSeek = document.getElementById('audioSeek');
+      const playPauseButton = document.getElementById('playPauseButton');
+      const muteButton = document.getElementById('muteButton');
+      let isMuted = false;
+
+      // Permet de modifier la position de l'audio courant via la seek bar
+      audioSeek.addEventListener('input', function () {
+        if (window.currentHotspotAudio && window.currentHotspotAudio.duration) {
+          window.currentHotspotAudio.currentTime = (this.value / 100) * window.currentHotspotAudio.duration;
+        }
+      });
+
+      // Mise à jour régulière de la seek bar
+      setInterval(function () {
+        if (window.currentHotspotAudio && window.currentHotspotAudio.duration) {
+          audioSeek.value = (window.currentHotspotAudio.currentTime / window.currentHotspotAudio.duration) * 100;
+        }
+      }, 100);
+
+      // Gestion du bouton play/pause avec modification de l'icône
+      playPauseButton.addEventListener('click', function () {
+        if (window.currentHotspotAudio) {
+          if (window.currentHotspotAudio.paused) {
+            window.currentHotspotAudio.play();
+            document.getElementById('playPauseIcon').src = "../build/potree/resources/icons/pause.svg";
+            document.getElementById('playPauseIcon').alt = "Pause";
+          } else {
+            window.currentHotspotAudio.pause();
+            document.getElementById('playPauseIcon').src = "../build/potree/resources/icons/play.svg";
+            document.getElementById('playPauseIcon').alt = "Play";
+          }
+        }
+      });
+
+      // Gestion du bouton mute/unmute avec modification de l'icône
+      muteButton.addEventListener('click', function () {
+        isMuted = !isMuted;
+        const audios = [
+          document.getElementById('audioHotspot0'),
+          document.getElementById('audioHotspot1'),
+          document.getElementById('audioHotspot2')
+        ];
+        audios.forEach(audio => {
+          if (audio) {
+            audio.muted = isMuted;
+          }
+        });
+        if (isMuted) {
+          document.getElementById('muteIcon').src = "../build/potree/resources/icons/volume-silent-white-icon.svg";
+          document.getElementById('muteIcon').alt = "Unmute";
+        } else {
+          document.getElementById('muteIcon').src = "../build/potree/resources/icons/volume-medium-white-icon.svg";
+          document.getElementById('muteIcon').alt = "Mute";
+        }
+      });
+    });
+  </script>
+  
+</body>
+</html>

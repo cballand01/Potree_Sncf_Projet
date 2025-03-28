@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accueil - Mon Projet 3D</title>
+  <style>
+    /* Reset de base et configuration flex pour la page */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fafafa;
+      color: #333;
+      line-height: 1.6;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #4a90e2, #145da0);
+      color: #fff;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    header p {
+      font-size: 1.2rem;
+    }
+
+    /* Contenu principal qui s'étend pour pousser le footer en bas */
+    main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .section {
+      margin-bottom: 2rem;
+    }
+    .section h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .card a {
+      display: block;
+      padding: 2rem;
+      text-align: center;
+      color: #333;
+      font-weight: 500;
+      font-size: 1.2rem;
+    }
+
+    /* Footer collant */
+    footer {
+      background: #333;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Projet du PAR de la LGV Paris-Lyon </h1>
+    <p>Visualisez et explorez vos modèles et nuages de points</p>
+  </header>
+  <main>
+    <!-- Section pour les contenus 3DHOP -->
+    <section class="section">
+      <h2>Modèles 3D - 3DHOP</h2>
+      <div class="cards">
+        <div class="card">
+          <a href="TCO_PRS1.html">PRS 1</a>
+        </div>
+        <div class="card">
+          <a href="TCO_PRS2.html">PRS 2</a>
+        </div>
+        <div class="card">
+          <a href="TCO_PRS3.html">PRS3</a>
+        </div>
+        <div class="card">
+          <a href="TCO_PRS4.html">PRS 4</a>
+        </div>
+        <div class="card">
+          <a href="TCO_IDF.html">Tableau Île-de-France</a>
+        </div>
+        <div class="card">
+          <a href="TCO_Tableau.html">Tableau</a>
+        </div>
+        <div class="card">
+          <a href="TCO_tab_haut.html">TCO haut</a>
+        </div>
+        <div class="card">
+          <a href="TCO_tab_central.html">TCO central</a>
+        </div>
+        <div class="card">
+          <a href="TCO_tab_bas.html">TCO bas</a>
+        </div>
+        <div class="card">
+          <a href="TCO_tab_total.html">TCO complet</a>
+        </div>
+      </div>
+    </section>
+    <!-- Section pour les contenus POTREE -->
+    <section class="section">
+      <h2>Nuages de points & Visite guidée - POTREE</h2>
+      <div class="cards">
+        <div class="card">
+          <a href="TCO.html">Salle du TCO</a>
+        </div>
+        <div class="card">
+          <a href="SDR.html">Salle des Relais</a>
+        </div>
+      </div>
+      
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 Mon Projet 3D. Tous droits réservés.</p>
+  </footer>
+</body>
+</html>

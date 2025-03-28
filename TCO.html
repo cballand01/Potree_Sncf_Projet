@@ -10,13 +10,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   
   <!-- Feuilles de styles pour Potree et autres bibliothèques -->
-  <link rel="stylesheet" type="text/css" href="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/potree.css">
-  <link rel="stylesheet" type="text/css" href="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/libs/jquery-ui/jquery-ui.min.css">
-  <link rel="stylesheet" type="text/css" href="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/libs/openlayers3/ol.css">
-  <link rel="stylesheet" type="text/css" href="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/libs/spectrum/spectrum.css">
-  <link rel="stylesheet" type="text/css" href="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/libs/jstree/themes/mixed/style.css">
-  <link rel="stylesheet" type="text/css" href="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/custom.css">
-  <link rel="stylesheet" type="text/css" href="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/style_SNCF.css">
+  <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/cballand01/Potree_Sncf_Projet/refs/heads/main/build/potree/potree.css">
+  <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/cballand01/Potree_Sncf_Projet/refs/heads/main/libs/jquery-ui/jquery-ui.min.css">
+  <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/cballand01/Potree_Sncf_Projet/refs/heads/main/libs/openlayers3/ol.css">
+  <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/cballand01/Potree_Sncf_Projet/refs/heads/main/libs/spectrum/spectrum.css">
+  <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/cballand01/Potree_Sncf_Projet/refs/heads/main/libs/jstree/themes/mixed/style.css">
+  <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/cballand01/Potree_Sncf_Projet/refs/heads/main/build/potree/custom.css">
+  <link rel="stylesheet" type="text/css" href="https://raw.githubusercontent.com/cballand01/Potree_Sncf_Projet/refs/heads/main/build/potree/style_SNCF.css">
   
   <!-- Style spécifique pour le conteneur de l'image dans la popup -->
   <style>
@@ -52,27 +52,27 @@
     <div id="buttonsContainer">
       <!-- Bouton pour mesurer un point -->
       <div id="measureButton" class="buttonFrame tooltip-container tooltip-right">
-        <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/Point.svg" alt="Mesurer">
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/Point.svg" alt="Mesurer">
         <span class="custom-tooltip">Mesurer un point</span>
       </div>
       <!-- Bouton pour supprimer les mesures -->
       <div id="deleteButton" class="buttonFrame tooltip-container tooltip-right">
-        <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/reset_tools.svg" alt="Supprimer">
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/reset_tools.svg" alt="Supprimer">
         <span class="custom-tooltip">Supprimer le/les point-s</span>
       </div>
       <!-- Bouton pour recentrer la vue -->
       <div id="recenterButton" class="buttonFrame tooltip-container tooltip-right">
-        <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/eye-svgrepo-com.svg" alt="Recentrer">
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/eye-svgrepo-com.svg" alt="Recentrer">
         <span class="custom-tooltip">Recentrer la vue</span>
       </div>
       <!-- Bouton pour afficher les instructions de déplacement -->
       <div id="instructionButton" class="buttonFrame tooltip-container tooltip-right">
-        <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/Souris.svg" alt="Instructions">
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/Souris.svg" alt="Instructions">
         <span class="custom-tooltip">Instructions de déplacement</span>
       </div>
       <!-- Bouton pour basculer en plein écran -->
       <div id="fullscreenButton" class="buttonFrame tooltip-container tooltip-right">
-        <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/GrandEcran.svg" alt="Plein écran">
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/GrandEcran.svg" alt="Plein écran">
         <span class="custom-tooltip">Ouvrir/fermer le plein écran</span>
       </div>
     </div>
@@ -81,7 +81,7 @@
   <!-- Slidebar latérale avec menu et informations -->
   <div id="slidebar">
     <div id="slidebarToggle">
-      <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/menu_button.svg" class="potree_menu_toggle">
+      <img src="/Potree_Sncf_Projet/build/potree/resources/icons/menu_button.svg" class="potree_menu_toggle">
     </div>
     <div class="slidebar-header">
       <a href="https://potree.org" target="_blank">potree.org - github</a>
@@ -114,13 +114,13 @@
             Plongez au cœur d'une journée captivante au PAR de la ligne à grande vitesse Paris-Lyon, située au centre Henri Lang à Paris. Découvrez en immersion totale les coulisses d'une infrastructure moderne et innovante, où chaque instant révèle les défis et les succès d'une technologie de pointe. Vivez une expérience unique qui vous connecte au futur de la mobilité, entre passion et ingénierie de haut vol.
           </p>
           <!-- Miniature vidéo cliquable -->
-          <img id="videoThumbnail" src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/Miniature.jpeg" alt="Miniature vidéo" style="width:100%; cursor:pointer;">
+          <img id="videoThumbnail" src="/Potree_Sncf_Projet/build/potree/resources/images/Miniature.jpeg" alt="Miniature vidéo" style="width:100%; cursor:pointer;">
         </div>
       </div>
     </div>
     <!-- Logo Potree en bas de la slidebar -->
     <div class="slidebar-logo">
-      <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/logo.svg" alt="Logo Potree">
+      <img src="/Potree_Sncf_Projet/build/potree/resources/logo.svg" alt="Logo Potree">
     </div>
   </div>
 
@@ -171,7 +171,7 @@
       <div id="instructionContainer">
         <!-- Instruction pour la rotation -->
         <div class="instructionRow">
-          <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/clicgauche.png" alt="Rotation" class="instructionImage">
+          <img src="/Potree_Sncf_Projet/build/potree/resources/images/clicgauche.png" alt="Rotation" class="instructionImage">
           <div class="instructionText">
             <h3>Rotation</h3>
             <p>Cliquez et faites glisser pour faire pivoter la vue.<br>Double-cliquez pour accélérer.</p>
@@ -179,7 +179,7 @@
         </div>
         <!-- Instruction pour le zoom -->
         <div class="instructionRow">
-          <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/clicmolette.png" alt="Zoom" class="instructionImage">
+          <img src="/Potree_Sncf_Projet/build/potree/resources/images/clicmolette.png" alt="Zoom" class="instructionImage">
           <div class="instructionText">
             <h3>Zoom</h3>
             <p>Utilisez la molette pour zoomer et dézoomer.</p>
@@ -187,7 +187,7 @@
         </div>
         <!-- Instruction pour le déplacement -->
         <div class="instructionRow">
-          <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/clicdroit.png" alt="Rotation" class="instructionImage">
+          <img src="/Potree_Sncf_Projet/build/potree/resources/images/clicdroit.png" alt="Rotation" class="instructionImage">
           <div class="instructionText">
             <h3>Déplacement</h3>
             <p>Cliquez et faites glisser pour déplacer la vue.</p>
@@ -204,15 +204,15 @@
         <div id="popupImagesContainer">
             <!-- Image et phrase 1 -->
             <p>Contrôlez le son et naviguez dans la narration :</p>
-            <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/image-audio.png" alt="Contrôle audio">
+            <img src="/Potree_Sncf_Projet/build/potree/resources/images/image-audio.png" alt="Contrôle audio">
 
             <!-- Image et phrase 2 -->
             <p>Explorez les différentes vues de la visite :</p>
-            <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/image-camera.png" alt="Navigation caméra">
+            <img src="/Potree_Sncf_Projet/build/potree/resources/images/image-camera.png" alt="Navigation caméra">
             
             <!-- Image et phrase 3 -->
             <p>Découvrez et interagissez avec les éléments interactifs :</p>
-            <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/image-interaction.png" alt="Interaction avec éléments">
+            <img src="/Potree_Sncf_Projet/build/potree/resources/images/image-interaction.png" alt="Interaction avec éléments">
             
         </div>
 
@@ -225,15 +225,15 @@
   <!-- Galerie d'images verticale -->
   <div id="verticalGallery">
     <span class="arrow" id="scrollUp">&#9650;</span>
-    <div class="galleryItem" data-full="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/Photographies_histoire/centreLANG.jpg" data-info="Centre Henri Lang, 16 rue Chrétien de Troyes, 75012 Paris" style="display: block;">
-      <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/Photographies_histoire/centreLANG.jpg" alt="Vue du TGV">
+    <div class="galleryItem" data-full="/Potree_Sncf_Projet/build/potree/resources/images/Photographies_histoire/centreLANG.jpg" data-info="Centre Henri Lang, 16 rue Chrétien de Troyes, 75012 Paris" style="display: block;">
+      <img src="/Potree_Sncf_Projet/build/potree/resources/images/Photographies_histoire/centreLANG.jpg" alt="Vue du TGV">
     </div>
     <span class="arrow" id="scrollDown">&#9660;</span>
   </div>
     
   <!-- Lien vers le site de la SNCF avec affichage du logo -->
   <a href="https://www.sncf-reseau.com/fr" target="_blank">
-    <img id="logo" src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/Logo_SNCF.png" alt="Logo SNCF">
+    <img id="logo" src="/Potree_Sncf_Projet/build/potree/resources/images/Logo_SNCF.png" alt="Logo SNCF">
   </a>
 
   <!-- Bulle d'information globale (affichée lors du survol d'un élément de la galerie) -->
@@ -242,7 +242,7 @@
   <!-- Barre de contrôle pour la visite guidée via des hotspots -->
   <div class="hotspot-controls-bar">
     <div id="prev" class="arrow-button tooltip-container">
-      <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/arrow_left.svg" alt="Gauche" />
+      <img src="/Potree_Sncf_Projet/build/potree/resources/icons/arrow_left.svg" alt="Gauche" />
       <span class="custom-tooltip">Vue précédente</span>
     </div>
     <div id="hotspots" class="hotspot-label tooltip-container">
@@ -250,7 +250,7 @@
       <span class="custom-tooltip">Recentrer la vue</span>
     </div>
     <div id="next" class="arrow-button tooltip-container">
-      <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/arrow_right.svg" alt="Droite" />
+      <img src="/Potree_Sncf_Projet/build/potree/resources/icons/arrow_right.svg" alt="Droite" />
       <span class="custom-tooltip">Vue suivante</span>
     </div>
     <div id="hotspotList" class="hotspot-list">
@@ -266,10 +266,10 @@
   <div id="audioBar">
     <input type="range" id="audioSeek" min="0" max="100" step="0.1" value="0">
     <button id="playPauseButton">
-      <img id="playPauseIcon" src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/pause.svg" alt="Pause" style="width:16px; height:16px;">
+      <img id="playPauseIcon" src="/Potree_Sncf_Projet/build/potree/resources/icons/pause.svg" alt="Pause" style="width:16px; height:16px;">
     </button>
     <button id="muteButton">
-      <img id="muteIcon" src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/volume-medium-white-icon.svg" alt="Mute" style="width:16px; height:16px;">
+      <img id="muteIcon" src="/Potree_Sncf_Projet/build/potree/resources/icons/volume-medium-white-icon.svg" alt="Mute" style="width:16px; height:16px;">
     </button>
   </div>
 
@@ -277,30 +277,30 @@
   
 
   <!-- Éléments audio pour les hotspots -->
-  <audio id="audioHotspot0" src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/audio/01.mp3" preload="auto"></audio>
-  <audio id="audioHotspot1" src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/audio/02.mp3" preload="auto"></audio>
-  <audio id="audioHotspot2" src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/audio/03.mp3" preload="auto"></audio>
+  <audio id="audioHotspot0" src="/Potree_Sncf_Projet/build/potree/resources/audio/01.mp3" preload="auto"></audio>
+  <audio id="audioHotspot1" src="/Potree_Sncf_Projet/build/potree/resources/audio/02.mp3" preload="auto"></audio>
+  <audio id="audioHotspot2" src="/Potree_Sncf_Projet/build/potree/resources/audio/03.mp3" preload="auto"></audio>
 
   <!-- Chargement des bibliothèques JavaScript -->
-  <script src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/libs/jquery/jquery-3.1.1.min.js"></script>
-  <script src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/libs/jquery-ui/jquery-ui.min.js"></script>
-  <script src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/libs/spectrum/spectrum.js"></script>
-  <script src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/libs/other/BinaryHeap.js"></script>
-  <script src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/libs/tween/tween.min.js"></script>
-  <script src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/libs/d3/d3.js"></script>
-  <script src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/libs/proj4/proj4.js"></script>
-  <script src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/libs/openlayers3/ol.js"></script>
-  <script src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/libs/i18next/i18next.js"></script>
-  <script src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/libs/jstree/jstree.js"></script>
-  <script src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/potree.js"></script>
-  <script src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/libs/plasio/js/laslaz.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/jquery/jquery-3.1.1.min.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/jquery-ui/jquery-ui.min.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/spectrum/spectrum.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/other/BinaryHeap.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/tween/tween.min.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/d3/d3.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/proj4/proj4.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/openlayers3/ol.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/i18next/i18next.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/jstree/jstree.js"></script>
+  <script src="/Potree_Sncf_Projet/build/potree/potree.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/plasio/js/laslaz.js"></script>
 
   <!-- Script principal pour configurer Potree et charger les éléments 3D -->
   <script type="module">
     // Importation des modules Three.js et des loaders pour les modèles OBJ et MTL
-    import * as THREE from "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/libs/three.js/build/three.module.js";
-    import {OBJLoader} from "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/libs/three.js/loaders/OBJLoader.js";
-    import {MTLLoader} from "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/libs/three.js/loaders/MTLLoader.js";
+    import * as THREE from "/Potree_Sncf_Projet/libs/three.js/build/three.module.js";
+    import {OBJLoader} from "/Potree_Sncf_Projet/libs/three.js/loaders/OBJLoader.js";
+    import {MTLLoader} from "/Potree_Sncf_Projet/libs/three.js/loaders/MTLLoader.js";
     
     // Définition des positions initiales de la caméra et de la cible
     let initialPosition = new THREE.Vector3(10.50, 8.15, 2.35);
@@ -325,7 +325,7 @@
     viewer.scene.scene.add(ambientLight);
     
     // Chargement du nuage de points via Potree.loadPointCloud
-    Potree.loadPointCloud("https://github.com/cballand01/Potree_Sncf_Projet/tree/main/pointclouds/Nuage_TCO/metadata.json", "Salle_SDR", function(e){
+    Potree.loadPointCloud("https://storage.googleapis.com/projet-potree-sncf/metadata.json", "Salle_TCO", function(e){
       viewer.scene.addPointCloud(e.pointcloud);
       let material = e.pointcloud.material;
       material.size = 1.3;
@@ -343,7 +343,7 @@
       //---------------- Anotations textuelles ----------------//
       // Annotation texte 1
       let iconInfo = $(`<span>
-        <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
       </span>`);
       let annotationTexte1 = new Potree.Annotation({
           position: new THREE.Vector3(4.84, 8.69, 1.83),
@@ -360,14 +360,14 @@
       // Annotation Image 1
       let iconImage1 = $(`<!-- Création d'une icône image pour l'annotation --> 
         <span>
-          <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
         </span>
       `);
       iconImage1.find("img").click((event) => {
         event.stopPropagation();
         viewer.scene.view.setView(annotationImage1.cameraPosition, annotationImage1.cameraTarget, 1000);
         setTimeout(() => {
-          const imageUrl = "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/175A0701.JPG";
+          const imageUrl = "/Potree_Sncf_Projet/build/potree/resources/images/175A0701.JPG";
           const imageDescription = "Poste tout relais à transit souple";
           $("#popupImage").attr("src", imageUrl);
           $("#popupText").text(imageDescription);
@@ -387,14 +387,14 @@
       // Annotation avec image 2
       let iconImage2 = $(`<!-- Icône image pour la deuxième annotation --> 
         <span>
-          <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
         </span>
       `);
       iconImage2.find("img").click((event) => {
         event.stopPropagation();
         viewer.scene.view.setView(annotationImage2.cameraPosition, annotationImage2.cameraTarget, 1000);
         setTimeout(() => {
-          const imageUrl = "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/175A0763.JPG";
+          const imageUrl = "/Potree_Sncf_Projet/build/potree/resources/images/175A0763.JPG";
           const imageDescription = "Région Ile de France";
           $("#popupImage").attr("src", imageUrl);
           $("#popupText").text(imageDescription);
@@ -415,7 +415,7 @@
       // Annotation 3D 1
       let icon3D1 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_Tableau.html --> 
         <span>
-          <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
         </span>
       `);
       icon3D1.find("img").click((event) => {
@@ -433,7 +433,7 @@
       // Annotation 3D 2
       let icon3D2 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_PRS4.html --> 
         <span>
-          <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
         </span>
       `);
       icon3D2.find("img").click((event) => {
@@ -451,7 +451,7 @@
       // Annotation 3D 3
       let icon3D3 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_PRS1.html --> 
         <span>
-          <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
         </span>
       `);
       icon3D3.find("img").click((event) => {
@@ -469,7 +469,7 @@
       // Annotation 3D 4
       let icon3D4 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_PRS2.html --> 
         <span>
-          <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
         </span>
       `);
       icon3D4.find("img").click((event) => {
@@ -487,7 +487,7 @@
       // Annotation 3D 5
       let icon3D5 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_PRS3.html --> 
         <span>
-          <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
         </span>
       `);
       icon3D5.find("img").click((event) => {
@@ -506,7 +506,7 @@
       // Annotation 3D 6
       let icon3D6 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_idf.html --> 
         <span>
-          <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
         </span>
       `);
       icon3D6.find("img").click((event) => {
@@ -524,7 +524,7 @@
       // Annotation 3D 7
       let icon3D7 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_tab_total.html --> 
         <span>
-          <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
         </span>
       `);
       icon3D7.find("img").click((event) => {
@@ -599,13 +599,13 @@
     
       // Chargement du modèle 1 (tab central)
       let mtlLoader1 = new MTLLoader(manager);
-      mtlLoader1.setPath('https://github.com/cballand01/Potree_Sncf_Projet/tree/main/model3D/modelOBJ/tab_central/');
+      mtlLoader1.setPath('/Potree_Sncf_Projet/model3D/modelOBJ/tab_central/');
       mtlLoader1.load('Model_TCOcentral.mtl', function(materials) {
         materials.preload();
     
         let objLoader1 = new OBJLoader(manager);
         objLoader1.setMaterials(materials);
-        objLoader1.setPath('https://github.com/cballand01/Potree_Sncf_Projet/tree/main/model3D/modelOBJ/tab_central/');
+        objLoader1.setPath('/Potree_Sncf_Projet/model3D/modelOBJ/tab_central/');
         objLoader1.load('Model_TCOcentral.obj', function ( object ) {
           object.position.set(0.02, 0.02, 0);
           object.scale.set(1, 1, 1);
@@ -617,13 +617,13 @@
 
       // Chargement du modèle 2 (tab bas)
       let MTLLoader2 = new MTLLoader(manager);
-      MTLLoader2.setPath('https://github.com/cballand01/Potree_Sncf_Projet/tree/main/model3D/modelOBJ/tab_bas/');
+      MTLLoader2.setPath('/Potree_Sncf_Projet/model3D/modelOBJ/tab_bas/');
       MTLLoader2.load('Model_bas.mtl', function(materials) {
         materials.preload();
         
         let OBJLoader2 = new OBJLoader(manager);
         OBJLoader2.setMaterials(materials);
-        OBJLoader2.setPath('https://github.com/cballand01/Potree_Sncf_Projet/tree/main/model3D/modelOBJ/tab_bas/');
+        OBJLoader2.setPath('/Potree_Sncf_Projet/model3D/modelOBJ/tab_bas/');
         OBJLoader2.load('Model_bas.obj', function (object) {
           object.position.set(0, 0, 0);
           object.scale.set(1, 1, 1);
@@ -635,13 +635,13 @@
 
       // Chargement du modèle 3 (tab haut)
       let MTLLoader3 = new MTLLoader(manager);
-      MTLLoader3.setPath('https://github.com/cballand01/Potree_Sncf_Projet/tree/main/model3D/modelOBJ/tab_haut/');
+      MTLLoader3.setPath('/Potree_Sncf_Projet/model3D/modelOBJ/tab_haut/');
       MTLLoader3.load('Model_haut.mtl', function(materials) {
         materials.preload();
         
         let OBJLoader3 = new OBJLoader(manager);
         OBJLoader3.setMaterials(materials);
-        OBJLoader3.setPath('https://github.com/cballand01/Potree_Sncf_Projet/tree/main/model3D/modelOBJ/tab_haut/');
+        OBJLoader3.setPath('/Potree_Sncf_Projet/model3D/modelOBJ/tab_haut/');
         OBJLoader3.load('Model_haut.obj', function (object) {
           object.position.set(0, 0, 0);
           object.scale.set(1, 1, 1);
@@ -653,13 +653,13 @@
 
       // Chargement du modèle 4 (IDF modèle faible)
       let MTLLoader4 = new MTLLoader(manager);
-      MTLLoader4.setPath('https://github.com/cballand01/Potree_Sncf_Projet/tree/main/model3D/modelOBJ/tab_idf/');
+      MTLLoader4.setPath('/Potree_Sncf_Projet/model3D/modelOBJ/tab_idf/');
       MTLLoader4.load('IDF_Model_faible.mtl', function(materials) {
         materials.preload();
         
         let OBJLoader4 = new OBJLoader(manager);
         OBJLoader4.setMaterials(materials);
-        OBJLoader4.setPath('https://github.com/cballand01/Potree_Sncf_Projet/tree/main/model3D/modelOBJ/tab_idf/');
+        OBJLoader4.setPath('/Potree_Sncf_Projet/model3D/modelOBJ/tab_idf/');
         OBJLoader4.load('IDF_Model_faible.obj', function (object) {
           object.position.set(0, 0, 0);
           object.scale.set(1, 1, 1);
@@ -671,13 +671,13 @@
 
       // Chargement du modèle 5 (tableau inc)
       let MTLLoader5 = new MTLLoader(manager);
-      MTLLoader5.setPath('https://github.com/cballand01/Potree_Sncf_Projet/tree/main/model3D/modelOBJ/tab_inc/');
+      MTLLoader5.setPath('/Potree_Sncf_Projet/model3D/modelOBJ/tab_inc/');
       MTLLoader5.load('Tableau_inc.mtl', function(materials) {
         materials.preload();
         
         let OBJLoader5 = new OBJLoader(manager);
         OBJLoader5.setMaterials(materials);
-        OBJLoader5.setPath('https://github.com/cballand01/Potree_Sncf_Projet/tree/main/model3D/modelOBJ/tab_inc/');
+        OBJLoader5.setPath('/Potree_Sncf_Projet/model3D/modelOBJ/tab_inc/');
         OBJLoader5.load('Tableau_inc.obj', function (object) {
           object.position.set(0, 0, 0);
           object.scale.set(1, 1, 1);
@@ -739,7 +739,7 @@
 
     // Création du bouton pour la première animation
     let iconGoto1 = $(`<span>
-        <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/camera.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/camera.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
     </span>`);
 
     // Ajouter un événement de clic sur le bouton pour lancer la première animation
@@ -825,7 +825,7 @@
 
     // Création du bouton pour la deuxième animation
     let iconGoto2 = $(`<span>
-        <img src="https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/camera.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/camera.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
     </span>`);
 
     // Ajouter un événement de clic sur le bouton pour lancer la deuxième animation
@@ -1017,7 +1017,7 @@
           document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
         }
         // Mise à jour de l'icône pour le mode "Quitter le plein écran"
-        fsButtonImg.src = "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/Petit-Ecran.svg";
+        fsButtonImg.src = "/Potree_Sncf_Projet/build/potree/resources/icons/Petit-Ecran.svg";
         fsButtonImg.alt = "Quitter le plein écran";
       } else {
         // Sortie du mode plein écran
@@ -1029,7 +1029,7 @@
           document.webkitExitFullscreen();
         }
         // Mise à jour de l'icône pour le mode "Plein écran"
-        fsButtonImg.src = "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/GrandEcran.svg";
+        fsButtonImg.src = "/Potree_Sncf_Projet/build/potree/resources/icons/GrandEcran.svg";
         fsButtonImg.alt = "Plein écran";
       }
     }
@@ -1038,7 +1038,7 @@
     document.addEventListener("fullscreenchange", function() {
       var fsButtonImg = document.querySelector("#fullscreenButton img");
       if (!document.fullscreenElement) {
-        fsButtonImg.src = "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/GrandEcran.svg";
+        fsButtonImg.src = "/Potree_Sncf_Projet/build/potree/resources/icons/GrandEcran.svg";
         fsButtonImg.alt = "Plein écran";
       }
     });
@@ -1091,21 +1091,21 @@
   <script>
     // Tableau contenant les images et leurs descriptions
     const images = [
-      { src: "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/Photographies_histoire/centreLANG.jpg", info: "Centre Henri Lang, 16 rue Chrétien de Troyes, 75012 Paris" },
-      { src: "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/Photographies_histoire/IMG_5673.jpg", info: "Salle du TCO en activité" },
-      { src: "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/Photographies_histoire/28451.jpg", info: "Salle du TCO en activité" },
-      { src: "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/Photographies_histoire/23361.jpg", info: "Salle du TCO en activité" },
-      { src: "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/Photographies_histoire/23360.jpg", info: "Salle du TCO en activité" },
-      { src: "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/Photographies_histoire/23356.jpg", info: "Salle du TCO en activité" },
-      { src: "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/Photographies_histoire/23354.jpg", info: "Salle du TCO en activité" },
-      { src: "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/Photographies_histoire/23350.jpg", info: "Salle du TCO en activité" },
-      { src: "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/Photographies_histoire/22637.JPG", info: "Salle du TCO en activité" },
-      { src: "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/Photographies_histoire/20907.jpg", info: "Salle du TCO en activité" },
-      { src: "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/Photographies_histoire/20905.JPG", info: "Salle du TCO en activité" },
-      { src: "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/Photographies_histoire/20903.JPG", info: "Salle du TCO en activité" },
-      { src: "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/Photographies_histoire/20901.jpg", info: "Salle du TCO en activité" },
-      { src: "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/Photographies_histoire/19134.jpg", info: "Salle du TCO en activité" },
-      { src: "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/images/Photographies_histoire/19131.jpg", info: "Salle du TCO en activité" }
+      { src: "/Potree_Sncf_Projet/build/potree/resources/images/Photographies_histoire/centreLANG.jpg", info: "Centre Henri Lang, 16 rue Chrétien de Troyes, 75012 Paris" },
+      { src: "/Potree_Sncf_Projet/build/potree/resources/images/Photographies_histoire/IMG_5673.jpg", info: "Salle du TCO en activité" },
+      { src: "/Potree_Sncf_Projet/build/potree/resources/images/Photographies_histoire/28451.jpg", info: "Salle du TCO en activité" },
+      { src: "/Potree_Sncf_Projet/build/potree/resources/images/Photographies_histoire/23361.jpg", info: "Salle du TCO en activité" },
+      { src: "/Potree_Sncf_Projet/build/potree/resources/images/Photographies_histoire/23360.jpg", info: "Salle du TCO en activité" },
+      { src: "/Potree_Sncf_Projet/build/potree/resources/images/Photographies_histoire/23356.jpg", info: "Salle du TCO en activité" },
+      { src: "/Potree_Sncf_Projet/build/potree/resources/images/Photographies_histoire/23354.jpg", info: "Salle du TCO en activité" },
+      { src: "/Potree_Sncf_Projet/build/potree/resources/images/Photographies_histoire/23350.jpg", info: "Salle du TCO en activité" },
+      { src: "/Potree_Sncf_Projet/build/potree/resources/images/Photographies_histoire/22637.JPG", info: "Salle du TCO en activité" },
+      { src: "/Potree_Sncf_Projet/build/potree/resources/images/Photographies_histoire/20907.jpg", info: "Salle du TCO en activité" },
+      { src: "/Potree_Sncf_Projet/build/potree/resources/images/Photographies_histoire/20905.JPG", info: "Salle du TCO en activité" },
+      { src: "/Potree_Sncf_Projet/build/potree/resources/images/Photographies_histoire/20903.JPG", info: "Salle du TCO en activité" },
+      { src: "/Potree_Sncf_Projet/build/potree/resources/images/Photographies_histoire/20901.jpg", info: "Salle du TCO en activité" },
+      { src: "/Potree_Sncf_Projet/build/potree/resources/images/Photographies_histoire/19134.jpg", info: "Salle du TCO en activité" },
+      { src: "/Potree_Sncf_Projet/build/potree/resources/images/Photographies_histoire/19131.jpg", info: "Salle du TCO en activité" }
     ];
     let currentIndex = 0;
     // Mise à jour de l'image affichée dans la galerie
@@ -1195,7 +1195,7 @@
           viewer.setPointBudget(100000);
           viewer.useHQ = false;
           videoPopup.style.display = 'flex';
-          popupVideo.querySelector('source').src = "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/videos/Version Courte PAR.mp4";
+          popupVideo.querySelector('source').src = "https://storage.googleapis.com/projet-potree-sncf/Version%20Courte%20PAR.mp4";
           popupVideo.load();
           popupVideo.play();
         });
@@ -1370,11 +1370,11 @@
         if (window.currentHotspotAudio) {
           if (window.currentHotspotAudio.paused) {
             window.currentHotspotAudio.play();
-            document.getElementById('playPauseIcon').src = "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/pause.svg";
+            document.getElementById('playPauseIcon').src = "/Potree_Sncf_Projet/build/potree/resources/icons/pause.svg";
             document.getElementById('playPauseIcon').alt = "Pause";
           } else {
             window.currentHotspotAudio.pause();
-            document.getElementById('playPauseIcon').src = "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/play.svg";
+            document.getElementById('playPauseIcon').src = "/Potree_Sncf_Projet/build/potree/resources/icons/play.svg";
             document.getElementById('playPauseIcon').alt = "Play";
           }
         }
@@ -1393,10 +1393,10 @@
           }
         });
         if (isMuted) {
-          document.getElementById('muteIcon').src = "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/volume-silent-white-icon.svg";
+          document.getElementById('muteIcon').src = "/Potree_Sncf_Projet/build/potree/resources/icons/volume-silent-white-icon.svg";
           document.getElementById('muteIcon').alt = "Unmute";
         } else {
-          document.getElementById('muteIcon').src = "https://github.com/cballand01/Potree_Sncf_Projet/tree/main/build/potree/resources/icons/volume-medium-white-icon.svg";
+          document.getElementById('muteIcon').src = "/Potree_Sncf_Projet/build/potree/resources/icons/volume-medium-white-icon.svg";
           document.getElementById('muteIcon').alt = "Mute";
         }
       });

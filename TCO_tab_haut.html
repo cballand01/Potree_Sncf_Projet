@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <title>3DHOP - 3D Heritage Online Presenter</title>
   <!--STYLESHEET-->
-  <link type="text/css" rel="stylesheet" href="../libs/3DHOP/stylesheet/3dhop.css"/>  
+  <link type="text/css" rel="stylesheet" href="/Potree_Sncf_Projet/libs/3DHOP/stylesheet/3dhop.css"/>  
   <style>
     /* Styles généraux pour une page blanche */
     html, body {
@@ -51,25 +51,25 @@
     #draw-canvas {
       width: 100%;
       height: 100%;
-      background-image: url(../libs/3DHOP/skins/backgrounds/light.jpg);
+      background-image: url(/Potree_Sncf_Projet/libs/3DHOP/skins/backgrounds/light.jpg);
     }
   </style>
   <!--SPIDERGL-->
-  <script type="text/javascript" src="../libs/3DHOP/js/spidergl.js"></script>
+  <script type="text/javascript" src="/Potree_Sncf_Projet/libs/3DHOP/js/spidergl.js"></script>
   <!--JQUERY-->
-  <script type="text/javascript" src="../libs/3DHOP/js/jquery.js"></script>
+  <script type="text/javascript" src="/Potree_Sncf_Projet/libs/3DHOP/js/jquery.js"></script>
   <!--PRESENTER-->
-  <script type="text/javascript" src="../libs/3DHOP/js/presenter.js"></script>
+  <script type="text/javascript" src="/Potree_Sncf_Projet/libs/3DHOP/js/presenter.js"></script>
   <!--3D MODELS LOADING AND RENDERING-->
-  <script type="text/javascript" src="../libs/3DHOP/js/nexus.js"></script>
-  <script type="text/javascript" src="../libs/3DHOP/js/ply.js"></script>
+  <script type="text/javascript" src="/Potree_Sncf_Projet/libs/3DHOP/js/nexus.js"></script>
+  <script type="text/javascript" src="/Potree_Sncf_Projet/libs/3DHOP/js/ply.js"></script>
   <!--TRACKBALLS-->
-  <script type="text/javascript" src="../libs/3DHOP/js/trackball_turntable.js"></script>
-  <script type="text/javascript" src="../libs/3DHOP/js/trackball_turntable_pan.js"></script>
-  <script type="text/javascript" src="../libs/3DHOP/js/trackball_pantilt.js"></script>
-  <script type="text/javascript" src="../libs/3DHOP/js/trackball_sphere.js"></script>
+  <script type="text/javascript" src="/Potree_Sncf_Projet/libs/3DHOP/js/trackball_turntable.js"></script>
+  <script type="text/javascript" src="/Potree_Sncf_Projet/libs/3DHOP/js/trackball_turntable_pan.js"></script>
+  <script type="text/javascript" src="/Potree_Sncf_Projet/libs/3DHOP/js/trackball_pantilt.js"></script>
+  <script type="text/javascript" src="/Potree_Sncf_Projet/libs/3DHOP/js/trackball_sphere.js"></script>
   <!--UTILITY-->
-  <script type="text/javascript" src="../libs/3DHOP/js/init.js"></script>
+  <script type="text/javascript" src="/Potree_Sncf_Projet/libs/3DHOP/js/init.js"></script>
 </head>
 <body>
   <!-- Écran de chargement : page blanche avec spinner -->
@@ -80,19 +80,19 @@
   
   <!-- Conteneur du viewer, caché au démarrage -->
   <div id="viewer-container">
-    <div id="3dhop" class="tdhop" onmousedown="if (event.preventDefault) event.preventDefault()">
+    <div id="3dhop" class="tdhop" onmousedown="if(event.preventDefault) event.preventDefault()">
       <div id="tdhlg"></div>
       <div id="toolbar">
-        <img id="home"         title="Home"                src="../libs/3DHOP/skins/dark/home.png"         /><br/> 
-        <img id="zoomin"       title="Zoom In"             src="../libs/3DHOP/skins/dark/zoomin.png"       /><br/>
-        <img id="zoomout"      title="Zoom Out"            src="../libs/3DHOP/skins/dark/zoomout.png"      /><br/>
+        <img id="home"         title="Home"                src="https://raw.githubusercontent.com/cballand01/Potree_Sncf_Projet/refs/heads/main/libs/3DHOP/skins/dark/home.png"         /><br/>
+        <img id="zoomin"       title="Zoom In"             src="https://raw.githubusercontent.com/cballand01/Potree_Sncf_Projet/refs/heads/main/libs/3DHOP/skins/dark/zoomin.png"       /><br/>
+        <img id="zoomout"      title="Zoom Out"            src="https://raw.githubusercontent.com/cballand01/Potree_Sncf_Projet/refs/heads/main/libs/3DHOP/skins/dark/zoomout.png"      /><br/>
         <!-- Boutons light supprimés -->
-        <img id="perspective"  title="Perspective Camera"  src="../libs/3DHOP/skins/dark/perspective.png" 
+        <img id="perspective"  title="Perspective Camera"  src="https://raw.githubusercontent.com/cballand01/Potree_Sncf_Projet/refs/heads/main/libs/3DHOP/skins/dark/perspective.png" 
              style="position:absolute; visibility:hidden;"/>
-        <img id="orthographic" title="Orthographic Camera" src="../libs/3DHOP/skins/dark/orthographic.png" /><br/>
-        <img id="full_on"      title="Exit Full Screen"    src="../libs/3DHOP/skins/dark/full_on.png" 
+        <img id="orthographic" title="Orthographic Camera" src="https://raw.githubusercontent.com/cballand01/Potree_Sncf_Projet/refs/heads/main/libs/3DHOP/skins/dark/orthographic.png" /><br/>
+        <img id="full_on"      title="Exit Full Screen"    src="https://raw.githubusercontent.com/cballand01/Potree_Sncf_Projet/refs/heads/main/libs/3DHOP/skins/dark/full_on.png" 
              style="position:absolute; visibility:hidden;"/>
-        <img id="full"         title="Full Screen"         src="../libs/3DHOP/skins/dark/full.png"         />
+        <img id="full"         title="Full Screen"         src="https://raw.githubusercontent.com/cballand01/Potree_Sncf_Projet/refs/heads/main/libs/3DHOP/skins/dark/full.png"         />
       </div>
       <!-- Un seul canvas pour le rendu -->
       <canvas id="draw-canvas"></canvas>
@@ -107,7 +107,7 @@
     
       presenter.setScene({
         meshes: {
-          "mesh_1" : { url: "../model3D/modelNXS/model_TCOhaut.nxs" }
+          "mesh_1" : { url: "https://storage.googleapis.com/projet-potree-sncf/model_TCOhaut.nxs" }
         },
         modelInstances : {
           "model_1" : { 

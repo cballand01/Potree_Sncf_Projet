@@ -935,6 +935,23 @@ html, body {
   cursor: pointer;
 }
 
+#pauseResumeButton {
+  position: fixed;
+  bottom: 20px; /* Espace à partir du bas de l'écran */
+  left: 20px; /* Espace à partir du bord gauche de l'écran */
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#pauseResumeButton:hover {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
 /* Style pour le logo positionné en bas à droite */
 #logo {
     position: absolute;
@@ -952,3 +969,4 @@ html, body {
 #menu_filters + div {
     display: none !important;
 }
+

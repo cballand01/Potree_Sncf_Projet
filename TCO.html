@@ -271,8 +271,6 @@
       <img id="muteIcon" src="/Potree_Sncf_Projet/build/potree/resources/icons/volume-medium-white-icon.svg" alt="Mute" style="width:16px; height:16px;">
     </button>
   </div>
-
-  <button id="pauseResumeButton">Pause</button>
   
 
   <!-- Éléments audio pour les hotspots -->
@@ -324,7 +322,7 @@
     viewer.scene.scene.add(ambientLight);
     
     // Chargement du nuage de points via Potree.loadPointCloud
-    Potree.loadPointCloud("https://storage.googleapis.com/projet-potree-sncf/metadata.json", "Salle_TCO", function(e){
+    Potree.loadPointCloud("https://storage.googleapis.com/projet-potree-sncf/metadata.json", "Salle_SDR", function(e){
       viewer.scene.addPointCloud(e.pointcloud);
       let material = e.pointcloud.material;
       material.size = 1.3;
@@ -337,27 +335,112 @@
       // Désactivation du mode haute qualité par défaut et mise à jour du texte du bouton
       viewer.useHQ = false;
       document.getElementById("toggleLissage").textContent = "Activer lissage";
-    
 
-      //---------------- Anotations textuelles ----------------//
-      // Annotation texte 1
-      let iconInfo = $(`<span>
+      // fonction qui permet de cliquer sur une annotation même si l'animation du hotpsot n'est pas terminée
+      function addAnnotationClickHandler(annotation, duration = 1000) {
+        annotation.title.find("img").click((event) => {
+          event.stopPropagation();
+          if (typeof TWEEN !== 'undefined') {
+            TWEEN.removeAll();
+          }
+          // Utilise les coordonnées déjà stockées dans l'annotation
+          viewer.scene.view.setView(annotation.cameraPosition, annotation.cameraTarget, duration);
+        });
+      }
+
+      //---------------- Annotations textuelles ----------------//
+      // Annotation texte 1 Zoom
+      let iconInfo1 = $(`<span>
         <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
       </span>`);
       let annotationTexte1 = new Potree.Annotation({
-          position: new THREE.Vector3(4.84, 8.69, 1.83),
-          title: iconInfo, // Ici on met l'élément HTML au lieu du texte
-          description: "Un « poste tout relais à transit souple » désigne un dispositif de commande ferroviaire...",
-          cameraPosition: new THREE.Vector3(5.8, 8.5, 1.86),
-          cameraTarget: new THREE.Vector3(4.8, 8.7, 1.4)
+          position: new THREE.Vector3(5.46, 9.28, 1.24),
+          title: iconInfo1, // Ici on met l'élément HTML au lieu du texte
+          description: "Un Poste de Relai à Transit Souple (PRS) est un dispositif de commande ferroviaire qui permet de gérer la circulation des trains dans des zones où plusieurs itinéraires se croisent ou se séparent. Contrairement aux systèmes traditionnels qui utilisent des relais mécaniques ou électromagnétiques rigides, le PRS repose sur des mécanismes à transit souple, offrant ainsi une plus grande souplesse et une adaptation plus facile aux besoins spécifiques du réseau.",
+          cameraPosition: new THREE.Vector3(6.19, 6.30, 1.99),
+          cameraTarget: new THREE.Vector3(5.31, 8.20, 1.25)
       });
+      addAnnotationClickHandler(annotationTexte1);
       annotationTexte1.visible = true;
       viewer.scene.annotations.add(annotationTexte1);
+      
     
+      // Annotation texte 2 Zoom
+      let iconInfo2 = $(`<span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>`);
+      let annotationTexte2 = new Potree.Annotation({
+          position: new THREE.Vector3(0.98, 10.26, 3.00),
+          title: iconInfo2, // Ici on met l'élément HTML au lieu du texte
+          description: "Le but du Tableau de Contrôle Optique (TCO) est de fournir une vue d'ensemble du trafic ferroviaire en temps réel, permettant aux régulateurs de prendre des décisions éclairées pour assurer la sécurité, la fluidité et l'efficacité des trajets des trains.",
+          cameraPosition: new THREE.Vector3(1.58, 9.79, 2.70),
+          cameraTarget: new THREE.Vector3(0.93, 10.07, 2.70)
+      });
+      addAnnotationClickHandler(annotationTexte2);
+      annotationTexte2.visible = true;
+      viewer.scene.annotations.add(annotationTexte2);
+      
 
-      //---------------- Anotations imagées ----------------//
-      // Annotation Image 1
-      let iconImage1 = $(`<!-- Création d'une icône image pour l'annotation --> 
+      //---------------- Annotations textuelles explications ----------------//
+      // Annotation texte explication 1
+      let iconExp1 = $(`<span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>`);
+      let annotationExp1 = new Potree.Annotation({
+          position: new THREE.Vector3(1.12, 10.66, 2.53),
+          title: iconExp1, // Ici on met l'élément HTML au lieu du texte
+          description: "<b>Numérotation des TGV :</b><br><br>Les TGV sont représentés par des numéros à <b>quatre chiffres</b> :<br>- <b>Pairs</b> en direction de Paris<br>- <b>Impairs</b> en direction de Lyon<br><br>Les TGV <i>sans voyageurs</i> portent des numéros à <b>six chiffres</b>.<br>Les trains <i>exceptionnels</i> sont identifiés par des numéros à <b>cinq chiffres</b>.",
+        });
+      addAnnotationClickHandler(annotationExp1);
+      annotationExp1.visible = true;
+      viewer.scene.annotations.add(annotationExp1);
+      
+
+      // Annotation texte explication 2
+      let iconExp2 = $(`<span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>`);
+      let annotationExp2 = new Potree.Annotation({
+          position: new THREE.Vector3(0.86, 9.93, 3.10),
+          title: iconExp2, // Ici on met l'élément HTML au lieu du texte
+          description: "Il y a en moyenne un poste tous les 20 km de voies, pouvant être contrôlé soit depuis le PAR, soit en local.  ",
+      });
+      addAnnotationClickHandler(annotationExp2);
+      annotationExp2.visible = true;
+      viewer.scene.annotations.add(annotationExp2);
+      
+    
+      // Annotation texte explication 3
+      let iconExp3 = $(`<span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>`);
+      let annotationExp3 = new Potree.Annotation({
+          position: new THREE.Vector3(0.96, 10.22, 2.56),
+          title: iconExp3, // Ici on met l'élément HTML au lieu du texte
+          description: "<span style='font-weight: bold;'>&larr; Direction Paris</span> <span style='color: gray;'>(haut)</span><br><span style='font-weight: bold;'>&rarr; Direction Lyon</span> <span style='color: gray;'>(bas)</span>",
+      });
+      addAnnotationClickHandler(annotationExp3);
+      annotationExp3.visible = true;
+      viewer.scene.annotations.add(annotationExp3);
+      
+      
+      // Annotation texte explication 4
+      let iconExp4 = $(`<span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>`);
+      let annotationExp4 = new Potree.Annotation({
+          position: new THREE.Vector3(0.84, 9.84, 2.60),
+          title: iconExp4, // Ici on met l'élément HTML au lieu du texte
+          description: "<span style='color: yellow;'>Lumière jaune</span> = Section libre<br><span style='color: red;'>Lumière rouge</span> = TGV en ligne",
+      });
+      addAnnotationClickHandler(annotationExp4);
+      annotationExp4.visible = true;
+      viewer.scene.annotations.add(annotationExp4);
+      
+
+      //---------------- Annotations imagées ----------------//
+      // Annotation Image 1 (PRS1)
+      let iconImage1 = $(`<!-- Icône image pour la première annotation --> 
         <span>
           <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
         </span>
@@ -367,23 +450,24 @@
         viewer.scene.view.setView(annotationImage1.cameraPosition, annotationImage1.cameraTarget, 1000);
         setTimeout(() => {
           const imageUrl = "/Potree_Sncf_Projet/build/potree/resources/images/175A0701.JPG";
-          const imageDescription = "Poste tout relais à transit souple";
+          const imageDescription = "Poste tout relais à transit souple 19 - 22";
           $("#popupImage").attr("src", imageUrl);
           $("#popupText").text(imageDescription);
           $("#imagePopup").css("display", "flex");
         }, 2000);
       });
       let annotationImage1 = new Potree.Annotation({
-        position: new THREE.Vector3(5.52, 10.17, 1.82),
+        position: new THREE.Vector3(5.88, 9.87, 1.25),
         title: iconImage1,
-        description: "PRS 3",
         cameraPosition: new THREE.Vector3(6.34, 9.56, 2.02),
         cameraTarget: new THREE.Vector3(5.53, 10.15, 1.40)
       });
+      addAnnotationClickHandler(annotationImage1);
       annotationImage1.visible = true;
       viewer.scene.annotations.add(annotationImage1);
+      
     
-      // Annotation avec image 2
+      // Annotation avec image 2 (Ile de France 1)
       let iconImage2 = $(`<!-- Icône image pour la deuxième annotation --> 
         <span>
           <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
@@ -394,22 +478,165 @@
         viewer.scene.view.setView(annotationImage2.cameraPosition, annotationImage2.cameraTarget, 1000);
         setTimeout(() => {
           const imageUrl = "/Potree_Sncf_Projet/build/potree/resources/images/175A0763.JPG";
-          const imageDescription = "Région Ile de France";
+          const imageDescription = "Poste de gestion Île-de-France n°1";
           $("#popupImage").attr("src", imageUrl);
           $("#popupText").text(imageDescription);
           $("#imagePopup").css("display", "flex");
         }, 2000);
       });
       let annotationImage2 = new Potree.Annotation({
-        position: new THREE.Vector3(7.48, 2, 2.10),
+        position: new THREE.Vector3(7.48, 2, 1.98),
         title: iconImage2,
-        description: "Région Ile de France",
         cameraPosition: new THREE.Vector3(7.78, 3.33, 2.03),
         cameraTarget: new THREE.Vector3(7.47, 1.99, 1.66)
       });
+      addAnnotationClickHandler(annotationImage2);
       annotationImage2.visible = true;
       viewer.scene.annotations.add(annotationImage2);
+      
+
+      // Annotation avec image 3 (Ile de France 2)
+      let iconImage3 = $(`<!-- Icône image pour la troisième annotation --> 
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      iconImage3.find("img").click((event) => {
+        event.stopPropagation();
+        viewer.scene.view.setView(annotationImage3.cameraPosition, annotationImage3.cameraTarget, 1000);
+        setTimeout(() => {
+          const imageUrl = "/Potree_Sncf_Projet/build/potree/resources/images/175A0764.JPG";
+          const imageDescription = "Poste de gestion Île-de-France n°2";
+          $("#popupImage").attr("src", imageUrl);
+          $("#popupText").text(imageDescription);
+          $("#imagePopup").css("display", "flex");
+        }, 2000);
+      });
+      let annotationImage3 = new Potree.Annotation({
+        position: new THREE.Vector3(6.49, 2.10, 1.61),
+        title: iconImage3,
+        cameraPosition: new THREE.Vector3(6.96, 3.09, 1.75),
+        cameraTarget: new THREE.Vector3(6.49, 2.10, 1.61)
+      });
+      addAnnotationClickHandler(annotationImage3);
+      annotationImage3.visible = true;
+      viewer.scene.annotations.add(annotationImage3);
+      
+
+      // Annotation avec image 4 (Ile de France 3)
+      let iconImage4 = $(`<!-- Icône image pour la quatrième annotation --> 
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      iconImage4.find("img").click((event) => {
+        event.stopPropagation();
+        viewer.scene.view.setView(annotationImage4.cameraPosition, annotationImage4.cameraTarget, 1000);
+        setTimeout(() => {
+          const imageUrl = "/Potree_Sncf_Projet/build/potree/resources/images/175A0762.JPG";
+          const imageDescription = "Poste de gestion Île-de-France n°3";
+          $("#popupImage").attr("src", imageUrl);
+          $("#popupText").text(imageDescription);
+          $("#imagePopup").css("display", "flex");
+        }, 2000);
+      });
+      let annotationImage4 = new Potree.Annotation({
+        position: new THREE.Vector3(5.78, 2.88, 1.96),
+        title: iconImage4,
+        cameraPosition: new THREE.Vector3(6.16, 3.92, 1.91),
+        cameraTarget: new THREE.Vector3(5.70, 2.97, 1.58)
+      });
+      addAnnotationClickHandler(annotationImage4);
+      annotationImage4.visible = true;
+      viewer.scene.annotations.add(annotationImage4);
+      
+
+      // Annotation avec image 5 (PRS1)
+      let iconImage5 = $(`<!-- Icône image pour la quatrième annotation --> 
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      iconImage5.find("img").click((event) => {
+        event.stopPropagation();
+        viewer.scene.view.setView(annotationImage5.cameraPosition, annotationImage5.cameraTarget, 1000);
+        setTimeout(() => {
+          const imageUrl = "/Potree_Sncf_Projet/build/potree/resources/images/175A0718.JPG";
+          const imageDescription = "Poste tout relais à transit souple 10 - 14";
+          $("#popupImage").attr("src", imageUrl);
+          $("#popupText").text(imageDescription);
+          $("#imagePopup").css("display", "flex");
+        }, 2000);
+      });
+      let annotationImage5 = new Potree.Annotation({
+        position: new THREE.Vector3(5.40, 7.12, 1.24),
+        title: iconImage5,
+        cameraPosition: new THREE.Vector3(6.05, 6.65, 1.79),
+        cameraTarget: new THREE.Vector3(5.08, 7.05, 1.33)
+      });
+      addAnnotationClickHandler(annotationImage5);
+      annotationImage5.visible = true;
+      viewer.scene.annotations.add(annotationImage5);
+      
+
+      // Annotation avec image 6 (PRS2)
+      let iconImage6 = $(`<!-- Icône image pour la quatrième annotation --> 
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      iconImage6.find("img").click((event) => {
+        event.stopPropagation();
+        viewer.scene.view.setView(annotationImage6.cameraPosition, annotationImage6.cameraTarget, 1000);
+        setTimeout(() => {
+          const imageUrl = "/Potree_Sncf_Projet/build/potree/resources/images/175A0710.JPG";
+          const imageDescription = "Poste tout relais à transit souple 15 - 16, 30, 18";
+          $("#popupImage").attr("src", imageUrl);
+          $("#popupText").text(imageDescription);
+          $("#imagePopup").css("display", "flex");
+        }, 2000);
+      });
+      let annotationImage6 = new Potree.Annotation({
+        position: new THREE.Vector3(5.26, 8.59, 1.24),
+        title: iconImage6,
+        cameraPosition: new THREE.Vector3(5.89, 8.49, 1.96),
+        cameraTarget: new THREE.Vector3(4.92, 8.60, 1.34)
+      });
+      addAnnotationClickHandler(annotationImage6);
+      annotationImage6.visible = true;
+      viewer.scene.annotations.add(annotationImage6);
+      
+
+      // Annotation avec image 7 (PRS 4)
+      let iconImage7 = $(`<!-- Icône image pour la quatrième annotation --> 
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      iconImage7.find("img").click((event) => {
+        event.stopPropagation();
+        viewer.scene.view.setView(annotationImage7.cameraPosition, annotationImage7.cameraTarget, 1000);
+        setTimeout(() => {
+          const imageUrl = "/Potree_Sncf_Projet/build/potree/resources/images/175A0699.JPG";
+          const imageDescription = "Poste tout relais à transit souple 23 - 27";
+          $("#popupImage").attr("src", imageUrl);
+          $("#popupText").text(imageDescription);
+          $("#imagePopup").css("display", "flex");
+        }, 2000);
+      });
+      let annotationImage7 = new Potree.Annotation({
+        position: new THREE.Vector3(7.08, 10.64, 1.24),
+        title: iconImage7,
+        cameraPosition: new THREE.Vector3(6.95, 10.24, 1.88),
+        cameraTarget: new THREE.Vector3(6.99, 10.96, 1.34)
+      });
+      addAnnotationClickHandler(annotationImage7);
+      annotationImage7.visible = true;
+      viewer.scene.annotations.add(annotationImage7);
+      
     
+
+
       //---------------- Liens visualisation 3D ----------------//
       // Annotation 3D 1
       let icon3D1 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_Tableau.html --> 
@@ -426,8 +653,10 @@
         title: icon3D1,
         description: "",
       });
+      addAnnotationClickHandler(annotation3D1);
       annotation3D1.visible = true;
       viewer.scene.annotations.add(annotation3D1);
+      
 
       // Annotation 3D 2
       let icon3D2 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_PRS4.html --> 
@@ -444,8 +673,10 @@
         title: icon3D2,
         description: "",
       });
+      addAnnotationClickHandler(annotation3D2);
       annotation3D2.visible = true;
       viewer.scene.annotations.add(annotation3D2);
+      
 
       // Annotation 3D 3
       let icon3D3 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_PRS1.html --> 
@@ -462,8 +693,10 @@
         title: icon3D3,
         description: "",
       });
+      addAnnotationClickHandler(annotation3D3);
       annotation3D3.visible = true;
       viewer.scene.annotations.add(annotation3D3);
+      
 
       // Annotation 3D 4
       let icon3D4 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_PRS2.html --> 
@@ -480,8 +713,10 @@
         title: icon3D4,
         description: "",
       });
+      addAnnotationClickHandler(annotation3D4);
       annotation3D4.visible = true;
       viewer.scene.annotations.add(annotation3D4);
+      
 
       // Annotation 3D 5
       let icon3D5 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_PRS3.html --> 
@@ -498,8 +733,10 @@
         title: icon3D5,
         description: "",
       });
+      addAnnotationClickHandler(annotation3D5);
       annotation3D5.visible = true;
       viewer.scene.annotations.add(annotation3D5);
+      
 
 
       // Annotation 3D 6
@@ -517,8 +754,10 @@
         title: icon3D6,
         description: "",
       });
+      addAnnotationClickHandler(annotation3D6);
       annotation3D6.visible = true;
       viewer.scene.annotations.add(annotation3D6);
+      
 
       // Annotation 3D 7
       let icon3D7 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_tab_total.html --> 
@@ -535,48 +774,100 @@
         title: icon3D7,
         description: "",
       });
+      addAnnotationClickHandler(annotation3D7);
       annotation3D7.visible = true;
       viewer.scene.annotations.add(annotation3D7);
+      
 
+
+      //---------------- Liens autre salle ----------------//
+      // Annotation Goto 1
+      let icongoto1 = $(`<!-- Icône pour annotation qui ouvre SDR.html --> 
+      <span style="display: flex; align-items: center;">
+        <!-- Titre textuel à gauche -->
+        <span style="margin-right: 10px; font-size: 16px; color: white;">Salle des relais</span>
+        <!-- Logo à côté du titre -->
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/goto.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    icongoto1.find("img").click((event) => {
+        event.stopPropagation();
+        window.open("SDR.html", "_blank");
+      });
+      let lienSDR = new Potree.Annotation({
+        position: new THREE.Vector3(8.96, 15.89, 1.75),
+        title: icongoto1,
+        description: "",
+      });
+      addAnnotationClickHandler(lienSDR);
+      lienSDR.visible = true;
+      viewer.scene.annotations.add(lienSDR);
+      
+    
 
 
       //---------------- Seuils de distance d'affichage ----------------//
-      const distanceThresholdText = 5; //textes
-      const distanceThresholdImage = 5; //images
-      const distanceThreshold3D = 10; //liens3D
+      const distanceThresholdText = 9; //textes
+      const distanceThresholdImage = 9; //images
+      const distanceThreshold3D = 9; //liens3D
+      const distanceGoto = 4; //liens html
+      const distanceThresholdExp = 1; //textes rapprochés
+      const distanceThresholdAnimation = 9; //video
       // Mise à jour de la visibilité des annotations en fonction de la distance de la caméra
       viewer.addEventListener("update", () => {
         let cameraPos = viewer.scene.getActiveCamera().position;
         
-        let distTexte1 = cameraPos.distanceTo(annotationTexte1.position);
+        let distTexte1 = cameraPos.distanceTo(annotationTexte2.position);
         annotationTexte1.visible = (distTexte1 < distanceThresholdText);
+        let distTexte2 = cameraPos.distanceTo(annotationTexte2.position);
+        annotationTexte2.visible = (distTexte2 < distanceThresholdText);
         
+        let distExp1 = cameraPos.distanceTo(annotationExp1.position);
+        annotationExp1.visible = (distExp1 < distanceThresholdExp);
+        let distExp2 = cameraPos.distanceTo(annotationExp2.position);
+        annotationExp2.visible = (distExp2 < distanceThresholdExp);
+        let distExp3 = cameraPos.distanceTo(annotationExp3.position);
+        annotationExp3.visible = (distExp3 < distanceThresholdExp);
+        let distExp4 = cameraPos.distanceTo(annotationExp4.position);
+        annotationExp4.visible = (distExp4 < distanceThresholdExp);
+
         let distImage1 = cameraPos.distanceTo(annotationImage1.position);
         annotationImage1.visible = (distImage1 < distanceThresholdImage);
-        
         let distImage2 = cameraPos.distanceTo(annotationImage2.position);
         annotationImage2.visible = (distImage2 < distanceThresholdImage);
+        let distImage3 = cameraPos.distanceTo(annotationImage3.position);
+        annotationImage3.visible = (distImage3 < distanceThresholdImage);
+        let distImage4 = cameraPos.distanceTo(annotationImage4.position);
+        annotationImage4.visible = (distImage4 < distanceThresholdImage);
+        let distImage5 = cameraPos.distanceTo(annotationImage5.position);
+        annotationImage5.visible = (distImage5 < distanceThresholdImage);
+        let distImage6 = cameraPos.distanceTo(annotationImage6.position);
+        annotationImage6.visible = (distImage6 < distanceThresholdImage);
+        let distImage7 = cameraPos.distanceTo(annotationImage7.position);
+        annotationImage7.visible = (distImage7 < distanceThresholdImage);
         
         let dist3D1 = cameraPos.distanceTo(annotation3D1.position);
-        annotation3D1.visible = (dist3D1 < distanceThreshold3D);
-        
+        annotation3D1.visible = (dist3D1 < distanceThreshold3D);       
         let dist3D2 = cameraPos.distanceTo(annotation3D2.position);
         annotation3D2.visible = (dist3D2 < distanceThreshold3D);
-
         let dist3D3 = cameraPos.distanceTo(annotation3D3.position);
         annotation3D3.visible = (dist3D3 < distanceThreshold3D);
-
         let dist3D4 = cameraPos.distanceTo(annotation3D4.position);
         annotation3D4.visible = (dist3D4 < distanceThreshold3D);
-
         let dist3D5 = cameraPos.distanceTo(annotation3D5.position);
         annotation3D5.visible = (dist3D5 < distanceThreshold3D);
-
         let dist3D6 = cameraPos.distanceTo(annotation3D6.position);
         annotation3D6.visible = (dist3D6 < distanceThreshold3D);
-
         let dist3D7 = cameraPos.distanceTo(annotation3D7.position);
         annotation3D7.visible = (dist3D7 < distanceThreshold3D);
+
+        let distgoto1 = cameraPos.distanceTo(lienSDR.position);
+        lienSDR.visible = (distgoto1 < distanceGoto);
+
+        let distAnim1 = cameraPos.distanceTo(annotationcam1.position);
+        annotationcam1.visible = (distAnim1 < distanceThresholdAnimation);
+        let distAnim2 = cameraPos.distanceTo(annotationcam2.position);
+        annotationcam2.visible = (distAnim2 < distanceThresholdAnimation);
       });
     });
     
@@ -735,26 +1026,26 @@
     viewer.scene.addCameraAnimation(animation1);
 
     // Création du bouton pour la première animation
-    let iconGoto1 = $(`<span>
+    let iconcam1 = $(`<span>
         <img src="/Potree_Sncf_Projet/build/potree/resources/icons/camera.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
     </span>`);
 
     // Ajouter un événement de clic sur le bouton pour lancer la première animation
-    iconGoto1.find("img").click((event) => {
+    iconcam1.find("img").click((event) => {
       event.stopPropagation();
       animation1.play();  // Lancer la première animation lorsque le bouton est cliqué
     });
 
     // Créer une annotation pour la première animation
-    let annotationGoto1 = new Potree.Annotation({
+    let annotationcam1 = new Potree.Annotation({
       position: new THREE.Vector3(2.65, 4.51, 2.70), // Position de l'annotation
-      title: iconGoto1,
+      title: iconcam1,
     });
 
     animation1.setDuration(animationDuration1); // Applique la durée définie ci-dessus
 
-    annotationGoto1.visible = true;
-    viewer.scene.annotations.add(annotationGoto1);
+    annotationcam1.visible = true;
+    viewer.scene.annotations.add(annotationcam1);
     animation1.setVisible(false);  // Désactive la représentation visuelle de l'animation
 
     // Bouton play pour la première animation
@@ -821,27 +1112,27 @@
     viewer.scene.addCameraAnimation(animation2);
 
     // Création du bouton pour la deuxième animation
-    let iconGoto2 = $(`<span>
+    let iconcam2 = $(`<span>
         <img src="/Potree_Sncf_Projet/build/potree/resources/icons/camera.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
     </span>`);
 
     // Ajouter un événement de clic sur le bouton pour lancer la deuxième animation
-    iconGoto2.find("img").click((event) => {
+    iconcam2.find("img").click((event) => {
       event.stopPropagation();
       animation2.play();  // Lancer la deuxième animation lorsque le bouton est cliqué
     });
 
     // Créer une annotation pour la deuxième animation
-    let annotationGoto2 = new Potree.Annotation({
+    let annotationcam2 = new Potree.Annotation({
       position: new THREE.Vector3(6.64, 8.59, 0.52), // Position de l'annotation
-      title: iconGoto2,
+      title: iconcam2,
       description: "Lancer l'animation de caméra 2",
     });
 
     animation2.setDuration(animationDuration2); // Applique la durée définie ci-dessus
 
-    annotationGoto2.visible = true;
-    viewer.scene.annotations.add(annotationGoto2);
+    annotationcam2.visible = true;
+    viewer.scene.annotations.add(annotationcam2);
     animation2.setVisible(false);  // Désactive la représentation visuelle de l'animation
 
     // Bouton play pour la deuxième animation
@@ -852,27 +1143,6 @@
 
     //---------------- Fin Deuxième Animation ----------------//
     
-
-    // Variable pour suivre l'état de l'animation
-    let isAnimationPaused = false;
-
-    // Bouton pour mettre en pause/reprendre l'animation
-    document.getElementById("pauseResumeButton").addEventListener("click", function() {
-        if (isAnimationPaused) {
-            animation1.play();  // Reprendre l'animation 1
-            animation2.play();  // Reprendre l'animation 2
-            document.getElementById("pauseResumeButton").textContent = "Pause";  // Changer le texte du bouton
-        } else {
-            animation1.pause();  // Mettre l'animation 1 en pause
-            animation2.pause();  // Mettre l'animation 2 en pause
-            document.getElementById("pauseResumeButton").textContent = "Reprendre";  // Changer le texte du bouton
-        }
-        isAnimationPaused = !isAnimationPaused;  // Inverser l'état de l'animation
-    });
-
-
-
-
       
     // Fonction pour jouer l'audio associé à un hotspot
     function playHotspotAudio(index) {
@@ -1192,7 +1462,7 @@
           viewer.setPointBudget(100000);
           viewer.useHQ = false;
           videoPopup.style.display = 'flex';
-          popupVideo.querySelector('source').src = "https://storage.googleapis.com/projet-potree-sncf/Version%20Courte%20PAR.mp4";
+          popupVideo.querySelector('source').src = "/Potree_Sncf_Projet/build/potree/resources/videos/Version Courte PAR.mp4";
           popupVideo.load();
           popupVideo.play();
         });

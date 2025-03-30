@@ -108,6 +108,10 @@
         padding: 1rem;
         font-size: 1rem;
       }
+      /* Masquer les boutons non souhaités en mode mobile */
+      .hide-mobile {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -145,16 +149,16 @@
         <div class="card">
           <a href="TCO_IDF.html">Tableau Île-de-France</a>
         </div>
-        <div class="card">
+        <div class="card hide-mobile">
           <a href="TCO_tab_haut.html">T.C.O. haut</a>
         </div>
-        <div class="card">
+        <div class="card hide-mobile">
           <a href="TCO_tab_central.html">T.C.O. central</a>
         </div>
-        <div class="card">
+        <div class="card hide-mobile">
           <a href="TCO_tab_bas.html">T.C.O. bas</a>
         </div>
-        <div class="card">
+        <div class="card hide-mobile">
           <a href="TCO_tab_total.html">T.C.O. complet</a>
         </div>
       </div>

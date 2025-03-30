@@ -51,7 +51,18 @@
     #draw-canvas {
       width: 100%;
       height: 100%;
-      background-image: url(/Potree_Sncf_Projet/libs/3DHOP/skins/backgrounds/light.jpg);
+      background-color: rgba(24, 31, 33, 1); /* Fond sombre de Potree */
+    }
+    #logo-container {
+      position: fixed; /* Position fixe pour le placer toujours à l'écran */
+      bottom: 10px;    /* Distance du bas de l'écran */
+      left: 10px;      /* Distance du côté gauche de l'écran */
+      z-index: 10000;  /* Assurez-vous que le logo soit au-dessus des autres éléments */
+    }
+
+    #logo {
+      width: 100px;     /* Ajustez la taille du logo */
+      height: auto;    /* Maintient les proportions du logo */
     }
   </style>
   <!--SPIDERGL-->
@@ -77,6 +88,11 @@
     <div class="spinner"></div>
     <p>Chargement du modèle...</p>
   </div>
+
+  <!-- Lien vers le site de la SNCF avec affichage du logo -->
+  <a href="https://www.sncf-reseau.com/fr" target="_blank" id="logo-container">
+    <img src="/Potree_Sncf_Projet/build/potree/resources/images/Logo_SNCF.png" alt="Logo SNCF" id="logo">
+  </a>
   
   <!-- Conteneur du viewer, caché au démarrage -->
   <div id="viewer-container">

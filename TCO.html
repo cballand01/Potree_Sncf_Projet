@@ -1668,6 +1668,33 @@
       });
     });
   </script>
+
+  <script>
+    let lastTap = 0;
+    const renderArea = document.getElementById("potree_render_area");
+  
+    renderArea.addEventListener("touchend", function(e) {
+      const currentTime = new Date().getTime();
+      const tapLength = currentTime - lastTap;
+      // Si le délai entre deux touchers est inférieur à 300ms, on considère qu'il s'agit d'un double tap
+      if (tapLength > 0 && tapLength < 300) {
+        e.preventDefault();
+        // Récupère la position du toucher
+        const touch = e.changedTouches[0];
+        const x = touch.clientX;
+        const y = touch.clientY;
+        
+        // Utilise la fonction pick de Potree pour obtenir le point dans le nuage
+        const pickResult = viewer.pick(x, y);
+        if (pickResult && pickResult.position) {
+          const point = pickResult.position;
+          // Recentrer la vue sur le point détecté
+          viewer.scene.view.setView(point, point, 500);
+        }
+      }
+      lastTap = currentTime;
+    });
+  </script>
   
 </body>
 </html>

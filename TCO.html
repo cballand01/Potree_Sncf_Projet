@@ -1126,7 +1126,6 @@
     let annotationcam2 = new Potree.Annotation({
       position: new THREE.Vector3(6.64, 8.59, 0.52), // Position de l'annotation
       title: iconcam2,
-      description: "Lancer l'animation de caméra 2",
     });
 
     animation2.setDuration(animationDuration2); // Applique la durée définie ci-dessus
@@ -1462,7 +1461,7 @@
           viewer.setPointBudget(100000);
           viewer.useHQ = false;
           videoPopup.style.display = 'flex';
-          popupVideo.querySelector('source').src = "/Potree_Sncf_Projet/build/potree/resources/videos/Version Courte PAR.mp4";
+          popupVideo.querySelector('source').src = "https://storage.googleapis.com/projet-potree-sncf/Version%20Courte%20PAR.mp4";
           popupVideo.load();
           popupVideo.play();
         });

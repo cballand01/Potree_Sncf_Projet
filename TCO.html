@@ -640,7 +640,33 @@
       addAnnotationClickHandler(annotationImage7);
       annotationImage7.visible = true;
       viewer.scene.annotations.add(annotationImage7);
-      
+
+      // Annotation avec image 8 (afficheur LED)
+      let iconImage8 = $(` 
+        <span>
+          <img src="/Potree_Sncf_Projet/bbuild/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      iconImage8.find("img").click((event) => {
+        event.stopPropagation();
+        viewer.scene.view.setView(annotationImage7.cameraPosition, annotationImage7.cameraTarget, 1000);
+        setTimeout(() => {
+          const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/IMG_2190.jpg";
+          const imageDescription = "Afficheur 20mm LED TCO mural";
+          $("#popupImage").attr("src", imageUrl);
+          $("#popupText").text(imageDescription);
+          $("#imagePopup").css("display", "flex");
+        }, 2000);
+      });
+      let annotationImage8 = new Potree.Annotation({
+        position: new THREE.Vector3(0.72, 6.65, 2.48),
+        title: iconImage8,
+        cameraPosition: new THREE.Vector3(1.29, 6.68, 2.40),
+        cameraTarget: new THREE.Vector3(0.72, 6.65, 2.40)
+      });
+      addAnnotationClickHandler(annotationImage8);
+      annotationImage8.visible = true;
+      viewer.scene.annotations.add(annotationImage8);
     
 
 
@@ -888,6 +914,8 @@
         annotationImage6.visible = (distImage6 < distanceThresholdImage);
         let distImage7 = cameraPos.distanceTo(annotationImage7.position);
         annotationImage7.visible = (distImage7 < distanceThresholdImage);
+        let distImage8 = cameraPos.distanceTo(annotationImage8.position);
+        annotationImage8.visible = (distImage8 < distanceThresholdImage);
         
         let dist3D1 = cameraPos.distanceTo(annotation3D1.position);
         annotation3D1.visible = (dist3D1 < distanceThreshold3D);       

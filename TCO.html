@@ -16,6 +16,7 @@
   <link rel="stylesheet" type="text/css" href="/Potree_Sncf_Projet/libs/spectrum/spectrum.css">
   <link rel="stylesheet" type="text/css" href="/Potree_Sncf_Projet/libs/jstree/themes/mixed/style.css">
   <link rel="stylesheet" type="text/css" href="/Potree_Sncf_Projet/build/potree/style_SNCF.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.pannellum.org/2.5/pannellum.css"/>
   
   <!-- Style spécifique pour le conteneur de l'image dans la popup -->
   <style>
@@ -271,7 +272,12 @@
       <img id="muteIcon" src="/Potree_Sncf_Projet/build/potree/resources/icons/volume-medium-white-icon.svg" alt="Mute" style="width:16px; height:16px;">
     </button>
   </div>
-  
+
+  <!-- Popup Image 360° -->
+  <div id="popup360" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 9999;">
+    <span id="close360" style="position: absolute; top: 20px; right: 30px; font-size: 30px; color: white; cursor: pointer; z-index: 1000;">&times;</span>
+    <div id="panorama" style=" width: 100vw; height: 100vh;"></div>
+  </div>
 
   <!-- Éléments audio pour les hotspots -->
   <audio id="audioHotspot0" src="/Potree_Sncf_Projet/build/potree/resources/audio/01.mp3" preload="auto"></audio>
@@ -291,6 +297,7 @@
   <script src="/Potree_Sncf_Projet/libs/jstree/jstree.js"></script>
   <script src="/Potree_Sncf_Projet/build/potree/potree.js"></script>
   <script src="/Potree_Sncf_Projet/libs/plasio/js/laslaz.js"></script>
+  <script src="https://cdn.pannellum.org/2.5/pannellum.js"></script>
 
   <!-- Script principal pour configurer Potree et charger les éléments 3D -->
   <script type="module">
@@ -802,7 +809,42 @@
       addAnnotationClickHandler(lienSDR);
       lienSDR.visible = true;
       viewer.scene.annotations.add(lienSDR);
-      
+
+
+      //---------------- Liens 360° ----------------//
+      // Annotation 360° 1
+      let icon3601 = $(`
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/360.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      icon3601.find("img").click((event) => {
+        event.stopPropagation();
+        open360Viewer("https://storage.googleapis.com/projet-potree-sncf/Images360/R0010641_20250306162238.JPG");
+      });
+      let annotation3601 = new Potree.Annotation({
+        position: new THREE.Vector3(7.00, 8.00, 1.50),
+        title: icon3601
+      });
+      annotation3601.visible = true;
+      viewer.scene.annotations.add(annotation3601);
+
+      // Annotation 360° 2
+      let icon3602 = $(`
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/360.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      icon3602.find("img").click((event) => {
+        event.stopPropagation();
+        open360Viewer("https://storage.googleapis.com/projet-potree-sncf/Images360/R0010642_20250306162347.JPG");
+      });
+      let annotation3602 = new Potree.Annotation({
+        position: new THREE.Vector3(4.06, 9.95, 1.50),
+        title: icon3602
+      });
+      annotation3602.visible = true;
+      viewer.scene.annotations.add(annotation3602);
     
 
 
@@ -1693,6 +1735,28 @@
         }
       }
       lastTap = currentTime;
+    });
+  </script>
+  
+  <script>
+    function open360Viewer(imagePath) {
+      document.getElementById("popup360").style.display = "block";
+      pannellum.viewer('panorama', {
+        type: 'equirectangular',
+        panorama: imagePath,
+        autoLoad: true,
+        showControls: false,     // Supprime tous les boutons (haut-gauche)
+        compass: false,          // Supprime l’icône d’orientation
+        showZoomCtrl: false,     // Supprime le zoom
+        showFullscreenCtrl: false,
+        showControlsOnHover: false,
+        mouseZoom: true          // Optionnel : garde le zoom molette si tu veux
+      });
+    }
+
+    document.getElementById("close360").addEventListener("click", function() {
+      document.getElementById("popup360").style.display = "none";
+      document.getElementById("panorama").innerHTML = ""; // Réinitialise le viewer
     });
   </script>
   

@@ -329,7 +329,7 @@
     viewer.scene.scene.add(ambientLight);
     
     // Chargement du nuage de points via Potree.loadPointCloud
-    Potree.loadPointCloud("https://storage.googleapis.com/projet-potree-sncf/NuageSDR/metadata.json", "Salle_SDR", function(e){
+    Potree.loadPointCloud("https://storage.googleapis.com/projet-potree-sncf/NuageTCO/metadata.json", "Salle_SDR", function(e){
       viewer.scene.addPointCloud(e.pointcloud);
       let material = e.pointcloud.material;
       material.size = 1.3;

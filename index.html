@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Accueil - Projet PAR SNCF</title>
+  <title>Accueil - Mon Projet 3D</title>
   <style>
     /* Appliquer box-sizing pour tous les éléments */
     *,
@@ -33,7 +33,6 @@
 
     /* Header */
     header {
-      width: 100%;
       background: linear-gradient(135deg, #4a90e2, #145da0);
       color: #fff;
       padding: 2rem 1rem;
@@ -88,9 +87,18 @@
       font-size: 1.2rem;
     }
 
+    /* Disposition verticale pour Potree avec pleine largeur */
+    .cards.vertical {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .cards.vertical .card {
+      width: 100%;
+    }
+
     /* Footer collant */
     footer {
-      width: 100%;
       background: #333;
       color: #fff;
       text-align: center;
@@ -99,18 +107,12 @@
 
     /* Media query pour les petits écrans */
     @media (max-width: 480px) {
-      /* Réduire la largeur minimale des cartes */
       .cards {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       }
-      /* Ajuster le padding et la taille de police des liens */
       .card a {
         padding: 1rem;
         font-size: 1rem;
-      }
-      /* Masquer les boutons non souhaités en mode mobile */
-      .hide-mobile {
-        display: none;
       }
     }
   </style>
@@ -124,9 +126,12 @@
     <!-- Section pour les contenus POTREE -->
     <section class="section">
       <h2>Nuages de points & Visite guidée - POTREE</h2>
-      <div class="cards">
+      <div class="cards vertical">
         <div class="card">
           <a href="TCO.html">Salle du Tableau de Contrôle Optique</a>
+        </div>
+        <div class="card">
+          <a href="SDR.html">Salle des Relais </a>
         </div>
       </div>
     </section>
@@ -135,31 +140,34 @@
       <h2>Modèles 3D - 3DHOP</h2>
       <div class="cards">
         <div class="card">
-          <a href="TCO_PRS1.html">P.R.S. n°1</a>
+          <a href="TCO_PRS1.html">PRS 1</a>
         </div>
         <div class="card">
-          <a href="TCO_PRS2.html">P.R.S. n°2</a>
+          <a href="TCO_PRS2.html">PRS 2</a>
         </div>
         <div class="card">
-          <a href="TCO_PRS3.html">P.R.S. n°3</a>
+          <a href="TCO_PRS3.html">PRS3</a>
         </div>
         <div class="card">
-          <a href="TCO_PRS4.html">P.R.S. n°4</a>
+          <a href="TCO_PRS4.html">PRS 4</a>
         </div>
         <div class="card">
           <a href="TCO_IDF.html">Tableau Île-de-France</a>
         </div>
-        <div class="card hide-mobile">
-          <a href="TCO_tab_haut.html">T.C.O. haut</a>
+        <div class="card">
+          <a href="TCO_Tableau.html">Tableau</a>
         </div>
-        <div class="card hide-mobile">
-          <a href="TCO_tab_central.html">T.C.O. central</a>
+        <div class="card">
+          <a href="TCO_tab_haut.html">TCO haut</a>
         </div>
-        <div class="card hide-mobile">
-          <a href="TCO_tab_bas.html">T.C.O. bas</a>
+        <div class="card">
+          <a href="TCO_tab_central.html">TCO central</a>
         </div>
-        <div class="card hide-mobile">
-          <a href="TCO_tab_total.html">T.C.O. complet</a>
+        <div class="card">
+          <a href="TCO_tab_bas.html">TCO bas</a>
+        </div>
+        <div class="card">
+          <a href="TCO_tab_total.html">TCO complet</a>
         </div>
       </div>
     </section>

@@ -246,7 +246,7 @@
       <span class="custom-tooltip">Vue précédente</span>
     </div>
     <div id="hotspots" class="hotspot-label tooltip-container">
-      <span id="hotspotName">Vue d'ensemble</span>
+      <span id="hotspotName">VUE D'ENSEMBLE</span>
       <span class="custom-tooltip">Recentrer la vue</span>
     </div>
     <div id="next" class="arrow-button tooltip-container">
@@ -255,7 +255,7 @@
     </div>
     <div id="hotspotList" class="hotspot-list">
       <ul>
-        <li><a href="#" data-hotspot-index="0">Vue d'ensemble</a></li>
+        <li><a href="#" data-hotspot-index="0">VUE D'ENSEMBLE</a></li>
         <li><a href="#" data-hotspot-index="1">Tableau 1</a></li>
         <li><a href="#" data-hotspot-index="2">Ile de France</a></li>
       </ul>
@@ -363,7 +363,7 @@
       let annotationTexte1 = new Potree.Annotation({
           position: new THREE.Vector3(5.46, 9.28, 1.24),
           title: iconInfo1, // Ici on met l'élément HTML au lieu du texte
-          description: "Un Poste de Relai à Transit Souple (PRS) est un dispositif de commande ferroviaire qui permet de gérer la circulation des trains dans des zones où plusieurs itinéraires se croisent ou se séparent. Contrairement aux systèmes traditionnels qui utilisent des relais mécaniques ou électromagnétiques rigides, le PRS repose sur des mécanismes à transit souple, offrant ainsi une plus grande souplesse et une adaptation plus facile aux besoins spécifiques du réseau.",
+          description: "Un Poste de Relais à Transit Souple (PRS) est un dispositif de commande ferroviaire qui permet de gérer la circulation des trains dans des zones où plusieurs itinéraires se croisent ou se séparent. Contrairement aux systèmes traditionnels qui utilisent des relais mécaniques ou électromagnétiques rigides, le PRS repose sur des mécanismes à transit souple, offrant ainsi une plus grande souplesse et une adaptation plus facile aux besoins spécifiques du réseau.",
           cameraPosition: new THREE.Vector3(6.19, 6.30, 1.99),
           cameraTarget: new THREE.Vector3(5.31, 8.20, 1.25)
       });
@@ -1237,14 +1237,14 @@
     
     // Définition des hotspots pour la visite guidée
     const hotspots = [
-      { name: "Vue d'ensemble", position: new THREE.Vector3(8.34, 8.15, 4.92), target: new THREE.Vector3(3.31, 10.11, 1.31), audioId: null },
-      { name: "Postes de relai à transit souple", position: new THREE.Vector3(8.19, 7.88, 2.12), target: new THREE.Vector3(1.14, 11.41, 1.73), audioId: null },
-      { name: "Poste Île-de-France", position: new THREE.Vector3(6.65, 7.57, 2.12), target: new THREE.Vector3(6.64, 5.40, 1.65), audioId: null },
-      { name: "Poste Île-de-France", position: new THREE.Vector3(7.3, 4, 2.2), target: new THREE.Vector3(6.5, 2, 1.5), audioId: null },
-      { name: "Tableau", position: new THREE.Vector3(8.31, 11.09, 2.18), target: new THREE.Vector3(9.24, 11.47, 1.90), audioId: "audioHotspot2"},
-      { name: "Gestion du réseau électrique", position: new THREE.Vector3(7.29, 12.61, 2.00), target: new THREE.Vector3(4.28, 12.43, 1.10),audioId: null},
-      { name: "Tableau de contrôle optique", position: new THREE.Vector3(2.97, 11.25, 2.08), target: new THREE.Vector3(0.40, 9.48, 2.19),audioId: null},
-      { name: "Tableau de contrôle optique", position: new THREE.Vector3(3.87, 5.82, 2.81), target: new THREE.Vector3(1.03, 5.81, 2.23),audioId: null}
+      { name: "VUE D'ENSEMBLE", position: new THREE.Vector3(8.34, 8.15, 4.92), target: new THREE.Vector3(3.31, 10.11, 1.31), audioId: null },
+      { name: "POSTE DE RELAIS À TRANSIT SOUPLE", position: new THREE.Vector3(8.19, 7.88, 2.12), target: new THREE.Vector3(1.14, 11.41, 1.73), audioId: null },
+      { name: "POSTE ÎLE-DE-FRANCE", position: new THREE.Vector3(6.65, 7.57, 2.12), target: new THREE.Vector3(6.64, 5.40, 1.65), audioId: null },
+      { name: "POSTE ÎLE-DE-FRANCE, position: new THREE.Vector3(7.3, 4, 2.2), target: new THREE.Vector3(6.5, 2, 1.5), audioId: null },
+      { name: "TABLEAU", position: new THREE.Vector3(8.31, 11.09, 2.18), target: new THREE.Vector3(9.24, 11.47, 1.90), audioId: "audioHotspot2"},
+      { name: "GESTION DU RÉSEAU ÉLECTRIQUE", position: new THREE.Vector3(7.29, 12.61, 2.00), target: new THREE.Vector3(4.28, 12.43, 1.10),audioId: null},
+      { name: "TABLEAU DE CONTRÔLE OPTIQUE", position: new THREE.Vector3(2.97, 11.25, 2.08), target: new THREE.Vector3(0.40, 9.48, 2.19),audioId: null},
+      { name: "TABLEAU DE CONTRÔLE OPTIQUE", position: new THREE.Vector3(3.87, 5.82, 2.81), target: new THREE.Vector3(1.03, 5.81, 2.23),audioId: null}
     ];
 
     // Fonction de navigation vers un hotspot donné

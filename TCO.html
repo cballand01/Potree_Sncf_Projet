@@ -875,13 +875,13 @@
 
 
       //---------------- Seuils de distance d'affichage ----------------//
-      const distanceThresholdText = 9; //textes
-      const distanceThresholdImage = 9; //images
-      const distanceThreshold3D = 9; //liens3D
+      const distanceThresholdText = 4; //textes
+      const distanceThresholdImage = 4; //images
+      const distanceThreshold3D = 4; //liens3D
       const distanceGoto = 4; //liens html
       const distanceThresholdExp = 1; //textes rapprochés
-      const distanceThresholdAnimation = 9; //video
-      const distanceThreshold360 = 9; //360
+      const distanceThresholdAnimation = 4; //video
+      const distanceThreshold360 = 5; //360
       // Mise à jour de la visibilité des annotations en fonction de la distance de la caméra
       viewer.addEventListener("update", () => {
         let cameraPos = viewer.scene.getActiveCamera().position;

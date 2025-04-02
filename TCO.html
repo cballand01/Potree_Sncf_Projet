@@ -1237,9 +1237,14 @@
     
     // Définition des hotspots pour la visite guidée
     const hotspots = [
-      { name: "Vue d'ensemble", position: new THREE.Vector3(8.34, 8.15, 4.92), target: new THREE.Vector3(3.31, 10.11, 1.31) },
-      { name: "Tableau 1", position: new THREE.Vector3(7.9, 11, 2.27), target: new THREE.Vector3(9.24, 11.47, 1.94) },
-      { name: "Ile de France", position: new THREE.Vector3(7.3, 4, 2.2), target: new THREE.Vector3(6.5, 2, 1.5) }
+      { name: "Vue d'ensemble", position: new THREE.Vector3(8.34, 8.15, 4.92), target: new THREE.Vector3(3.31, 10.11, 1.31), audioId: null },
+      { name: "Postes de relai à transit souple", position: new THREE.Vector3(8.19, 7.88, 2.12), target: new THREE.Vector3(1.14, 11.41, 1.73), audioId: null },
+      { name: "Poste Île-de-France", position: new THREE.Vector3(6.65, 7.57, 2.12), target: new THREE.Vector3(6.64, 5.40, 1.65), audioId: null },
+      { name: "Poste Île-de-France", position: new THREE.Vector3(7.3, 4, 2.2), target: new THREE.Vector3(6.5, 2, 1.5), audioId: null },
+      { name: "Tableau", position: new THREE.Vector3(8.31, 11.09, 2.18), target: new THREE.Vector3(9.24, 11.47, 1.90), audioId: "audioHotspot2"},
+      { name: "Gestion du réseau électrique", position: new THREE.Vector3(7.29, 12.61, 2.00), target: new THREE.Vector3(4.28, 12.43, 1.10),audioId: null},
+      { name: "Tableau de contrôle optique", position: new THREE.Vector3(2.97, 11.25, 2.08), target: new THREE.Vector3(0.40, 9.48, 2.19),audioId: null},
+      { name: "Tableau de contrôle optique", position: new THREE.Vector3(3.87, 5.82, 2.81), target: new THREE.Vector3(1.03, 5.81, 2.23),audioId: null}
     ];
 
     // Fonction de navigation vers un hotspot donné
@@ -1251,8 +1256,16 @@
         lastHotspotView = { position: hp.position, target: hp.target, name: hp.name };
         
         // Ne jouer l'audio que si playAudio est vrai
-        if (playAudio) {
-            playHotspotAudio(index);
+        // Afficher ou masquer la barre audio selon la présence d’un audio
+        const audioBar = document.getElementById("audioBar");
+        if (hp.audioId && document.getElementById(hp.audioId)) {
+            audioBar.style.display = "flex";
+            if (playAudio) {
+                playHotspotAudio(hp.audioId);
+            }
+        } else {
+            audioBar.style.display = "none";
+            playHotspotAudio(null); // Arrête l’audio s’il n’y en a pas
         }
     }
     let currentHotspotIndex = 0;

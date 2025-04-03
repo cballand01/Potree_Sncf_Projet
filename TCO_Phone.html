@@ -393,7 +393,7 @@
       };
       let onError = function ( xhr ) {};
     
-      /*// Chargement du modèle 1 (tab central)
+      // Chargement du modèle 1 (tab central)
       let mtlLoader1 = new MTLLoader(manager);
       mtlLoader1.load('https://storage.googleapis.com/projet-potree-sncf/Model_central/model_TCOcentral.mtl', function(materials) {
         materials.preload();
@@ -408,21 +408,28 @@
           window.objMesh1 = object;
           checkAllLoaded();
         }, onProgress, onError );
-      });*/
+      });
 
       // Chargement du modèle 2 (tab bas)
-      let gltfLoader = new GLTFLoader(manager);
-      gltfLoader.load('https://storage.googleapis.com/projet-potree-sncf/Model_bas.gltf', function (gltf) {
-        let model = gltf.scene;
-        model.position.set(0.0, 0.0, 0);
-        model.scale.set(1, 1, 1);
-        model.rotation.set(0, 0, 0);
-        viewer.scene.scene.add(model);
-        window.objMesh1 = model;
-        checkAllLoaded();
-      }, onProgress, onError);
-
-      /*// Chargement du modèle 3 (tab haut)
+      let MTLLoader2 = new MTLLoader(manager);
+      MTLLoader2.setPath('/Potree_Sncf_Projet/model3D/modelOBJ/tab_bas/');
+      MTLLoader2.load('Model_bas.mtl', function(materials) {
+        materials.preload();
+        
+        let OBJLoader2 = new OBJLoader(manager);
+        OBJLoader2.setMaterials(materials);
+        OBJLoader2.setPath('/Potree_Sncf_Projet/model3D/modelOBJ/tab_bas/');
+        OBJLoader2.load('Model_bas.obj', function (object) {
+          object.position.set(0, 0, 0);
+          object.scale.set(1, 1, 1);
+          object.rotation.set(0, 0, 0);
+          window.objMesh2 = object;
+          viewer.scene.scene.add(object);
+          checkAllLoaded();
+        }, onProgress, onError);
+      });
+      
+      // Chargement du modèle 3 (tab haut)
       let MTLLoader3 = new MTLLoader(manager);
       MTLLoader3.setPath('/Potree_Sncf_Projet/model3D/modelOBJ/tab_haut/');
       MTLLoader3.load('Model_haut.mtl', function(materials) {
@@ -477,7 +484,7 @@
           viewer.scene.scene.add(object);
           checkAllLoaded();
         }, onProgress, onError);
-      });*/
+      });
     }
 
   </script>

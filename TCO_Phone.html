@@ -188,8 +188,8 @@
     let initialTarget = new THREE.Vector3(4.99, 9.46, 1.72);
   
     window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
-    viewer.setPointBudget(10000000);
-    viewer.setFOV(70);
+    viewer.setPointBudget(8000000);
+    viewer.setFOV(80);
     viewer.loadSettingsFromURL();
     viewer.setDescription("Salle du TCO du PAR de la ligne à grande vitesse Paris-Lyon");
   
@@ -242,6 +242,7 @@
       e.pointcloud.position.set(0, 0, 0);
   
       viewer.scene.view.setView(initialPosition, initialTarget);
+      viewer.useHQ = true;
 
       checkAllLoaded();
   

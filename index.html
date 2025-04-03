@@ -85,6 +85,8 @@
       color: #333;
       font-weight: 500;
       font-size: 1.2rem;
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
     }
 
     /* Disposition verticale pour Potree avec pleine largeur */
@@ -121,6 +123,20 @@
         display: none;
       }
     }
+  
+    /* Définition des images de fond pour chaque bouton */
+    .img-prs1 { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images_illustration/PRS1_illu.png'); }
+    .img-prs2 { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images_illustration/PRS2_illu.png'); }
+    .img-prs3 { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images_illustration/PRS3_illu.png'); }
+    .img-prs4 { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images_illustration/PRS4_illu.png'); }
+    .img-idf  { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images_illustration/IDF_illu.png'); }
+    .img-tableau  { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images_illustration/Tableau_illu.png'); }
+    .img-tab-haut { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images_illustration/TCO_haut_illu.png'); }
+    .img-tab-central { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images_illustration/TCO_central_illu.png'); }
+    .img-tab-bas { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images_illustration/TCO_bas_illu.png'); }
+    .img-tab-total { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images_illustration/TCO_complet_illu.png'); }
+    .img-tco { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images_illustration/TCO_illu.png'); }
+    .img-sdr { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images_illustration/SDR_illu.png'); }
   </style>
 </head>
 <body>
@@ -133,10 +149,10 @@
     <section class="section">
       <h2>Nuages de points & Visite guidée - POTREE</h2>
       <div class="cards vertical">
-        <div class="card">
+        <div class="card img-tco">
           <a href="#" id="tco-link">Salle du Tableau de Contrôle Optique</a>
         </div>
-        <div class="card">
+        <div class="card img-sdr">
           <a href="SDR.html" id="sdr-link">Salle des Relais</a>
         </div>
       </div>
@@ -145,31 +161,31 @@
     <section class="section">
       <h2>Modèles 3D - 3DHOP</h2>
       <div class="cards">
-        <div class="card">
+        <div class="card img-prs1">
           <a href="TCO_PRS1.html">P.R.S. n°1</a>
         </div>
-        <div class="card">
+        <div class="card img-prs2">
           <a href="TCO_PRS2.html">P.R.S. n°2</a>
         </div>
-        <div class="card">
+        <div class="card img-prs3">
           <a href="TCO_PRS3.html">P.R.S. n°3</a>
         </div>
-        <div class="card">
+        <div class="card img-prs4">
           <a href="TCO_PRS4.html">P.R.S. n°4</a>
         </div>
-        <div class="card">
+        <div class="card img-idf">
           <a href="TCO_IDF.html">Tableau Île-de-France</a>
         </div>
-        <div class="card hide-mobile">
+        <div class="card hide-mobile img-tab-haut">
           <a href="TCO_tab_haut.html">T.C.O. haut</a>
         </div>
-        <div class="card hide-mobile">
+        <div class="card hide-mobile img-tab-central">
           <a href="TCO_tab_central.html">T.C.O. central</a>
         </div>
-        <div class="card hide-mobile">
+        <div class="card hide-mobile img-tab-bas">
           <a href="TCO_tab_bas.html">T.C.O. bas</a>
         </div>
-        <div class="card hide-mobile">
+        <div class="card hide-mobile img-tab-total">
           <a href="TCO_tab_total.html">T.C.O. complet</a>
         </div>
       </div>

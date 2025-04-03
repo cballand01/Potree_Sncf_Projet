@@ -188,7 +188,7 @@
     let initialTarget = new THREE.Vector3(8.57, 11.21, 1.57);
   
     window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
-    viewer.setPointBudget(3000000);
+    viewer.setPointBudget(5000000);
     viewer.setFOV(90);
     viewer.loadSettingsFromURL();
     viewer.setDescription("Salle des relais du PAR de la ligne à grande vitesse Paris-Lyon");
@@ -242,7 +242,7 @@
       e.pointcloud.position.set(0, 0, 0);
   
       viewer.scene.view.setView(initialPosition, initialTarget);
-      viewer.useHQ = false;
+      viewer.useHQ = true;
 
       checkAllLoaded();
   

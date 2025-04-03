@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <!-- Métadonnées et configuration de la page -->
+  <meta charset="utf-8">
+  <title>PAR Sud-Est</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  
+  <!-- Chargement des polices Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Feuilles de styles pour Potree et autres bibliothèques -->
+  <link rel="stylesheet" type="text/css" href="/Potree_Sncf_Projet/build/potree/potree.css">
+  <link rel="stylesheet" type="text/css" href="/Potree_Sncf_Projet/libs/jquery-ui/jquery-ui.min.css">
+  <link rel="stylesheet" type="text/css" href="/Potree_Sncf_Projet/libs/openlayers3/ol.css">
+  <link rel="stylesheet" type="text/css" href="/Potree_Sncf_Projet/libs/spectrum/spectrum.css">
+  <link rel="stylesheet" type="text/css" href="/Potree_Sncf_Projet/libs/jstree/themes/mixed/style.css">
+  <link rel="stylesheet" type="text/css" href="/Potree_Sncf_Projet/build/potree/style_SNCF.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.pannellum.org/2.5/pannellum.css"/>
+  
+  <!-- Style spécifique pour le conteneur de l'image dans la popup -->
+  <style>
+    #joystick-container {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      width: 120px;
+      height: 120px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 50%;
+      touch-action: none;
+      z-index: 9999;
+    }
+  
+    #joystick {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 60px;
+      height: 60px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      touch-action: none;
+    }
+    /* Nouveau Joystick Déplacement */
+    #joystick-move-container {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 120px;
+      height: 120px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 50%;
+      touch-action: none;
+      z-index: 9999;
+    }
+
+    #joystick-move {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 60px;
+      height: 60px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      touch-action: none;
+    }
+    #splash-logo {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 100px;
+      height: auto;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Splash screen affiché au démarrage -->
+  <div id="splash">
+    <div class="loader"></div>
+    <img src="/Potree_Sncf_Projet/build/potree/resources/images/Logo_SNCF.png" alt="Logo SNCF" id="splash-logo">
+  </div>
+
+  <!-- Zone principale de rendu Potree -->
+  <div class="potree_container">
+    <div id="potree_render_area"></div>
+    <div id="potree_sidebar_container"></div>
+  </div>
+
+  <!-- Joystick pour a caméra -->
+  <div id="joystick-container">
+    <div id="joystick"></div>
+  </div>
+
+  <!-- Joystick pour le déplacement -->
+  <div id="joystick-move-container">
+    <div id="joystick-move"></div>
+  </div>
+
+  <!-- Popup pour entrer en plein écran après chargement -->
+  <div id="fullscreen-popup" style="
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.85);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000;
+    color: white;
+    font-family: sans-serif;
+  ">
+    <p style="font-size: 1.2rem; margin-bottom: 1rem;"></p>
+    <button id="enter-fullscreen" style="
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+    ">
+      Passer en plein écran
+    </button>
+  </div>
+
+
+  <!-- Message rotation paysage si besoin -->
+  <div id="rotate-warning" style="
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 99999;
+  color: white;
+  font-family: sans-serif;
+  text-align: center;
+  ">
+  <div style="
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  ">
+    <!-- SVG blanc stylisé -->
+    <img src="/Potree_Sncf_Projet/build/potree/resources/icons/rotation_phone.svg" alt="Tourner l’écran" style="width: 100px; height: auto; margin-top: 1rem;">
+    <p style="margin-top: 1rem; font-size: 1.2rem;">
+      Tournez votre appareil
+    </p>
+  </div>
+  </div>
+
+  <!-- Chargement des bibliothèques JavaScript -->
+  <script src="/Potree_Sncf_Projet/libs/jquery/jquery-3.1.1.min.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/jquery-ui/jquery-ui.min.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/spectrum/spectrum.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/other/BinaryHeap.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/tween/tween.min.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/d3/d3.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/proj4/proj4.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/openlayers3/ol.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/i18next/i18next.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/jstree/jstree.js"></script>
+  <script src="/Potree_Sncf_Projet/build/potree/potree.js"></script>
+  <script src="/Potree_Sncf_Projet/libs/plasio/js/laslaz.js"></script>
+  <script src="https://cdn.pannellum.org/2.5/pannellum.js"></script>
+
+  <!-- Script principal pour configurer Potree et charger les éléments 3D -->
+  <script type="module">
+    import * as THREE from "/Potree_Sncf_Projet/libs/three.js/build/three.module.js";
+    import {OBJLoader} from "/Potree_Sncf_Projet/libs/three.js/loaders/OBJLoader.js";
+    import {MTLLoader} from "/Potree_Sncf_Projet/libs/three.js/loaders/MTLLoader.js";
+  
+    let initialPosition = new THREE.Vector3(11.30, 12.66, 0.58);
+    let initialTarget = new THREE.Vector3(8.57, 11.21, 1.57);
+  
+    window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
+    viewer.setPointBudget(10000000);
+    viewer.setFOV(90);
+    viewer.loadSettingsFromURL();
+    viewer.setDescription("Salle des relais du PAR de la ligne à grande vitesse Paris-Lyon");
+  
+    viewer.setEDLEnabled(false);
+    viewer.setEDLRadius(1);
+    viewer.setEDLStrength(0);
+    viewer.setEDLOpacity(1);
+  
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+    viewer.scene.scene.add(ambientLight);
+    
+    // Désactive les contrôles Potree
+    viewer.controls.enabled = false;
+    viewer.inputHandler.enabled = false;
+
+    // Bloque explicitement les interactions tactiles sur mobile
+    const renderArea = document.getElementById("potree_render_area");
+
+    ['touchstart', 'touchmove', 'touchend', 'pointerdown', 'pointermove', 'pointerup'].forEach(eventType => {
+      renderArea.addEventListener(eventType, (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+      }, { passive: false });
+    });
+
+    // Bloque aussi explicitement les interactions souris (au cas où)
+    ['mousedown', 'mousemove', 'mouseup', 'wheel'].forEach(eventType => {
+      renderArea.addEventListener(eventType, (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+      }, { passive: false });
+    });
+
+    let totalToLoad = 6; // 1 nuage + 5 modèles
+    let itemsLoaded = 0;
+
+    function checkAllLoaded() {
+      itemsLoaded++;
+      if (itemsLoaded === totalToLoad) {
+        document.getElementById("splash").style.display = "none";
+        document.getElementById("fullscreen-popup").style.display = "flex";
+      }
+    }
+  
+    Potree.loadPointCloud("https://storage.googleapis.com/projet-potree-sncf/NuageSDR/metadata.json", "Salle_SDR", function(e){
+      viewer.scene.addPointCloud(e.pointcloud);
+      let material = e.pointcloud.material;
+      material.size = 1.3;
+      material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
+      e.pointcloud.position.set(0, 0, 0);
+  
+      viewer.scene.view.setView(initialPosition, initialTarget);
+      viewer.useHQ = false;
+
+      checkAllLoaded();
+  
+      // Joystick ajouté ici pour être sûr que viewer soit initialisé
+      const joystickContainer = document.getElementById('joystick-container');
+      const joystick = document.getElementById('joystick');
+  
+      let dragging = false;
+      let startX, startY, currentX, currentY;
+      let maxDistance = joystickContainer.offsetWidth / 2;
+  
+      joystickContainer.addEventListener('pointerdown', function(e) {
+        dragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+      });
+  
+      window.addEventListener('pointermove', function(e) {
+        if (!dragging) return;
+  
+        currentX = e.clientX - startX;
+        currentY = e.clientY - startY;
+  
+        const distance = Math.min(maxDistance, Math.hypot(currentX, currentY));
+        const angle = Math.atan2(currentY, currentX);
+  
+        const joystickX = distance * Math.cos(angle);
+        const joystickY = distance * Math.sin(angle);
+  
+        joystick.style.transform = `translate(calc(-50% + ${joystickX}px), calc(-50% + ${joystickY}px))`;
+  
+        const sensitivity = 0.0005;
+        viewer.scene.view.yaw -= joystickX * sensitivity;
+        viewer.scene.view.pitch -= joystickY * sensitivity;
+      });
+  
+      window.addEventListener('pointerup', function() {
+        dragging = false;
+        joystick.style.transform = 'translate(-50%, -50%)';
+      });
+  
+      window.addEventListener('pointerleave', function() {
+        dragging = false;
+        joystick.style.transform = 'translate(-50%, -50%)';
+      });
+    });
+
+    // === Second Joystick (Déplacement corrigé) ===
+    const joystickMoveContainer = document.getElementById('joystick-move-container');
+    const joystickMove = document.getElementById('joystick-move');
+
+    let draggingMove = false;
+    let initialTouchX, initialTouchY;
+    let maxDistanceMove = 60; // valeur par défaut
+
+    joystickMoveContainer.addEventListener('pointerdown', (e) => {
+      draggingMove = true;
+      initialTouchX = e.clientX;
+      initialTouchY = e.clientY;
+
+      // on le recalcule ici, DOM prêt
+      maxDistanceMove = joystickMoveContainer.offsetWidth / 2;
+    });
+
+
+    // Fonction pour obtenir les vecteurs de direction (avant et droite) avec Three.js
+    function getCameraDirections(camera) {
+      const cameraDirection = new THREE.Vector3();
+      camera.getWorldDirection(cameraDirection);
+
+      const cameraRight = new THREE.Vector3();
+      cameraRight.crossVectors(camera.up, cameraDirection).normalize();
+
+      return { forward: cameraDirection.normalize(), right: cameraRight };
+    }
+
+    // Début du mouvement joystick
+    joystickMoveContainer.addEventListener('pointerdown', (e) => {
+      draggingMove = true;
+      initialTouchX = e.clientX;
+      initialTouchY = e.clientY;
+    });
+
+    // Mouvement joystick
+    window.addEventListener('pointermove', (e) => {
+      if (!draggingMove) return;
+
+      const rect = joystickMoveContainer.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const deltaX = e.clientX - centerX;
+      const deltaY = e.clientY - centerY;
+
+      const distance = Math.min(maxDistanceMove, Math.hypot(deltaX, deltaY));
+      const angle = Math.atan2(deltaY, deltaX);
+
+      const joystickPosX = distance * Math.cos(angle);
+      const joystickPosY = distance * Math.sin(angle);
+
+      joystickMove.style.transform = `translate(calc(-50% + ${joystickPosX}px), calc(-50% + ${joystickPosY}px))`;
+
+      // Déplacement caméra avec directions calculées via Three.js
+      const distanceRatio = distance / maxDistanceMove; // entre 0 (centre) et 1 (bord)
+      const moveSpeed = 0.005 * distanceRatio; // vitesse progressive
+
+      const potreeCamera = viewer.scene.getActiveCamera();
+      const directions = getCameraDirections(potreeCamera);
+
+      const forwardMovement = directions.forward.clone().multiplyScalar(-joystickPosY * moveSpeed);
+      const sideMovement = directions.right.clone().multiplyScalar(-joystickPosX * moveSpeed);
+      
+      if (viewer.scene.view?.position) {
+        viewer.scene.view.position.add(forwardMovement).add(sideMovement);
+      }
+      if (viewer.scene.view?.target) {
+        viewer.scene.view.target.add(forwardMovement).add(sideMovement);
+      }
+
+      // Mise à jour fluide des positions initiales pour un déplacement continu
+      initialTouchX = e.clientX;
+      initialTouchY = e.clientY;
+    });
+
+    // Fin du mouvement joystick
+    window.addEventListener('pointerup', () => {
+      draggingMove = false;
+      joystickMove.style.transform = 'translate(-50%, -50%)';
+    });
+
+    window.addEventListener('pointercancel', () => {
+      draggingMove = false;
+      joystickMove.style.transform = 'translate(-50%, -50%)';
+    });
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const fullscreenPopup = document.getElementById("fullscreen-popup");
+      const rotateWarning = document.getElementById("rotate-warning");
+      const fullscreenBtn = document.getElementById("enter-fullscreen");
+
+      // Fonction pour vérifier orientation
+      function checkOrientation() {
+        if (window.innerHeight > window.innerWidth) {
+          rotateWarning.style.display = "block";
+        } else {
+          rotateWarning.style.display = "none";
+        }
+      }
+
+      // Quand l'utilisateur clique pour passer en plein écran
+      fullscreenBtn.addEventListener("click", () => {
+        const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        if (!isiOS) {
+            const el = document.documentElement;
+            const request = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+            if (request) {
+                request.call(el)
+                  .then(() => {
+                    if (screen.orientation && screen.orientation.lock) {
+                      screen.orientation.lock("landscape").catch(() => {});
+                    }
+                  })
+                  .finally(() => {
+                    fullscreenPopup.style.display = "none";
+                    setTimeout(checkOrientation, 300);
+                  });
+            } else {
+                fullscreenPopup.style.display = "none";
+                setTimeout(checkOrientation, 300);
+            }
+        } else {
+            // Pour iOS, on ajuste le style pour simuler un plein écran sans utiliser l'API Fullscreen
+            document.documentElement.style.height = "100vh";
+            document.body.style.height = "100vh";
+            fullscreenPopup.style.display = "none";
+            setTimeout(checkOrientation, 300);
+        }
+      });
+
+      // Réagit à l’orientation ensuite aussi
+      window.addEventListener("orientationchange", checkOrientation);
+      window.addEventListener("resize", checkOrientation);
+
+      // Remplace ta fonction checkAllLoaded pour lancer la suite proprement
+      window.checkAllLoaded = function() {
+        itemsLoaded++;
+        if (itemsLoaded === totalToLoad) {
+          // 👇 On cache le splash
+          document.getElementById("splash").style.display = "none";
+
+          // 👇 Et on affiche seulement maintenant la popup de plein écran
+          document.getElementById("fullscreen-popup").style.display = "flex";
+        }
+      };
+
+    });
+  </script>
+
+</body>
+</html>

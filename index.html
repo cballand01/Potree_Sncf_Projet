@@ -128,7 +128,7 @@
       <h2>Nuages de points & Visite guidée - POTREE</h2>
       <div class="cards vertical">
         <div class="card">
-          <a href="TCO.html">Salle du Tableau de Contrôle Optique</a>
+          <a href="#" id="tco-link">Salle du Tableau de Contrôle Optique</a>
         </div>
         <div class="card">
           <a href="SDR.html">Salle des Relais </a>
@@ -172,5 +172,21 @@
   <footer>
     <p>&copy; 2025 Mon Projet 3D. Tous droits réservés.</p>
   </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const tcoLink = document.getElementById("tco-link");
+  
+      tcoLink.addEventListener("click", (e) => {
+        e.preventDefault();
+  
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
+        const targetUrl = isMobile ? "TCO_Phone.html" : "TCO.html";
+  
+        window.location.href = targetUrl;
+      });
+    });
+  </script>
+  
 </body>
 </html>

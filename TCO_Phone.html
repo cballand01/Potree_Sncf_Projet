@@ -103,6 +103,35 @@
     <div id="joystick-move"></div>
   </div>
 
+  <!-- Popup plein écran -->
+  <div id="fullscreen-popup" style="
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000;
+    color: white;
+    font-family: sans-serif;
+  ">
+    <p style="font-size: 1.2rem; margin-bottom: 1rem;">Pour une meilleure expérience, passez en plein écran.</p>
+    <button id="enter-fullscreen" style="
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+    ">
+      Passer en plein écran
+    </button>
+  </div>
+
   <!-- Chargement des bibliothèques JavaScript -->
   <script src="/Potree_Sncf_Projet/libs/jquery/jquery-3.1.1.min.js"></script>
   <script src="/Potree_Sncf_Projet/libs/jquery-ui/jquery-ui.min.js"></script>
@@ -426,6 +455,28 @@
 
     
 
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const fullscreenPopup = document.getElementById("fullscreen-popup");
+      const fullscreenBtn = document.getElementById("enter-fullscreen");
+  
+      fullscreenBtn.addEventListener("click", () => {
+        const el = document.documentElement;
+        const request = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+  
+        if (request) {
+          request.call(el)
+            .catch(() => {}) // ignore erreur
+            .finally(() => {
+              fullscreenPopup.style.display = "none";
+            });
+        } else {
+          fullscreenPopup.style.display = "none";
+        }
+      });
+    });
   </script>
 
 </body>

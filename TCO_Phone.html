@@ -507,23 +507,31 @@
 
       // Quand l'utilisateur clique pour passer en plein écran
       fullscreenBtn.addEventListener("click", () => {
-        const el = document.documentElement;
-        const request = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
-
-        if (request) {
-          request.call(el)
-            .then(() => {
-              if (screen.orientation && screen.orientation.lock) {
-                screen.orientation.lock("landscape").catch(() => {});
-              }
-            })
-            .finally(() => {
-              fullscreenPopup.style.display = "none";
-              setTimeout(checkOrientation, 300);
-            });
+        const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        if (!isiOS) {
+            const el = document.documentElement;
+            const request = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+            if (request) {
+                request.call(el)
+                  .then(() => {
+                    if (screen.orientation && screen.orientation.lock) {
+                      screen.orientation.lock("landscape").catch(() => {});
+                    }
+                  })
+                  .finally(() => {
+                    fullscreenPopup.style.display = "none";
+                    setTimeout(checkOrientation, 300);
+                  });
+            } else {
+                fullscreenPopup.style.display = "none";
+                setTimeout(checkOrientation, 300);
+            }
         } else {
-          fullscreenPopup.style.display = "none";
-          setTimeout(checkOrientation, 300);
+            // Pour iOS, on ajuste le style pour simuler un plein écran sans utiliser l'API Fullscreen
+            document.documentElement.style.height = "100vh";
+            document.body.style.height = "100vh";
+            fullscreenPopup.style.display = "none";
+            setTimeout(checkOrientation, 300);
         }
       });
 

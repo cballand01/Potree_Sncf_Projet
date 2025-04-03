@@ -103,14 +103,14 @@
     <div id="joystick-move"></div>
   </div>
 
-  <!-- Popup plein écran -->
+  <!-- Popup pour entrer en plein écran après chargement -->
   <div id="fullscreen-popup" style="
+    display: none;
     position: fixed;
     top: 0; left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0,0,0,0.8);
-    display: flex;
+    background: rgba(0,0,0,0.85);
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -118,7 +118,7 @@
     color: white;
     font-family: sans-serif;
   ">
-    <p style="font-size: 1.2rem; margin-bottom: 1rem;">Pour une meilleure expérience, passez en plein écran.</p>
+    <p style="font-size: 1.2rem; margin-bottom: 1rem;"></p>
     <button id="enter-fullscreen" style="
       padding: 1rem 2rem;
       font-size: 1rem;
@@ -130,6 +130,38 @@
     ">
       Passer en plein écran
     </button>
+  </div>
+
+
+  <!-- Message rotation paysage si besoin -->
+  <div id="rotate-warning" style="
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 99999;
+  color: white;
+  font-family: sans-serif;
+  text-align: center;
+  ">
+  <div style="
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  ">
+    <!-- SVG blanc stylisé -->
+    <img src="../build/potree/resources/icons/rotation_phone.svg" alt="Tourner l’écran" style="width: 100px; height: auto; margin-top: 1rem;">
+    <p style="margin-top: 1rem; font-size: 1.2rem;">
+      Tournez votre appareil
+    </p>
+  </div>
   </div>
 
   <!-- Chargement des bibliothèques JavaScript -->
@@ -460,22 +492,56 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const fullscreenPopup = document.getElementById("fullscreen-popup");
+      const rotateWarning = document.getElementById("rotate-warning");
       const fullscreenBtn = document.getElementById("enter-fullscreen");
-  
+
+      // Fonction pour vérifier orientation
+      function checkOrientation() {
+        if (window.innerHeight > window.innerWidth) {
+          rotateWarning.style.display = "block";
+        } else {
+          rotateWarning.style.display = "none";
+        }
+      }
+
+      // Quand l'utilisateur clique pour passer en plein écran
       fullscreenBtn.addEventListener("click", () => {
         const el = document.documentElement;
         const request = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
-  
+
         if (request) {
           request.call(el)
-            .catch(() => {}) // ignore erreur
+            .then(() => {
+              if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock("landscape").catch(() => {});
+              }
+            })
             .finally(() => {
               fullscreenPopup.style.display = "none";
+              setTimeout(checkOrientation, 300);
             });
         } else {
           fullscreenPopup.style.display = "none";
+          setTimeout(checkOrientation, 300);
         }
       });
+
+      // Réagit à l’orientation ensuite aussi
+      window.addEventListener("orientationchange", checkOrientation);
+      window.addEventListener("resize", checkOrientation);
+
+      // Remplace ta fonction checkAllLoaded pour lancer la suite proprement
+      window.checkAllLoaded = function() {
+        itemsLoaded++;
+        if (itemsLoaded === totalToLoad) {
+          // 👇 On cache le splash
+          document.getElementById("splash").style.display = "none";
+
+          // 👇 Et on affiche seulement maintenant la popup de plein écran
+          document.getElementById("fullscreen-popup").style.display = "flex";
+        }
+      };
+
     });
   </script>
 

@@ -274,7 +274,7 @@
   
         joystick.style.transform = `translate(calc(-50% + ${joystickX}px), calc(-50% + ${joystickY}px))`;
   
-        const sensitivity = 0.005;
+        const sensitivity = 0.0005;
         viewer.scene.view.yaw -= joystickX * sensitivity;
         viewer.scene.view.pitch -= joystickY * sensitivity;
       });
@@ -303,7 +303,7 @@
       initialTouchX = e.clientX;
       initialTouchY = e.clientY;
 
-      // 👇 on le recalcule ici, DOM prêt
+      // on le recalcule ici, DOM prêt
       maxDistanceMove = joystickMoveContainer.offsetWidth / 2;
     });
 

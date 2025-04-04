@@ -431,12 +431,12 @@
       
       // Chargement du modèle 3 (tab haut)
       let MTLLoader3 = new MTLLoader(manager);
-      MTLLoader3.load('https://storage.googleapis.com/projet-potree-sncf/Tab_haut_test/Model_TCO_Haut_test.mtl', function(materials) {
+      MTLLoader3.load('https://storage.googleapis.com/projet-potree-sncf/test_PRS1/Model_PRS1.mtl', function(materials) {
         materials.preload();
         
         let OBJLoader3 = new OBJLoader(manager);
         OBJLoader3.setMaterials(materials);
-        OBJLoader3.load('https://storage.googleapis.com/projet-potree-sncf/Tab_haut_test/Model_TCO_Haut_test.obj', function (object) {
+        OBJLoader3.load('https://storage.googleapis.com/projet-potree-sncf/test_PRS1/Model_PRS1.obj', function (object) {
           object.position.set(0, 0, 0);
           object.scale.set(1, 1, 1);
           object.rotation.set(0, 0, 0);

@@ -393,7 +393,7 @@
       };
       let onError = function ( xhr ) {};
     
-      /*// Chargement du modèle 1 (tab central)
+      // Chargement du modèle 1 (tab central)
       let mtlLoader1 = new MTLLoader(manager);
       mtlLoader1.load('https://storage.googleapis.com/projet-potree-sncf/Model_central/model_TCOcentral.mtl', function(materials) {
         materials.preload();
@@ -427,7 +427,7 @@
           viewer.scene.scene.add(object);
           checkAllLoaded();
         }, onProgress, onError);
-      });*/
+      });
       
       // Chargement du modèle 3 (tab haut)
       let MTLLoader3 = new MTLLoader(manager);
@@ -446,7 +446,7 @@
         }, onProgress, onError);
       });
 
-      /*// Chargement du modèle 4 (IDF modèle faible)
+      // Chargement du modèle 4 (IDF modèle faible)
       let MTLLoader4 = new MTLLoader(manager);
       MTLLoader4.setPath('/Potree_Sncf_Projet/model3D/modelOBJ/tab_idf/');
       MTLLoader4.load('IDF_Model_faible.mtl', function(materials) {
@@ -482,7 +482,7 @@
           viewer.scene.scene.add(object);
           checkAllLoaded();
         }, onProgress, onError);
-      });*/
+      });
     }
 
   </script>

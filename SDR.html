@@ -352,18 +352,12 @@
                 // Construire l'URL de l'image en ajoutant l'extension .JPG
                 image.imageUrl = `${imageBaseURL}${imageName}.JPG`;
     
-                // S'assurer que l'image est invisible au départ
+                // On ne charge pas encore la texture ici, juste on crée l'URL
+                image.textureLoaded = false;
+    
+                // Rendre les images invisibles par défaut
                 image.mesh.visible = false;
                 image.line.visible = false;
-    
-                // Chargement de la texture de l'image
-                if (!image.textureLoaded) {
-                    new THREE.TextureLoader().load(image.imageUrl, (texture) => {
-                        image.mesh.material.map = texture;
-                        image.mesh.material.needsUpdate = true;
-                        image.textureLoaded = true;
-                    });
-                }
             }
         });
     
@@ -371,7 +365,7 @@
         viewer.scene.scene.add(orientedImages.node);
     
         // Empêcher la réactivation des images par erreur
-        orientedImages.addEventListener('imageActivated', () => {
+        orientedImages.addEventListener('imageActivated', (event) => {
             if (!window.imagesActives) {
                 orientedImages.exit();
             }
@@ -389,6 +383,15 @@
                 if (window.imagesActives) {
                     image.mesh.visible = true;
                     image.line.visible = true;
+    
+                    // Charger la texture si elle n'est pas encore chargée
+                    if (!image.textureLoaded) {
+                        new THREE.TextureLoader().load(image.imageUrl, (texture) => {
+                            image.mesh.material.map = texture;
+                            image.mesh.material.needsUpdate = true;
+                            image.textureLoaded = true; // Marquer comme chargé
+                        });
+                    }
                 } else {
                     image.mesh.visible = false;
                     image.line.visible = false;
@@ -401,7 +404,6 @@
         });
     
     })();
-
 
     
     // Ajout d'une lumière ambiante dans la scène

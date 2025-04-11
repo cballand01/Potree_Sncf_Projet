@@ -325,8 +325,8 @@
     viewer.setEDLOpacity(1);
 
     (async () => {
-      const cameraParamsPath = "https://storage.googleapis.com/projet-potree-sncf/Images_orient%C3%A9es/Armoire2_arri%C3%A8re/Test_images.xml";
-      const imageParamsPath = "https://storage.googleapis.com/projet-potree-sncf/Images_orient%C3%A9es/Armoire2_arri%C3%A8re/orientation.txt";
+      const cameraParamsPath = "/Potree_Sncf_Projet/Test_images.xml";
+      const imageParamsPath = "/Potree_Sncf_Projet/orientation.txt";
 
       const orientedImages = await OrientedImageLoader.load(cameraParamsPath, imageParamsPath, viewer);
       window.orientedImages = orientedImages;
@@ -334,24 +334,24 @@
       
       // Ajout du groupe d'images à la scène
       viewer.scene.scene.add(orientedImages.node);
-    
+
       // On rend tout invisible par défaut
       for (const image of orientedImages.images) {
         image.mesh.visible = false;  // L’image affichée
         image.line.visible = false;  // La ligne (frustum)
       }
-    
+
       // Empêche les frustums de réapparaître par clic par erreur
       orientedImages.addEventListener('imageActivated', () => {
         if (!window.imagesActives) {
           orientedImages.exit();
         }
       });
-    
+
       // Gestion du bouton
       const toggleBtn = document.getElementById('toggleOrientedImages');
       toggleBtn.textContent = "Activer Images orientées";
-    
+
       toggleBtn.addEventListener('click', () => {
         window.imagesActives = !window.imagesActives;
         
@@ -359,34 +359,34 @@
         if (!window.imagesActives && window.orientedImagesControls) {
           window.orientedImagesControls.release();
         }
-    
+
         // Mettre à jour la visibilité de toutes les images
         for (const image of orientedImages.images) {
           // Utilisation des liens des images à partir de imageLinks
           const imageId = image.id;  // Exemple : 'photo1.jpg'
           const objectName = "objet1";  // Assurez-vous de récupérer le bon nom de l'objet
-    
+
           // Récupérer l'URL correspondante depuis imageLinks
           const imageUrl = imageLinks.find(url => url.includes(imageId));  // Trouver l'URL qui correspond à l'imageId
           console.log(imageUrl);  // Vérifiez l'URL générée
-    
+
           // Utilisez imageUrl pour charger l'image ou mettre à jour l'affichage
           // Vous pouvez charger l'image ici (par exemple avec THREE.js TextureLoader)
           new THREE.TextureLoader().load(imageUrl, (texture) => {
             image.mesh.material.map = texture;
             image.mesh.material.needsUpdate = true;
           });
-    
+
           // Rendre visible ou invisible
           image.mesh.visible = window.imagesActives;
           image.line.visible = window.imagesActives;
         }
-    
+
         toggleBtn.textContent = window.imagesActives
             ? "Désactiver Images orientées"
             : "Activer Images orientées";
       });
-    
+
     })();
     
     // Ajout d'une lumière ambiante dans la scène

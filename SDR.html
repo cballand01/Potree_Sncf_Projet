@@ -404,7 +404,22 @@
                 : "Activer Images orientées";
         });
     
+        // Activation de l'image individuelle (lorsqu'on clique pour l'orienter)
+        orientedImages.addEventListener('imageActivated', (event) => {
+            const image = event.detail;  // L'image activée
+    
+            // Vérifier et ajouter .JPG à l'URL de l'image si nécessaire
+            const imageUrl = image.imageUrl.endsWith(".JPG") ? image.imageUrl : `${image.imageUrl}.JPG`;
+    
+            // Charger la texture pour l'image activée
+            new THREE.TextureLoader().load(imageUrl, (texture) => {
+                image.mesh.material.map = texture;
+                image.mesh.material.needsUpdate = true;
+            });
+        });
+    
     })();
+
 
 
     

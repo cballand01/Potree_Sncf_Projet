@@ -1,5 +1,5 @@
 import * as THREE from "/Potree_Sncf_Projet/libs/three.js/build/three.module.js";
-import {EventDispatcher} from "/Potree_Sncf_Projet/EventDispatcher.js";
+import {EventDispatcher} from "/Potree_Sncf_Projet/src/EventDispatcher.js";
 
 export class OrientedImageControls extends EventDispatcher{
 	

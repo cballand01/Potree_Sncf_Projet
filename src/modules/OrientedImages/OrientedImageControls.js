@@ -1,5 +1,5 @@
-import * as THREE from "../../../libs/three.js/build/three.module.js";
-import {EventDispatcher} from "../../EventDispatcher.js";
+import * as THREE from "/Potree_Sncf_Projet/libs/three.js/build/three.module.js";
+import {EventDispatcher} from "/Potree_Sncf_Projet/EventDispatcher.js";
 
 export class OrientedImageControls extends EventDispatcher{
 	
@@ -58,19 +58,19 @@ export class OrientedImageControls extends EventDispatcher{
 		// Créez les boutons avec pointer-events activés
 		// Flèche haut
 		this.elUp = $(`<input type="button" class="elUp" />`);
-		this.elUp.append('<http://localhost:8080/build/potree/resources/icons/arrow-up1.svg" alt="Up Arrow" />');
+		this.elUp.append('<https://storage.googleapis.com/projet-potree-sncf/Icons/arrow-up1.svg" alt="Up Arrow" />');
 
 		// Flèche droite
 		this.elRight = $(`<input type="button" class="elRight" />`);
-		this.elRight.append('<http://localhost:8080/build/potree/resources/icons/arrow-right1.svg" alt="Right Arrow" />');
+		this.elRight.append('<https://storage.googleapis.com/projet-potree-sncf/Icons/arrow-right1.svg" alt="Right Arrow" />');
 
 		// Flèche bas
 		this.elDown = $(`<input type="button" class="elDown" />`);
-		this.elDown.append('<http://localhost:8080/build/potree/resources/icons/arrow-down1.svg" alt="Down Arrow" />');
+		this.elDown.append('<https://storage.googleapis.com/projet-potree-sncf/Icons/arrow-down1.svg" alt="Down Arrow" />');
 
 		// Flèche gauche
 		this.elLeft = $(`<input type="button" class="elLeft" />`);
-		this.elLeft.append('<http://localhost:8080/build/potree/resources/icons/arrow-left1.svg" alt="Left Arrow" />');
+		this.elLeft.append('<https://storage.googleapis.com/projet-potree-sncf/Icons/arrow-left1.svg" alt="Left Arrow" />');
 
 		this.elExit = $(`<input type="button" class="oriented-exit-btn" value="Revenir à la vue 3D" style="pointer-events: auto; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);" />`);		// Bouton de sortie qui appelle release()
 		this.elExit.click(() => {

@@ -1,6 +1,6 @@
 
 import * as THREE from "/Potree_Sncf_Projet/libs/three.js/build/three.module.js";
-import {OrientedImageControls} from "/Potree_Sncf_Projet/src/modules/orientedImages/OrientedImageControls.js";
+import {OrientedImageControls} from "/Potree_Sncf_Projet/src/modules/OrientedImages/OrientedImageControls.js";
 import { EventDispatcher } from "/Potree_Sncf_Projet/src/EventDispatcher.js";
 
 // https://support.pix4d.com/hc/en-us/articles/205675256-How-are-yaw-pitch-roll-defined

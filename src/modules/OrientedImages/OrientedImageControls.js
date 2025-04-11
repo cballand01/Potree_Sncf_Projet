@@ -53,10 +53,10 @@ export class OrientedImageControls extends EventDispatcher{
 	_initDOMElements(){
 		// Crée un conteneur overlay qui couvre l'écran entier.
 		this.controlsContainer = $(`<div id="orientedControlsContainer" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10000;"></div>`);
-		this.elUp = $(`<input type="button" class="oriented-arrow oriented-arrow-up" value="🡅" />`);
-		this.elRight = $(`<input type="button" class="oriented-arrow oriented-arrow-right" value="🡆" />`);
-		this.elDown = $(`<input type="button" class="oriented-arrow oriented-arrow-down" value="🡇" />`);
-		this.elLeft = $(`<input type="button" class="oriented-arrow oriented-arrow-left" value="🡄" />`);
+		this.elUp = $(`<input type="button" class="elUp" value="🡅" />`);
+	  	this.elRight = $(`<input type="button" class="elRight" value="🡆" />`);
+	  	this.elDown = $(`<input type="button" class="elDown" value="🡇" />`);
+	  	this.elLeft = $(`<input type="button" class="elLeft" value="🡄" />`);
 		this.elExit = $(`<input type="button" class="oriented-exit-btn" value="Revenir à la vue 3D" style="pointer-events: auto; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);" />`);		// Bouton de sortie qui appelle release()
 		this.elExit.click(() => {
 			this.release();

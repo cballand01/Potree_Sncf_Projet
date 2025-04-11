@@ -1,8 +1,6 @@
-
 import * as THREE from "../../../libs/three.js/build/three.module.js";
 import {EventDispatcher} from "../../EventDispatcher.js";
 
- 
 export class OrientedImageControls extends EventDispatcher{
 	
 	constructor(viewer){
@@ -11,10 +9,13 @@ export class OrientedImageControls extends EventDispatcher{
 		this.viewer = viewer;
 		this.renderer = viewer.renderer;
 
+		this.active = false; // Contrôles désactivés par défaut
+
 		this.originalCam = viewer.scene.getActiveCamera();
 		this.shearCam = viewer.scene.getActiveCamera().clone();
 		this.shearCam.rotation.set(this.originalCam.rotation.toArray());
 		this.shearCam.updateProjectionMatrix();
+		// Forcer la mise à jour de la projectionMatrix
 		this.shearCam.updateProjectionMatrix = () => {
 			return this.shearCam.projectionMatrix;
 		};
@@ -29,95 +30,140 @@ export class OrientedImageControls extends EventDispatcher{
 
 		this.shear = [0, 0];
 
-		// const style = ``;
-		this.elUp =    $(`<input type="button" value="🡅" style="position: absolute; top: 10px; left: calc(50%); z-index: 1000" />`);
-		this.elRight = $(`<input type="button" value="🡆" style="position: absolute; top: calc(50%); right: 10px; z-index: 1000" />`);
-		this.elDown =  $(`<input type="button" value="🡇" style="position: absolute; bottom: 10px; left: calc(50%); z-index: 1000" />`);
-		this.elLeft =  $(`<input type="button" value="🡄" style="position: absolute; top: calc(50%); left: 10px; z-index: 1000" />`);
-		this.elExit = $(`<input type="button" value="Back to 3D view" style="position: absolute; bottom: 10px; right: 10px; z-index: 1000" />`);
-
-		this.elExit.click( () => {
-			this.release();
-		});
-
-		this.elUp.click(() => {
-			const fovY = viewer.getFOV();
-			const top = Math.tan(THREE.Math.degToRad(fovY / 2));
-			this.shear[1] += 0.1 * top;
-		});
-
-		this.elRight.click(() => {
-			const fovY = viewer.getFOV();
-			const top = Math.tan(THREE.Math.degToRad(fovY / 2));
-			this.shear[0] += 0.1 * top;
-		});
-
-		this.elDown.click(() => {
-			const fovY = viewer.getFOV();
-			const top = Math.tan(THREE.Math.degToRad(fovY / 2));
-			this.shear[1] -= 0.1 * top;
-		});
-
-		this.elLeft.click(() => {
-			const fovY = viewer.getFOV();
-			const top = Math.tan(THREE.Math.degToRad(fovY / 2));
-			this.shear[0] -= 0.1 * top;
-		});
+		// Crée le conteneur overlay et les éléments DOM de contrôle
+		this._initDOMElements();
 
 		this.scene = null;
 		this.sceneControls = new THREE.Scene();
 
 		let scroll = (e) => {
 			this.fovDelta += -e.delta * 1.0;
+			// Empêcher le zoom au-delà d'un certain point
+			if (this.viewer.getFOV() < 5) {
+				this.fovDelta = 0; // Limite du zoom
+			}
 		};
-
 		this.addEventListener('mousewheel', scroll);
 		//this.addEventListener("mousemove", onMove);
 	}
 
+	/**
+	 * Crée un conteneur overlay fixe pour les contrôles et y crée les boutons.
+	 */
+	_initDOMElements(){
+		// Crée un conteneur overlay qui couvre l'écran entier.
+		this.controlsContainer = $(`<div id="orientedControlsContainer" 
+      style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10000;"></div>`);
+		
+		// Créez les boutons avec pointer-events activés
+		// Flèche haut
+		this.elUp = $(`<input type="button" class="elUp" />`);
+		this.elUp.append('<http://localhost:8080/build/potree/resources/icons/arrow-up1.svg" alt="Up Arrow" />');
+
+		// Flèche droite
+		this.elRight = $(`<input type="button" class="elRight" />`);
+		this.elRight.append('<http://localhost:8080/build/potree/resources/icons/arrow-right1.svg" alt="Right Arrow" />');
+
+		// Flèche bas
+		this.elDown = $(`<input type="button" class="elDown" />`);
+		this.elDown.append('<http://localhost:8080/build/potree/resources/icons/arrow-down1.svg" alt="Down Arrow" />');
+
+		// Flèche gauche
+		this.elLeft = $(`<input type="button" class="elLeft" />`);
+		this.elLeft.append('<http://localhost:8080/build/potree/resources/icons/arrow-left1.svg" alt="Left Arrow" />');
+
+		this.elExit = $(`<input type="button" class="oriented-exit-btn" value="Revenir à la vue 3D" style="pointer-events: auto; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);" />`);		// Bouton de sortie qui appelle release()
+		this.elExit.click(() => {
+			this.release();
+		});
+
+		// Bouton flèche haut
+		this.elUp.click(() => {
+			const fovY = this.viewer.getFOV();
+			const top = Math.tan(THREE.Math.degToRad(fovY / 2));
+			this.shear[1] += 0.1 * top;
+		});
+
+		// Bouton flèche droite
+		this.elRight.click(() => {
+			const fovY = this.viewer.getFOV();
+			const top = Math.tan(THREE.Math.degToRad(fovY / 2));
+			this.shear[0] += 0.1 * top;
+		});
+
+		// Bouton flèche bas
+		this.elDown.click(() => {
+			const fovY = this.viewer.getFOV();
+			const top = Math.tan(THREE.Math.degToRad(fovY / 2));
+			this.shear[1] -= 0.1 * top;
+		});
+
+		// Bouton flèche gauche
+		this.elLeft.click(() => {
+			const fovY = this.viewer.getFOV();
+			const top = Math.tan(THREE.Math.degToRad(fovY / 2));
+			this.shear[0] -= 0.1 * top;
+		});
+
+		// Ajoute les boutons dans le conteneur
+		this.controlsContainer.append(this.elUp);
+		this.controlsContainer.append(this.elRight);
+		this.controlsContainer.append(this.elDown);
+		this.controlsContainer.append(this.elLeft);
+		this.controlsContainer.append(this.elExit);
+	}
+
+	// Vérifie s'il y a une image capturée
 	hasSomethingCaptured(){
 		return this.image !== null;
 	}
 
-	capture(image){
-		if(this.hasSomethingCaptured()){
+	capture(image) {
+		if (this.hasSomethingCaptured()) {
 			return;
 		}
-
+	
 		this.image = image;
-
+		this.active = true;
+	
 		this.originalFOV = this.viewer.getFOV();
 		this.originalControls = this.viewer.getControls();
-
+	
 		this.viewer.setControls(this);
 		this.viewer.scene.overrideCamera = this.shearCam;
-
-		const elCanvas = this.viewer.renderer.domElement;
-		const elRoot = $(elCanvas.parentElement);
-
+	
 		this.shear = [0, 0];
-
-
-		elRoot.append(this.elUp);
-		elRoot.append(this.elRight);
-		elRoot.append(this.elDown);
-		elRoot.append(this.elLeft);
-		elRoot.append(this.elExit);
+	
+		// Masque le bouton "Désactiver images orientées"
+		$('#toggleOrientedImages').hide();
+	
+		// Ajoute le conteneur des contrôles dans le document
+		$(document.body).append(this.controlsContainer);
 	}
 
-	release(){
+	release() {
+		// Si la page est en mode plein écran, on en sort
+		if (document.fullscreenElement) {
+			document.exitFullscreen();
+		}
+	
 		this.image = null;
-
+		this.active = false; // Désactivation pour stopper update()
+	
 		this.viewer.scene.overrideCamera = null;
-
-		this.elUp.detach();
-		this.elRight.detach();
-		this.elDown.detach();
-		this.elLeft.detach();
-		this.elExit.detach();
-
+	
+		// Réaffiche le bouton "Désactiver images orientées"
+		$('#toggleOrientedImages').show();
+	
+		// Retire le conteneur de contrôle du DOM
+		this.controlsContainer.remove();
+	
+		// Rétablit le champ de vision et les contrôles originaux du viewer
 		this.viewer.setFOV(this.originalFOV);
 		this.viewer.setControls(this.originalControls);
+	
+		// Recrée le conteneur et les boutons pour une future utilisation
+		this._initDOMElements();
 	}
 
 	setScene (scene) {
@@ -125,17 +171,14 @@ export class OrientedImageControls extends EventDispatcher{
 	}
 
 	update (delta) {
-		// const view = this.scene.view;
+		// Ne met rien à jour si le contrôle n'est pas actif
+		if(!this.active) return;
 
-		// let prevTotal = this.shearCam.projectionMatrix.elements.reduce( (a, i) => a + i, 0);
-
-		//const progression = Math.min(1, this.fadeFactor * delta);
-		//const attenuation = Math.max(0, 1 - this.fadeFactor * delta);
 		const progression = 1;
 		const attenuation = 0;
 
 		const oldFov = this.viewer.getFOV();
-		let fovProgression =  progression * this.fovDelta;
+		let fovProgression = progression * this.fovDelta;
 		let newFov = oldFov * ((1 + fovProgression / 10));
 
 		newFov = Math.max(this.fovMin, newFov);
@@ -171,7 +214,7 @@ export class OrientedImageControls extends EventDispatcher{
 
 		const shu = (1 - diff);
 
-		const newShear =  [
+		const newShear = [
 			(1 - shu) * this.shear[0] + shu * shx,
 			(1 - shu) * this.shear[1] + shu * shy,
 		];
@@ -182,7 +225,7 @@ export class OrientedImageControls extends EventDispatcher{
 		const {originalCam, shearCam} = this;
 
 		originalCam.fov = newFov;
-		originalCam.updateMatrixWorld()
+		originalCam.updateMatrixWorld();
 		originalCam.updateProjectionMatrix();
 		shearCam.copy(originalCam);
 		shearCam.rotation.set(...originalCam.rotation.toArray());
@@ -195,15 +238,14 @@ export class OrientedImageControls extends EventDispatcher{
 			1, 0, sx, 0,
 			0, 1, sy, 0,
 			0, 0, 1, 0,
-			0, 0, 0, 1,
+			0, 0, 0, 1
 		);
 
 		const proj = shearCam.projectionMatrix;
 		proj.multiply(mShear);
 		shearCam.projectionMatrixInverse.copy(proj).invert();
 
-		let total = shearCam.projectionMatrix.elements.reduce( (a, i) => a + i, 0);
-
+		// Réinitialise le fovDelta (puisque attenuation est ici à 0)
 		this.fovDelta *= attenuation;
 	}
-};
+}

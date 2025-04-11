@@ -331,7 +331,7 @@
       const orientedImages = await OrientedImageLoader.load(cameraParamsPath, imageParamsPath, viewer);
       window.orientedImages = orientedImages;
       window.imagesActives = false;
-      
+
       // Ajout du groupe d'images à la scène
       viewer.scene.scene.add(orientedImages.node);
 
@@ -354,21 +354,30 @@
 
       toggleBtn.addEventListener('click', () => {
         window.imagesActives = !window.imagesActives;
-        
-        // Si l'on désactive les images orientées, appeler release() de l'instance
-        if (!window.imagesActives && window.orientedImagesControls) {
-          window.orientedImagesControls.release();
-        }
 
         // Mettre à jour la visibilité de toutes les images
         for (const image of orientedImages.images) {
-          image.mesh.visible = window.imagesActives;
-          image.line.visible = window.imagesActives;
+          if (window.imagesActives) {
+            image.mesh.visible = true;
+            image.line.visible = true;
+            // Appliquer les textures ou les éléments nécessaires si ce n'est pas déjà fait
+            if (!image.textureLoaded) {
+              const imageUrl = image.imageUrl;  // Récupérez le lien de l'image depuis imageLinks ou d'autres sources
+              new THREE.TextureLoader().load(imageUrl, (texture) => {
+                image.mesh.material.map = texture;
+                image.mesh.material.needsUpdate = true;
+                image.textureLoaded = true;  // Marquer que la texture a été chargée
+              });
+            }
+          } else {
+            image.mesh.visible = false;
+            image.line.visible = false;
+          }
         }
 
         toggleBtn.textContent = window.imagesActives
-            ? "Désactiver Images orientées"
-            : "Activer Images orientées";
+          ? "Désactiver Images orientées"
+          : "Activer Images orientées";
       });
 
     })();

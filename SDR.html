@@ -337,8 +337,8 @@
 
       // On rend tout invisible par défaut
       for (const image of orientedImages.images) {
-        image.mesh.visible = false;  // L’image affichée
-        image.line.visible = false;  // La ligne (frustum)
+        image.mesh.visible = false;  // l’image affichée
+        image.line.visible = false;  // la ligne (frustum)
       }
 
       // Empêche les frustums de réapparaître par clic par erreur
@@ -362,22 +362,6 @@
 
         // Mettre à jour la visibilité de toutes les images
         for (const image of orientedImages.images) {
-          // Utilisation des liens des images à partir de imageLinks
-          const imageId = image.id;  // Exemple : 'photo1.jpg'
-          const objectName = "objet1";  // Assurez-vous de récupérer le bon nom de l'objet
-
-          // Récupérer l'URL correspondante depuis imageLinks
-          const imageUrl = imageLinks.find(url => url.includes(imageId));  // Trouver l'URL qui correspond à l'imageId
-          console.log(imageUrl);  // Vérifiez l'URL générée
-
-          // Utilisez imageUrl pour charger l'image ou mettre à jour l'affichage
-          // Vous pouvez charger l'image ici (par exemple avec THREE.js TextureLoader)
-          new THREE.TextureLoader().load(imageUrl, (texture) => {
-            image.mesh.material.map = texture;
-            image.mesh.material.needsUpdate = true;
-          });
-
-          // Rendre visible ou invisible
           image.mesh.visible = window.imagesActives;
           image.line.visible = window.imagesActives;
         }

@@ -43,6 +43,7 @@
       <input type="range" id="pointBudgetSlider" min="100000" max="10000000" step="100000" value="2000000">
     </div>
     <button id="toggleLissage">Désactiver lissage</button>
+    <button id="toggleOrientedImages">Activer les images orientées</button>
   </div>
 
   <!-- Boutons de contrôle pour la caméra et les outils -->
@@ -322,6 +323,55 @@
     viewer.setEDLRadius(1);
     viewer.setEDLStrength(0);
     viewer.setEDLOpacity(1);
+
+    (async () => {
+      const cameraParamsPath = "https://storage.googleapis.com/projet-potree-sncf/Images_orient%C3%A9es/Armoire2_arri%C3%A8re/Test_images.xml";
+      const imageParamsPath = "https://storage.googleapis.com/projet-potree-sncf/Images_orient%C3%A9es/Armoire2_arri%C3%A8re/orientation.txt";
+
+      const orientedImages = await OrientedImageLoader.load(cameraParamsPath, imageParamsPath, viewer);
+      window.orientedImages = orientedImages;
+      window.imagesActives = false;
+      
+      // Ajout du groupe d'images à la scène
+      viewer.scene.scene.add(orientedImages.node);
+
+      // On rend tout invisible par défaut
+      for (const image of orientedImages.images) {
+        image.mesh.visible = false;  // l’image affichée
+        image.line.visible = false;  // la ligne (frustum)
+      }
+
+      // Empêche les frustums de réapparaître par clic par erreur
+      orientedImages.addEventListener('imageActivated', () => {
+        if (!window.imagesActives) {
+          orientedImages.exit();
+        }
+      });
+
+      // Gestion du bouton
+      const toggleBtn = document.getElementById('toggleOrientedImages');
+      toggleBtn.textContent = "Activer Images orientées";
+
+      toggleBtn.addEventListener('click', () => {
+        window.imagesActives = !window.imagesActives;
+        
+        // Si l'on désactive les images orientées, appeler release() de l'instance
+        if (!window.imagesActives && window.orientedImagesControls) {
+          window.orientedImagesControls.release();
+        }
+
+        // Mettre à jour la visibilité de toutes les images
+        for (const image of orientedImages.images) {
+          image.mesh.visible = window.imagesActives;
+          image.line.visible = window.imagesActives;
+        }
+
+        toggleBtn.textContent = window.imagesActives
+            ? "Désactiver Images orientées"
+            : "Activer Images orientées";
+      });
+
+    })();
     
     // Ajout d'une lumière ambiante dans la scène
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);

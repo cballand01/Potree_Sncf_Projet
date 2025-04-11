@@ -365,7 +365,7 @@
         viewer.scene.scene.add(orientedImages.node);
     
         // Empêcher la réactivation des images par erreur
-        orientedImages.addEventListener('imageActivated', (event) => {
+        orientedImages.addEventListener('imageActivated', () => {
             if (!window.imagesActives) {
                 orientedImages.exit();
             }
@@ -384,9 +384,10 @@
                     image.mesh.visible = true;
                     image.line.visible = true;
     
-                    // Charger la texture si elle n'est pas encore chargée
+                    // Ajouter .JPG à l'URL et charger la texture si elle n'est pas encore chargée
                     if (!image.textureLoaded) {
-                        new THREE.TextureLoader().load(image.imageUrl, (texture) => {
+                        const imageUrlWithExtension = `${image.imageUrl}`;  // L'URL est déjà correcte ici avec .JPG
+                        new THREE.TextureLoader().load(imageUrlWithExtension, (texture) => {
                             image.mesh.material.map = texture;
                             image.mesh.material.needsUpdate = true;
                             image.textureLoaded = true; // Marquer comme chargé
@@ -404,6 +405,7 @@
         });
     
     })();
+
 
     
     // Ajout d'une lumière ambiante dans la scène

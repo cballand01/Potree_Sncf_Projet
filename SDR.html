@@ -325,8 +325,8 @@
     viewer.setEDLOpacity(1);
 
     (async () => {
-      const cameraParamsPath = "/Potree_Sncf_Projet/Test_images.xml";
-      const imageParamsPath = "/Potree_Sncf_Projet/orientation.txt";
+      const cameraParamsPath = "https://storage.googleapis.com/projet-potree-sncf/Images_orient%C3%A9es/Armoire2_arri%C3%A8re/Test_images.xml";
+      const imageParamsPath = "https://storage.googleapis.com/projet-potree-sncf/Images_orient%C3%A9es/Armoire2_arri%C3%A8re/Test.txt";
 
       const orientedImages = await OrientedImageLoader.load(cameraParamsPath, imageParamsPath, viewer);
       window.orientedImages = orientedImages;

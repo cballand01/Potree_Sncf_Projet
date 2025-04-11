@@ -328,7 +328,7 @@
         const cameraParamsPath = "https://storage.googleapis.com/projet-potree-sncf/Images_orient%C3%A9es/Armoire2_arri%C3%A8re/Test_images.xml";
         const imageParamsPath = "https://storage.googleapis.com/projet-potree-sncf/Images_orient%C3%A9es/Armoire2_arri%C3%A8re/Test.txt";
     
-        // Charger les paramètres de caméra et d'images
+        // Charger les paramètres de la caméra et des images
         const orientedImages = await OrientedImageLoader.load(cameraParamsPath, imageParamsPath, viewer);
         window.orientedImages = orientedImages;
         window.imagesActives = false;
@@ -347,10 +347,10 @@
     
             if (line) {
                 const tokens = line.split(/\s+/);
-                const imageName = tokens[0]; // Récupérer le nom de l'image (ex: "1H3A8819.jpg")
-                
-                // Construire l'URL de l'image en utilisant l'imageName et l'URL de base
-                image.imageUrl = `${imageBaseURL}${imageName}`;
+                const imageName = tokens[0]; // Récupérer le nom de l'image (ex: "1H3A8819")
+    
+                // Construire l'URL de l'image en ajoutant l'extension .JPG
+                image.imageUrl = `${imageBaseURL}${imageName}.JPG`;
     
                 // S'assurer que l'image est invisible au départ
                 image.mesh.visible = false;

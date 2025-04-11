@@ -355,9 +355,9 @@
                 // On ne charge pas encore la texture ici, juste on crée l'URL
                 image.textureLoaded = false;
     
-                // Rendre les images invisibles par défaut
+                // Afficher uniquement les cadres (frustums) au départ
                 image.mesh.visible = false;
-                image.line.visible = false;
+                image.line.visible = true;  // Les lignes sont visibles dès le départ, mais pas l'image
             }
         });
     
@@ -384,7 +384,7 @@
                     image.mesh.visible = true;
                     image.line.visible = true;
     
-                    // Ajouter .JPG à l'URL et charger la texture si elle n'est pas encore chargée
+                    // Charger la texture si elle n'est pas encore chargée
                     if (!image.textureLoaded) {
                         const imageUrlWithExtension = `${image.imageUrl}`;  // L'URL est déjà correcte ici avec .JPG
                         new THREE.TextureLoader().load(imageUrlWithExtension, (texture) => {
@@ -395,7 +395,7 @@
                     }
                 } else {
                     image.mesh.visible = false;
-                    image.line.visible = false;
+                    image.line.visible = true;  // Toujours afficher les cadres même quand l'image est cachée
                 }
             }
     
@@ -404,25 +404,8 @@
                 : "Activer Images orientées";
         });
     
-        // Activation de l'image individuelle (lorsqu'on clique pour l'orienter)
-        orientedImages.addEventListener('imageActivated', (event) => {
-            const image = event.detail;  // L'image activée
-    
-            // Vérifier et ajouter .JPG à l'URL de l'image si nécessaire
-            const imageUrl = image.imageUrl.endsWith(".JPG") ? image.imageUrl : `${image.imageUrl}.JPG`;
-    
-            // Charger la texture pour l'image activée
-            new THREE.TextureLoader().load(imageUrl, (texture) => {
-                image.mesh.material.map = texture;
-                image.mesh.material.needsUpdate = true;
-            });
-        });
-    
     })();
 
-
-
-    
     // Ajout d'une lumière ambiante dans la scène
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
     viewer.scene.scene.add(ambientLight);

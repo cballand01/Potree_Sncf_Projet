@@ -55,23 +55,10 @@ export class OrientedImageControls extends EventDispatcher{
 		this.controlsContainer = $(`<div id="orientedControlsContainer" 
       style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10000;"></div>`);
 		
-		// Créez les boutons avec pointer-events activés
-		// Flèche haut
-		this.elUp = $(`<input type="button" class="elUp" />`);
-		this.elUp.append('<https://storage.googleapis.com/projet-potree-sncf/Icons/arrow-up1.svg" alt="Up Arrow" />');
-
-		// Flèche droite
-		this.elRight = $(`<input type="button" class="elRight" />`);
-		this.elRight.append('<https://storage.googleapis.com/projet-potree-sncf/Icons/arrow-right1.svg" alt="Right Arrow" />');
-
-		// Flèche bas
-		this.elDown = $(`<input type="button" class="elDown" />`);
-		this.elDown.append('<https://storage.googleapis.com/projet-potree-sncf/Icons/arrow-down1.svg" alt="Down Arrow" />');
-
-		// Flèche gauche
-		this.elLeft = $(`<input type="button" class="elLeft" />`);
-		this.elLeft.append('<https://storage.googleapis.com/projet-potree-sncf/Icons/arrow-left1.svg" alt="Left Arrow" />');
-
+		this.elUp =    $(`<input type="button" value="🡅" style="pointer-events: auto; position: absolute; top: 20px; left: calc(50% - 25px); width: 60px; height: 60px; font-size: 35px;" />`);
+		this.elRight = $(`<input type="button" value="🡆" style="pointer-events: auto; position: absolute; top: calc(50% - 25px); left: calc(50% + 20px); width: 60px; height: 60px; font-size: 35px;" />`);
+		this.elDown =  $(`<input type="button" value="🡇" style="pointer-events: auto; position: absolute; top: calc(50% + 20px); left: calc(50% - 25px); width: 60px; height: 60px; font-size: 35px;" />`);
+		this.elLeft =  $(`<input type="button" value="🡄" style="pointer-events: auto; position: absolute; top: calc(50% - 25px); left: calc(50% - 80px); width: 60px; height: 60px; font-size: 35px;" />`);
 		this.elExit = $(`<input type="button" class="oriented-exit-btn" value="Revenir à la vue 3D" style="pointer-events: auto; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);" />`);		// Bouton de sortie qui appelle release()
 		this.elExit.click(() => {
 			this.release();

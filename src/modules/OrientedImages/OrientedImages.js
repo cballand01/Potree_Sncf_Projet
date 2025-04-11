@@ -422,7 +422,7 @@ export class OrientedImageLoader{
 					}
 				);
 
-				const imagePath = `${imageParamsPath}/../${target.id}.JPG`;
+				const imagePath = `${imageParamsPath}/../${target.id}`;
 				new THREE.TextureLoader().load(imagePath,
 					(texture) => {
 						target.texture = texture;

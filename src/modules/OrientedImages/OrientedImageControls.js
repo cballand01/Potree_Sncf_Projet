@@ -52,20 +52,11 @@ export class OrientedImageControls extends EventDispatcher{
 	 */
 	_initDOMElements(){
 		// Crée un conteneur overlay qui couvre l'écran entier.
-		this.controlsContainer = $(`<div id="orientedControlsContainer" 
-      style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10000;"></div>`);
-		
-		// Bouton flèche haut
-this.elUp = $(`<input type="button" value="🡅" style="pointer-events: auto; position: absolute; top: 20px; left: calc(50% - 25px); width: 60px; height: 60px; font-size: 35px;" />`);
-
-// Bouton flèche droite
-this.elRight = $(`<input type="button" value="🡆" style="pointer-events: auto; position: absolute; top: calc(50% - 25px); left: calc(50% + 20px); width: 60px; height: 60px; font-size: 35px;" />`);
-
-// Bouton flèche bas
-this.elDown = $(`<input type="button" value="🡇" style="pointer-events: auto; position: absolute; top: calc(50% + 20px); left: calc(50% - 25px); width: 60px; height: 60px; font-size: 35px;" />`);
-
-// Bouton flèche gauche
-this.elLeft = $(`<input type="button" value="🡄" style="pointer-events: auto; position: absolute; top: calc(50% - 25px); left: calc(50% - 80px); width: 60px; height: 60px; font-size: 35px;" />`);
+		this.controlsContainer = $(`<div id="orientedControlsContainer" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10000;"></div>`);
+		this.elUp = $(`<input type="button" class="oriented-arrow oriented-arrow-up" value="🡅" />`);
+		this.elRight = $(`<input type="button" class="oriented-arrow oriented-arrow-right" value="🡆" />`);
+		this.elDown = $(`<input type="button" class="oriented-arrow oriented-arrow-down" value="🡇" />`);
+		this.elLeft = $(`<input type="button" class="oriented-arrow oriented-arrow-left" value="🡄" />`);
 		this.elExit = $(`<input type="button" class="oriented-exit-btn" value="Revenir à la vue 3D" style="pointer-events: auto; position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);" />`);		// Bouton de sortie qui appelle release()
 		this.elExit.click(() => {
 			this.release();

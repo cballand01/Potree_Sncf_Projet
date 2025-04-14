@@ -104,51 +104,68 @@ export class OrientedImageControls extends EventDispatcher{
 	}
 
 	capture(image) {
-		if (this.hasSomethingCaptured()) {
-			return;
-		}
+	    if (this.hasSomethingCaptured()) {
+	        return;
+	    }
 	
-		this.image = image;
-		this.active = true;
+	    // Masquer toutes les images sauf celle qui est capturée
+	    if (window.orientedImages && window.orientedImages.images) {
+	        window.orientedImages.images.forEach(function(img) {
+	            if (img !== image) {
+	                img.mesh.visible = false;
+	                img.line.visible = false;
+	            }
+	        });
+	    }
 	
-		this.originalFOV = this.viewer.getFOV();
-		this.originalControls = this.viewer.getControls();
+	    this.image = image;
+	    this.active = true;
 	
-		this.viewer.setControls(this);
-		this.viewer.scene.overrideCamera = this.shearCam;
+	    this.originalFOV = this.viewer.getFOV();
+	    this.originalControls = this.viewer.getControls();
 	
-		this.shear = [0, 0];
+	    this.viewer.setControls(this);
+	    this.viewer.scene.overrideCamera = this.shearCam;
 	
-		// Masque le bouton "Désactiver images orientées"
-		$('#toggleOrientedImages').hide();
+	    this.shear = [0, 0];
 	
-		// Ajoute le conteneur des contrôles dans le document
-		$(document.body).append(this.controlsContainer);
+	    // Masquer le bouton "Désactiver images orientées"
+	    $('#toggleOrientedImages').hide();
+	
+	    // Ajouter le conteneur des contrôles dans le document
+	    $(document.body).append(this.controlsContainer);
 	}
 
 	release() {
-		// Si la page est en mode plein écran, on en sort
-		if (document.fullscreenElement) {
-			document.exitFullscreen();
-		}
+	    if (document.fullscreenElement) {
+	        document.exitFullscreen();
+	    }
 	
-		this.image = null;
-		this.active = false; // Désactivation pour stopper update()
+	    // Réafficher toutes les images
+	    if (window.orientedImages && window.orientedImages.images) {
+	        window.orientedImages.images.forEach(function(img) {
+	            img.mesh.visible = true;
+	            img.line.visible = true;
+	        });
+	    }
 	
-		this.viewer.scene.overrideCamera = null;
+	    this.image = null;
+	    this.active = false; // Désactivation pour stopper update()
 	
-		// Réaffiche le bouton "Désactiver images orientées"
-		$('#toggleOrientedImages').show();
+	    this.viewer.scene.overrideCamera = null;
 	
-		// Retire le conteneur de contrôle du DOM
-		this.controlsContainer.remove();
+	    // Réafficher le bouton "Désactiver images orientées"
+	    $('#toggleOrientedImages').show();
 	
-		// Rétablit le champ de vision et les contrôles originaux du viewer
-		this.viewer.setFOV(this.originalFOV);
-		this.viewer.setControls(this.originalControls);
+	    // Retirer le conteneur de contrôle du DOM
+	    this.controlsContainer.remove();
 	
-		// Recrée le conteneur et les boutons pour une future utilisation
-		this._initDOMElements();
+	    // Rétablir le champ de vision et les contrôles originaux du viewer
+	    this.viewer.setFOV(this.originalFOV);
+	    this.viewer.setControls(this.originalControls);
+	
+	    // Recréer le conteneur et les boutons pour une future utilisation
+	    this._initDOMElements();
 	}
 
 	setScene (scene) {

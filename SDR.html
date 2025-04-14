@@ -53,27 +53,27 @@
     <div id="buttonsContainer">
       <!-- Bouton pour mesurer un point -->
       <div id="measureButton" class="buttonFrame tooltip-container tooltip-right">
-        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/Point.svg" alt="Mesurer">
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/pointeur.svg" alt="Mesurer">
         <span class="custom-tooltip">Mesurer un point</span>
       </div>
       <!-- Bouton pour supprimer les mesures -->
       <div id="deleteButton" class="buttonFrame tooltip-container tooltip-right">
-        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/Poubelle.svg" alt="Supprimer">
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/poubelle.svg" alt="Supprimer">
         <span class="custom-tooltip">Supprimer le/les point-s</span>
       </div>
       <!-- Bouton pour recentrer la vue -->
       <div id="recenterButton" class="buttonFrame tooltip-container tooltip-right">
-        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/focus.svg" alt="Recentrer">
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/maison.svg" alt="Recentrer">
         <span class="custom-tooltip">Recentrer la vue</span>
       </div>
       <!-- Bouton pour afficher les instructions de déplacement -->
       <div id="instructionButton" class="buttonFrame tooltip-container tooltip-right">
-        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/Souris.svg" alt="Instructions">
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/question.svg" alt="Instructions">
         <span class="custom-tooltip">Instructions de déplacement</span>
       </div>
       <!-- Bouton pour basculer en plein écran -->
       <div id="fullscreenButton" class="buttonFrame tooltip-container tooltip-right">
-        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/GrandEcran.svg" alt="Plein écran">
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/fullscreen.svg" alt="Plein écran">
         <span class="custom-tooltip">Ouvrir/fermer le plein écran</span>
       </div>
     </div>
@@ -1029,7 +1029,7 @@
           document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
         }
         // Mise à jour de l'icône pour le mode "Quitter le plein écran"
-        fsButtonImg.src = "/Potree_Sncf_Projet/build/potree/resources/icons/Petit-Ecran.svg";
+        fsButtonImg.src = "/Potree_Sncf_Projet/build/potree/resources/icons/fullscreen-exit.svg";
         fsButtonImg.alt = "Quitter le plein écran";
       } else {
         // Sortie du mode plein écran
@@ -1041,7 +1041,7 @@
           document.webkitExitFullscreen();
         }
         // Mise à jour de l'icône pour le mode "Plein écran"
-        fsButtonImg.src = "/Potree_Sncf_Projet/build/potree/resources/icons/GrandEcran.svg";
+        fsButtonImg.src = "/Potree_Sncf_Projet/build/potree/resources/icons/fullscreen.svg";
         fsButtonImg.alt = "Plein écran";
       }
     }
@@ -1050,7 +1050,7 @@
     document.addEventListener("fullscreenchange", function() {
       var fsButtonImg = document.querySelector("#fullscreenButton img");
       if (!document.fullscreenElement) {
-        fsButtonImg.src = "/Potree_Sncf_Projet/build/potree/resources/icons/GrandEcran.svg";
+        fsButtonImg.src = "/Potree_Sncf_Projet/build/potree/resources/icons/fullscreen.svg";
         fsButtonImg.alt = "Plein écran";
       }
     });

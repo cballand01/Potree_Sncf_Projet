@@ -753,7 +753,7 @@
     
 
 
-    /*//---------------- Début du chargement des modèles 3D (OBJ)----------------//
+    //---------------- Début du chargement des modèles 3D (OBJ)----------------//
     {
       let manager = new THREE.LoadingManager();
       manager.onProgress = function ( item, loaded, total ) {
@@ -767,17 +767,15 @@
       };
       let onError = function ( xhr ) {};
     
-      // Chargement du modèle 1 (tab central)
+      // Chargement du modèle 1 (Sol)
       let mtlLoader1 = new MTLLoader(manager);
-      mtlLoader1.setPath('/Potree_Sncf_Projet/model3D/modelOBJ/tab_central/');
-      mtlLoader1.load('Model_TCOcentral.mtl', function(materials) {
+      mtlLoader1.load('https://storage.googleapis.com/projet-potree-sncf/Models_OBJ/SDR_Sol/SDR_Sol.mtl', function(materials) {
         materials.preload();
     
         let objLoader1 = new OBJLoader(manager);
         objLoader1.setMaterials(materials);
-        objLoader1.setPath('/Potree_Sncf_Projet/model3D/modelOBJ/tab_central/');
-        objLoader1.load('Model_TCOcentral.obj', function ( object ) {
-          object.position.set(0.02, 0.02, 0);
+        objLoader1.load('https://storage.googleapis.com/projet-potree-sncf/Models_OBJ/SDR_Sol/SDR_Sol.obj', function ( object ) {
+          object.position.set(0.90, 6.54, 51.775);
           object.scale.set(1, 1, 1);
           object.rotation.set(0, 0, 0);
           viewer.scene.scene.add( object );
@@ -785,7 +783,7 @@
         }, onProgress, onError );
       });
     }
-    //---------------- Fin du chargement des modèles 3D (OBJ)----------------//*/
+    //---------------- Fin du chargement des modèles 3D (OBJ)----------------//
 
 
     //---------------- Première Animation (Tableau Haut) ----------------//

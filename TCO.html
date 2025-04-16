@@ -1067,12 +1067,12 @@
 
       // Chargement du modèle 7 (Sol_haut)
       let MTLLoader7 = new MTLLoader(manager);
-      MTLLoader7.load('https://storage.googleapis.com/projet-potree-sncf/Models_OBJ/TCO_Sol_Haut/Sol_TCO_haut.mtl', function(materials) {
+      MTLLoader7.load('https://storage.googleapis.com/projet-potree-sncf/Models_OBJ/TCO_Sol_Haut/Sol_TCO_Haut.mtl', function(materials) {
         materials.preload();
         
         let OBJLoader7 = new OBJLoader(manager);
         OBJLoader7.setMaterials(materials);
-        OBJLoader7.load('https://storage.googleapis.com/projet-potree-sncf/Models_OBJ/TCO_Sol_Haut/Sol_TCO_haut.obj', function (object) {
+        OBJLoader7.load('https://storage.googleapis.com/projet-potree-sncf/Models_OBJ/TCO_Sol_Haut/Sol_TCO_Haut.obj', function (object) {
           object.position.set(5.21, 13.55, 40.755);
           object.scale.set(1, 1, 1);
           object.rotation.set(0, 0, 0);

@@ -199,7 +199,7 @@
     viewer.setEDLStrength(0);
     viewer.setEDLOpacity(1);
   
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.1);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
     viewer.scene.scene.add(ambientLight);
     
     // Désactive les contrôles Potree
@@ -224,7 +224,7 @@
       }, { passive: false });
     });
 
-    let totalToLoad = 1; // 1 nuage + 6 modèles
+    let totalToLoad = 1; // 1 nuage + 5 modèles
     let itemsLoaded = 0;
 
     function checkAllLoaded() {
@@ -235,7 +235,7 @@
       }
     }
   
-    Potree.loadPointCloud("https://storage.googleapis.com/projet-potree-sncf/NuageTCO/Nuage_Sans_Sol/metadata.json", "Salle_SDR", function(e){
+    Potree.loadPointCloud("https://storage.googleapis.com/projet-potree-sncf/NuageTCO/metadata.json", "Salle_SDR", function(e){
       viewer.scene.addPointCloud(e.pointcloud);
       let material = e.pointcloud.material;
       material.size = 1.3;
@@ -481,39 +481,6 @@
           window.objMesh5 = object;
           viewer.scene.scene.add(object);
           checkAllLoaded();
-        }, onProgress, onError);
-      });
-      
-      // Chargement du modèle 6 (Sol_bas)
-      let MTLLoader6 = new MTLLoader(manager);
-      MTLLoader6.setPath('../model3D/modelOBJ/TCO_Sol_Bas/');
-      MTLLoader6.load('Sol_TCO_bas.mtl', function(materials) {
-        materials.preload();
-        
-        let OBJLoader6 = new OBJLoader(manager);
-        OBJLoader6.setMaterials(materials);
-        OBJLoader6.load('https://storage.googleapis.com/projet-potree-sncf/Models_OBJ/TCO_Sol_Bas/Sol_TCO_bas.obj', function (object) {
-          object.position.set(5.21, 13.55, 40.755);
-          object.scale.set(1, 1, 1);
-          object.rotation.set(0, 0, 0);
-          window.objMesh6 = object;
-          viewer.scene.scene.add(object);
-        }, onProgress, onError);
-      });
-
-      // Chargement du modèle 6 (Sol_haut)
-      let MTLLoader7 = new MTLLoader(manager);
-      MTLLoader7.load('Sol_TCO_haut.mtl', function(materials) {
-        materials.preload();
-        
-        let OBJLoader7 = new OBJLoader(manager);
-        OBJLoader7.setMaterials(materials);
-        OBJLoader7.load('https://storage.googleapis.com/projet-potree-sncf/Models_OBJ/TCO_Sol_Haut/Sol_TCO_Haut.obj', function (object) {
-          object.position.set(5.21, 13.55, 40.755);
-          object.scale.set(1, 1, 1);
-          object.rotation.set(0, 0, 0);
-          window.objMesh7 = object;
-          viewer.scene.scene.add(object);
         }, onProgress, onError);
       });
     }

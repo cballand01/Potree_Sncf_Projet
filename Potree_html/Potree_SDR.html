@@ -175,7 +175,7 @@
           <img src="https://storage.googleapis.com/projet-potree-sncf/Images/Images_Interface/clicgauche.png" alt="Rotation" class="instructionImage">
           <div class="instructionText">
             <h3>Rotation</h3>
-            <p>Cliquez et faites glisser pour faire pivoter la vue.<br>Double-cliquez pour accélérer.</p>
+            <p>Cliquez et faites glisser pour faire pivoter la vue.<br>Double-cliquez pour déplacer la vue plus rapidement.</p>
           </div>
         </div>
         <!-- Instruction pour le zoom -->
@@ -480,6 +480,19 @@
           viewer.scene.view.setView(annotation.cameraPosition, annotation.cameraTarget, duration);
         });
       }
+      
+      //bouton de recentrage sur la vue initiale
+      const btn = document.getElementById("recenterButton");
+      btn.querySelector(".custom-tooltip").textContent = "Retour à la vue initiale";
+
+      // ajoute le listener ici, dans le même scope que initialPosition
+      btn.addEventListener("click", () => {
+        viewer.scene.view.setView(
+          initialPosition.clone(),
+          initialTarget.clone(),
+          1000
+        );
+      });
 
       //---------------- Annotations textuelles ----------------//
     
@@ -985,10 +998,6 @@
           measurements = [];
           $('#cameraPosition').text("Toutes les mesures ont été supprimées");
         }
-      });
-      // Recentrement de la vue
-      document.getElementById("recenterButton").addEventListener("click", function(){
-        viewer.fitToScreen();
       });
       // Affichage de la popup d'instructions
       document.getElementById("instructionButton").addEventListener("click", function(){

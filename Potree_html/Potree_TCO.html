@@ -336,6 +336,46 @@
     
       // Positionnement initial de la vue
       viewer.scene.view.setView(initialPosition, initialTarget);
+
+      // Fonction pour créer une boite de déplacement limitante
+      const cameraLimitBox = {
+        minX: -100,
+        maxX: 100,
+        minY: -100,
+        maxY: 100,
+        minZ: 0.5,
+        maxZ: 5.0
+      };
+      function clampToBox(pos, box) {
+        if (!pos) return;
+        pos.x = Math.max(box.minX, Math.min(box.maxX, pos.x));
+        pos.y = Math.max(box.minY, Math.min(box.maxY, pos.y));
+        pos.z = Math.max(box.minZ, Math.min(box.maxZ, pos.z));
+      } 
+      let skipFirstClamp = true;
+      viewer.addEventListener("update", () => {
+        if (skipFirstClamp) {
+          skipFirstClamp = false;
+          return; // ne pas clamp la caméra sur le premier update
+        }
+
+        const cam  = viewer.scene.getActiveCamera();
+        const view = viewer.scene.view;
+
+        if (cam?.position) {
+          clampToBox(cam.position, cameraLimitBox);
+        }
+        if (view?.position) {
+          clampToBox(view.position, cameraLimitBox);
+        }
+        if (view?.target) {
+          clampToBox(view.target, cameraLimitBox);
+        }
+        if (typeof view.getPivot === "function") {
+          const pivot = view.getPivot();
+          if (pivot) clampToBox(pivot, cameraLimitBox);
+        }
+      });
     
       // Désactivation du mode haute qualité par défaut et mise à jour du texte du bouton
       viewer.useHQ = false;
@@ -352,6 +392,7 @@
           viewer.scene.view.setView(annotation.cameraPosition, annotation.cameraTarget, duration);
         });
       }
+      
 
       //---------------- Annotations textuelles ----------------//
       // Annotation texte 1 Zoom

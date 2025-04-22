@@ -392,7 +392,17 @@
           viewer.scene.view.setView(annotation.cameraPosition, annotation.cameraTarget, duration);
         });
       }
-      
+
+      // Bouton de retour à la vue initiale
+      const btn = document.getElementById("recenterButton");
+      btn.querySelector(".custom-tooltip").textContent = "Retour à la vue initiale";
+      btn.addEventListener("click", () => {
+        viewer.scene.view.setView(
+          initialPosition.clone(),
+          initialTarget.clone(),
+          1000
+        );
+      });
 
       //---------------- Annotations textuelles ----------------//
       // Annotation texte 1 Zoom
@@ -1405,10 +1415,6 @@
           measurements = [];
           $('#cameraPosition').text("Toutes les mesures ont été supprimées");
         }
-      });
-      // Recentrement de la vue
-      document.getElementById("recenterButton").addEventListener("click", function(){
-        viewer.fitToScreen();
       });
       // Affichage de la popup d'instructions
       document.getElementById("instructionButton").addEventListener("click", function(){

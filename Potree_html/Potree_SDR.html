@@ -325,16 +325,18 @@
     viewer.setEDLOpacity(1);
 
     (async () => {
-        window.imagesActives = false;
-    
         // === LOT 1 ===
         const cameraParamsPath1 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.xml";
         const imageParamsPath1 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.txt";
         const imageBaseURL1 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/";
     
         const orientedImages1 = await OrientedImageLoader.load(cameraParamsPath1, imageParamsPath1, viewer);
+        window.orientedImages1 = orientedImages1;
+    
         const response1 = await fetch(imageParamsPath1);
-        const lines1 = (await response1.text()).split('\n');
+        const text1 = await response1.text();
+        const lines1 = text1.split('\n');
+    
         orientedImages1.images.forEach((image, index) => {
             const line = lines1[index];
             if (line) {
@@ -346,6 +348,7 @@
                 image.line.visible = false;
             }
         });
+    
         viewer.scene.scene.add(orientedImages1.node);
     
         // === LOT 2 ===
@@ -354,8 +357,12 @@
         const imageBaseURL2 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/";
     
         const orientedImages2 = await OrientedImageLoader.load(cameraParamsPath2, imageParamsPath2, viewer);
+        window.orientedImages2 = orientedImages2;
+    
         const response2 = await fetch(imageParamsPath2);
-        const lines2 = (await response2.text()).split('\n');
+        const text2 = await response2.text();
+        const lines2 = text2.split('\n');
+    
         orientedImages2.images.forEach((image, index) => {
             const line = lines2[index];
             if (line) {
@@ -367,26 +374,31 @@
                 image.line.visible = false;
             }
         });
+    
         viewer.scene.scene.add(orientedImages2.node);
     
-        // === Activation globale
+        // === BOUTON UNIQUE
+        window.imagesActives = false;
         const toggleBtn = document.getElementById('toggleOrientedImages');
         toggleBtn.textContent = "Activer Images orientées";
     
         toggleBtn.addEventListener('click', () => {
             window.imagesActives = !window.imagesActives;
-            const allImages = [...orientedImages1.images, ...orientedImages2.images];
     
-            for (const image of allImages) {
-                image.mesh.visible = window.imagesActives;
-                image.line.visible = window.imagesActives;
+            const lots = [orientedImages1, orientedImages2];
     
-                if (window.imagesActives && !image.textureLoaded) {
-                    new THREE.TextureLoader().load(image.imageUrl, (texture) => {
-                        image.mesh.material.map = texture;
-                        image.mesh.material.needsUpdate = true;
-                        image.textureLoaded = true;
-                    });
+            for (const orientedImages of lots) {
+                for (const image of orientedImages.images) {
+                    image.mesh.visible = window.imagesActives;
+                    image.line.visible = window.imagesActives;
+    
+                    if (window.imagesActives && !image.textureLoaded) {
+                        new THREE.TextureLoader().load(image.imageUrl, (texture) => {
+                            image.mesh.material.map = texture;
+                            image.mesh.material.needsUpdate = true;
+                            image.textureLoaded = true;
+                        });
+                    }
                 }
             }
     
@@ -395,30 +407,21 @@
                 : "Activer Images orientées";
         });
     
-        // === Affichage image unique à l’activation
-        function focusOnSingleImage(activeImage) {
-            const allImages = [...orientedImages1.images, ...orientedImages2.images];
-            allImages.forEach((img) => {
-                const isActive = img === activeImage;
-                img.mesh.visible = isActive;
-                img.line.visible = isActive;
-            });
-            window.imagesActives = false;
-            toggleBtn.textContent = "Activer Images orientées";
-        }
-    
-        // === Gestion de l'événement d’activation d’une image
+        // === LOGIQUE QUI FONCTIONNAIT (adaptée à plusieurs lots)
         [orientedImages1, orientedImages2].forEach(orientedImages => {
-            orientedImages.addEventListener('imageActivated', (event) => {
-                const activeImage = event.image;
-                focusOnSingleImage(activeImage);
+            orientedImages.addEventListener('imageActivated', () => {
+                if (!window.imagesActives) {
+                    // cacher toutes les autres images dans ce lot
+                    orientedImages.exit();
+                    // cacher les images dans les autres lots aussi
+                    const autresLots = [orientedImages1, orientedImages2].filter(lot => lot !== orientedImages);
+                    for (const lot of autresLots) {
+                        lot.exit();
+                    }
+                }
             });
         });
     })();
-
-
-
-
 
     // Ajout d'une lumière ambiante dans la scène
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);

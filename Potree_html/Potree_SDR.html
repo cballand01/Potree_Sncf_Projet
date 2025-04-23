@@ -352,39 +352,8 @@
         });
     
         viewer.scene.scene.add(orientedImages1.node);
-    
-        // Gestion du bouton pour activer/désactiver les images du premier jeu
-        const toggleBtn1 = document.getElementById('toggleOrientedImages1');
-        toggleBtn1.textContent = "Activer Images orientées 1";
-    
-        toggleBtn1.addEventListener('click', () => {
-            window.imagesActives1 = !window.imagesActives1;
-    
-            // Mettre à jour la visibilité des images et des frustums pour le premier jeu
-            orientedImages1.images.forEach((image) => {
-                if (window.imagesActives1) {
-                    image.mesh.visible = true;
-                    image.line.visible = true;
-                    if (!image.textureLoaded) {
-                        new THREE.TextureLoader().load(image.imageUrl, (texture) => {
-                            image.mesh.material.map = texture;
-                            image.mesh.material.needsUpdate = true;
-                            image.textureLoaded = true;
-                        });
-                    }
-                } else {
-                    image.mesh.visible = false;
-                    image.line.visible = false;
-                }
-            });
-    
-            toggleBtn1.textContent = window.imagesActives1
-                ? "Désactiver Images orientées 1"
-                : "Activer Images orientées 1";
-        });
-    
     })();
-    
+
     (async () => {
         // Charger le deuxième jeu de données XML/TXT
         const cameraParamsPath2 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Orientation_SDR_Armoire2_Arriere.xml";
@@ -413,38 +382,49 @@
         });
     
         viewer.scene.scene.add(orientedImages2.node);
+    })();
+
+    (async () => {
+        // Bouton pour activer/désactiver les images des deux jeux
+        const toggleBtn = document.getElementById('toggleOrientedImages');
+        toggleBtn.textContent = "Activer Images orientées";
     
-        // Gestion du bouton pour activer/désactiver les images du deuxième jeu
-        const toggleBtn2 = document.getElementById('toggleOrientedImages2');
-        toggleBtn2.textContent = "Activer Images orientées 2";
-    
-        toggleBtn2.addEventListener('click', () => {
+        toggleBtn.addEventListener('click', () => {
+            // Alterner l'état d'activation pour les deux ensembles
+            window.imagesActives1 = !window.imagesActives1;
             window.imagesActives2 = !window.imagesActives2;
     
-            // Mettre à jour la visibilité des images et des frustums pour le deuxième jeu
-            orientedImages2.images.forEach((image) => {
-                if (window.imagesActives2) {
-                    image.mesh.visible = true;
-                    image.line.visible = true;
-                    if (!image.textureLoaded) {
-                        new THREE.TextureLoader().load(image.imageUrl, (texture) => {
-                            image.mesh.material.map = texture;
-                            image.mesh.material.needsUpdate = true;
-                            image.textureLoaded = true;
-                        });
+            // Mettre à jour la visibilité des images et des frustums pour les deux jeux
+            [window.orientedImages1, window.orientedImages2].forEach((orientedImages) => {
+                orientedImages.images.forEach((image) => {
+                    if (window.imagesActives1 || window.imagesActives2) {
+                        image.mesh.visible = true;  // Afficher l'image
+                        image.line.visible = true;  // Afficher les frustums
+    
+                        // Charger la texture si elle n'est pas encore chargée
+                        if (!image.textureLoaded) {
+                            new THREE.TextureLoader().load(image.imageUrl, (texture) => {
+                                image.mesh.material.map = texture;
+                                image.mesh.material.needsUpdate = true;
+                                image.textureLoaded = true;
+                            });
+                        }
+                    } else {
+                        image.mesh.visible = false;
+                        image.line.visible = false;
                     }
-                } else {
-                    image.mesh.visible = false;
-                    image.line.visible = false;
-                }
+                });
             });
     
-            toggleBtn2.textContent = window.imagesActives2
-                ? "Désactiver Images orientées 2"
-                : "Activer Images orientées 2";
+            toggleBtn.textContent = (window.imagesActives1 || window.imagesActives2)
+                ? "Désactiver Images orientées"
+                : "Activer Images orientées";
         });
     
     })();
+
+
+
 
 
 

@@ -325,94 +325,84 @@
     viewer.setEDLOpacity(1);
 
     (async () => {
-        // === LOT 1 ===
-        const cameraParamsPath1 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Test_images.xml";
-        const imageParamsPath1 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/orientation1.txt";
-        const imageBaseURL1 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/";
+        const cameraParamsPath = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Test_images.xml";
+        const imageParamsPath = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/orientation1.txt";
     
-        const orientedImages1 = await OrientedImageLoader.load(cameraParamsPath1, imageParamsPath1, viewer);
-        window.orientedImages1 = orientedImages1;
-    
-        const response1 = await fetch(imageParamsPath1);
-        const text1 = await response1.text();
-        const lines1 = text1.split('\n');
-    
-        orientedImages1.images.forEach((image, index) => {
-            const line = lines1[index];
-            if (line) {
-                const tokens = line.split(/\s+/);
-                const imageName = tokens[0];
-                image.imageUrl = `${imageBaseURL1}${imageName}.JPG`;
-                image.textureLoaded = false;
-                image.mesh.visible = false;
-                image.line.visible = false;
-            }
-        });
-    
-        viewer.scene.scene.add(orientedImages1.node);
-    
-        // === LOT 2 ===
-        const cameraParamsPath2 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/SDR_Orientation_Armoire1_Arriere.xml";
-        const imageParamsPath2 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/SDR_Orientation_Armoire1_Arriere.txt";
-        const imageBaseURL2 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/";
-    
-        const orientedImages2 = await OrientedImageLoader.load(cameraParamsPath2, imageParamsPath2, viewer);
-        window.orientedImages2 = orientedImages2;
-    
-        const response2 = await fetch(imageParamsPath2);
-        const text2 = await response2.text();
-        const lines2 = text2.split('\n');
-    
-        orientedImages2.images.forEach((image, index) => {
-            const line = lines2[index];
-            if (line) {
-                const tokens = line.split(/\s+/);
-                const imageName = tokens[0];
-                image.imageUrl = `${imageBaseURL2}${imageName}.JPG`;
-                image.textureLoaded = false;
-                image.mesh.visible = false;
-                image.line.visible = false;
-            }
-        });
-    
-        viewer.scene.scene.add(orientedImages2.node);
-    
-        // === Gestion commune ===
+        // Charger les paramètres de la caméra et des images
+        const orientedImages = await OrientedImageLoader.load(cameraParamsPath, imageParamsPath, viewer);
+        window.orientedImages = orientedImages;
         window.imagesActives = false;
     
+        // Lire le fichier orientation.txt
+        const response = await fetch(imageParamsPath);
+        const text = await response.text();
+        const lines = text.split('\n');
+    
+        // Générer l'URL pour chaque image
+        const imageBaseURL = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/";
+    
+        // On suppose que chaque ligne contient les informations nécessaires pour une image (nom + autres données)
+        orientedImages.images.forEach((image, index) => {
+            const line = lines[index]; // Trouver la ligne correspondante pour l'image
+    
+            if (line) {
+                const tokens = line.split(/\s+/);
+                const imageName = tokens[0]; // Récupérer le nom de l'image (ex: "1H3A8819")
+    
+                // Construire l'URL de l'image en ajoutant l'extension .JPG
+                image.imageUrl = ${imageBaseURL}${imageName};
+    
+                // Ne pas charger la texture au départ, juste créer l'URL
+                image.textureLoaded = false;
+    
+                // Ne rendre les frustums visibles que lorsque les images sont activées
+                image.mesh.visible = false;  // Image cachée au départ
+                image.line.visible = false;  // Frustums cachés au départ
+            }
+        });
+    
+        // Ajouter les images à la scène
+        viewer.scene.scene.add(orientedImages.node);
+    
+        // Empêcher la réactivation des images par erreur
+        orientedImages.addEventListener('imageActivated', () => {
+            if (!window.imagesActives) {
+                orientedImages.exit();
+            }
+        });
+    
+        // Gestion du bouton pour activer/désactiver les images
         const toggleBtn = document.getElementById('toggleOrientedImages');
         toggleBtn.textContent = "Activer Images orientées";
     
         toggleBtn.addEventListener('click', () => {
             window.imagesActives = !window.imagesActives;
     
-            const lots = [orientedImages1, orientedImages2]; // Tu peux en ajouter d'autres ici
+            // Mettre à jour la visibilité des images et des frustums
+            for (const image of orientedImages.images) {
+                if (window.imagesActives) {
+                    image.mesh.visible = true;  // Afficher l'image
+                    image.line.visible = true;  // Afficher les frustums
     
-            for (const orientedImages of lots) {
-                for (const image of orientedImages.images) {
-                    image.mesh.visible = window.imagesActives;
-                    image.line.visible = window.imagesActives;
-    
-                    if (window.imagesActives && !image.textureLoaded) {
+                    // Charger la texture si elle n'est pas encore chargée
+                    if (!image.textureLoaded) {
                         new THREE.TextureLoader().load(image.imageUrl, (texture) => {
                             image.mesh.material.map = texture;
                             image.mesh.material.needsUpdate = true;
-                            image.textureLoaded = true;
+                            image.textureLoaded = true;  // Marquer comme chargé
                         });
                     }
+                } else {
+                    image.mesh.visible = false;  // Cacher l'image
+                    image.line.visible = false;  // Cacher les frustums
                 }
-    
-                orientedImages.addEventListener('imageActivated', () => {
-                    if (!window.imagesActives) {
-                        orientedImages.exit();
-                    }
-                });
             }
     
             toggleBtn.textContent = window.imagesActives
                 ? "Désactiver Images orientées"
                 : "Activer Images orientées";
         });
+    
     })();
 
 

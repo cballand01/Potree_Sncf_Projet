@@ -112,7 +112,7 @@ export class OrientedImageControls extends EventDispatcher{
 	    if (window.orientedImages && window.orientedImages.images) {
 	        window.orientedImages.images.forEach(function(img) {
 	            if (img !== image) {
-	                img.mesh.material.transparent = true;
+	                img.mesh.visible = false;
 	                img.line.visible = false;
 	            }
 	        });
@@ -144,7 +144,7 @@ export class OrientedImageControls extends EventDispatcher{
 	    // Réafficher toutes les images
 	    if (window.orientedImages && window.orientedImages.images) {
 	        window.orientedImages.images.forEach(function(img) {
-	            img.mesh.material.transparent = false;
+	            img.mesh.visible = false;
 	            img.line.visible = true;
 	        });
 	    }

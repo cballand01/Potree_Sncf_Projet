@@ -325,8 +325,8 @@
     viewer.setEDLOpacity(1);
 
     (async () => {
-        const cameraParamsPath = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Test_images.xml";
-        const imageParamsPath = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/orientation1.txt";
+        const cameraParamsPath = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/SDR_Orientation_Armoire1_Arriere.xml";
+        const imageParamsPath = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/SDR_Orientation_Armoire1_Arriere.txt";
     
         // Charger les paramètres de la caméra et des images
         const orientedImages = await OrientedImageLoader.load(cameraParamsPath, imageParamsPath, viewer);
@@ -339,7 +339,7 @@
         const lines = text.split('\n');
     
         // Générer l'URL pour chaque image
-        const imageBaseURL = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/";
+        const imageBaseURL = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/";
     
         // On suppose que chaque ligne contient les informations nécessaires pour une image (nom + autres données)
         orientedImages.images.forEach((image, index) => {
@@ -350,7 +350,7 @@
                 const imageName = tokens[0]; // Récupérer le nom de l'image (ex: "1H3A8819")
     
                 // Construire l'URL de l'image en ajoutant l'extension .JPG
-                image.imageUrl = ${imageBaseURL}${imageName};
+                image.imageUrl = `${imageBaseURL}${imageName}`;
     
                 // Ne pas charger la texture au départ, juste créer l'URL
                 image.textureLoaded = false;

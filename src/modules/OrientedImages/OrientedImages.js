@@ -338,16 +338,19 @@ export class OrientedImageLoader{
 			const intersects = raycaster.intersectObjects( objects );
 			let selectionChanged = false;
 		  
-			if ( intersects.length > 0){
-			  const intersection = intersects[0];
-			  const orientedImage = intersection.object.orientedImage;
-			  orientedImage.line.material.color.setRGB(1, 0, 0);
-			  selectionChanged = hoveredElement !== orientedImage;
-			  hoveredElement = orientedImage;
-			}else{
-			  hoveredElement = null;
+			if (intersects.length > 0) {
+			    const intersection = intersects[0];
+			    const orientedImage = intersection.object.orientedImage;
+			
+			    // Garder la ligne rouge, mais éviter la zone interne rouge
+			    orientedImage.line.material.color.setRGB(1, 0, 0); // Laisse la ligne rouge
+			
+			    selectionChanged = hoveredElement !== orientedImage;
+			    hoveredElement = orientedImage;
+			} else {
+			    hoveredElement = null;
 			}
-		  
+					  
 			let shouldRemoveClipVolume = clipVolume !== null && hoveredElement === null;
 			let shouldAddClipVolume = clipVolume === null && hoveredElement !== null;
 		  

@@ -344,7 +344,7 @@
             if (line) {
                 const tokens = line.split(/\s+/);
                 const imageName = tokens[0]; // Récupérer le nom de l'image (ex: "1H3A8819")
-                image.imageUrl = `${imageBaseURL1}${imageName}.JPG`;
+                image.imageUrl = `${imageBaseURL1}${imageName}`;
                 image.textureLoaded = false;
                 image.mesh.visible = false;  // Image cachée par défaut
                 image.line.visible = false;  // Frustums cachés par défaut
@@ -374,7 +374,7 @@
             if (line) {
                 const tokens = line.split(/\s+/);
                 const imageName = tokens[0]; // Récupérer le nom de l'image (ex: "1H3A8819")
-                image.imageUrl = `${imageBaseURL2}${imageName}.JPG`;
+                image.imageUrl = `${imageBaseURL2}${imageName}`;
                 image.textureLoaded = false;
                 image.mesh.visible = false;  // Image cachée par défaut
                 image.line.visible = false;  // Frustums cachés par défaut

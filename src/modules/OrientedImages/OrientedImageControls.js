@@ -108,15 +108,15 @@ export class OrientedImageControls extends EventDispatcher{
 	        return;
 	    }
 	
-	    // Cacher toutes les autres images sauf celle sélectionnée
-		if (window.orientedImages?.images) {
-			for (const img of window.orientedImages.images) {
-				if (img !== image) {
-					img.mesh.visible = false;
-					img.line.visible = false;
-				}
-			}
-		}
+	    // Masquer toutes les images sauf celle qui est capturée
+	    if (window.orientedImages && window.orientedImages.images) {
+	        window.orientedImages.images.forEach(function(img) {
+	            if (img !== image) {
+	                img.mesh.visible = false;
+	                img.line.visible = false;
+	            }
+	        });
+	    }
 	
 	    this.image = image;
 	    this.active = true;
@@ -148,12 +148,6 @@ export class OrientedImageControls extends EventDispatcher{
 	            img.line.visible = true;
 	        });
 	    }
-			if (window.imagesActives && window.orientedImages?.images) {
-				for (const img of window.orientedImages.images) {
-					img.mesh.visible = true;
-					img.line.visible = true;
-			}
-		}
 	
 	    this.image = null;
 	    this.active = false; // Désactivation pour stopper update()
@@ -173,7 +167,7 @@ export class OrientedImageControls extends EventDispatcher{
 	    // Recréer le conteneur et les boutons pour une future utilisation
 	    this._initDOMElements();
 	}
-
+	
 	setScene (scene) {
 		this.scene = scene;
 	}

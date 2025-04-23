@@ -325,100 +325,101 @@
     viewer.setEDLOpacity(1);
 
     (async () => {
-        // ------------------------------------------------------------------
-        // 1.  PARAMÉTRAGE DES LOTS  –  ajoute ici autant d’objets que tu veux
-        // ------------------------------------------------------------------
-        const lots = [
+        window.imagesActives = false;  // état du bouton
+    
+        // Liste des fichiers XML et TXT
+        const sources = [
             {
-                xml : "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.xml",
-                txt : "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.txt",
+                xml: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.xml",
+                txt: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.txt",
                 base: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/"
             },
             {
-                xml : "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Orientation_SDR_Armoire2_Arriere.xml",
-                txt : "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Orientation_SDR_Armoire2_Arriere.txt",
+                xml: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Orientation_SDR_Armoire2_Arriere.xml",
+                txt: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Orientation_SDR_Armoire2_Arriere.txt",
                 base: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/"
             }
         ];
     
-        // ------------------------------------------------------------------
-        // 2.  VARIABLES GLOBALES
-        // ------------------------------------------------------------------
-        window.imagesActives = false;                 // état du bouton
-        const allLots = [];                            // stocke les objets OrientedImages
-        const toggleBtn = document.getElementById('toggleOrientedImages');
-        toggleBtn.textContent = "Activer Images orientées";
+        const allImages = [];  // Pour stocker toutes les images de tous les lots
     
-        // ------------------------------------------------------------------
-        // 3.  FONCTION GÉNÉRIQUE POUR CHARGER UN LOT
-        // ------------------------------------------------------------------
-        async function chargeLot({ xml, txt, base }) {
+        // Fonction pour charger un lot
+        async function loadLot(xml, txt, base) {
             const orientedImages = await OrientedImageLoader.load(xml, txt, viewer);
-            allLots.push(orientedImages);
+            allImages.push(...orientedImages.images);
     
-            // associe les URL d’images et masque tout
-            const lignes = (await (await fetch(txt)).text()).split('\n');
-            orientedImages.images.forEach((img, i) => {
-                const nom = lignes[i]?.split(/\s+/)[0];
-                img.imageUrl       = `${base}${nom}`;   // ⚠️ ajoute .JPG dans le .txt si besoin
-                img.textureLoaded  = false;
-                img.mesh.visible   = false;
-                img.line.visible   = false;
+            const response = await fetch(txt);
+            const text = await response.text();
+            const lines = text.split('\n');
+    
+            // Assignation des URLs et des propriétés des images
+            orientedImages.images.forEach((image, index) => {
+                const line = lines[index];
+                if (line) {
+                    const tokens = line.split(/\s+/);
+                    const imageName = tokens[0]; // Récupérer le nom de l'image
+                    image.imageUrl = `${base}${imageName}`;
+    
+                    // Initialisation
+                    image.textureLoaded = false;
+                    image.mesh.visible = false;  // Image cachée au départ
+                    image.line.visible = false;  // Frustums cachés au départ
+                }
             });
     
+            // Ajouter les images à la scène
             viewer.scene.scene.add(orientedImages.node);
     
-            //-----------------------------------------------------------------
-            // Quand UNE image est activée :
-            //-----------------------------------------------------------------
-            orientedImages.addEventListener('imageActivated', ev => {
-                const active = ev.image;                // l’image cliquée
-    
-                // 1) masquer absolument tout, partout
-                allLots.forEach(lot => lot.images.forEach(img => {
-                    img.mesh.visible = false;
-                    img.line.visible = false;
-                }));
-    
-                // 2) afficher UNIQUEMENT l’image cliquée
-                active.mesh.visible = true;
-                active.line.visible = true;
-    
-                // 3) repasser le bouton en mode désactivé
-                window.imagesActives = false;
-                toggleBtn.textContent = "Activer Images orientées";
+            // Masquer toutes les autres images quand une image est activée
+            orientedImages.addEventListener('imageActivated', () => {
+                if (!window.imagesActives) {
+                    allImages.forEach(img => {
+                        img.mesh.visible = false;
+                        img.line.visible = false;
+                    });
+                }
             });
         }
     
-        // ------------------------------------------------------------------
-        // 4.  CHARGE TOUS LES LOTS DÉFINIS PLUS HAUT
-        // ------------------------------------------------------------------
-        for (const lot of lots) await chargeLot(lot);
+        // Charger tous les lots
+        for (const source of sources) {
+            await loadLot(source.xml, source.txt, source.base);
+        }
     
-        // ------------------------------------------------------------------
-        // 5.  BOUTON GLOBAL  –  (dé-)montre toutes les images de tous les lots
-        // ------------------------------------------------------------------
+        // Gestion du bouton pour activer/désactiver les images
+        const toggleBtn = document.getElementById('toggleOrientedImages');
+        toggleBtn.textContent = "Activer Images orientées";
+    
         toggleBtn.addEventListener('click', () => {
             window.imagesActives = !window.imagesActives;
     
-            allLots.forEach(lot => lot.images.forEach(img => {
-                img.mesh.visible = window.imagesActives;
-                img.line.visible = window.imagesActives;
+            // Mettre à jour la visibilité des images et des frustums
+            allImages.forEach(image => {
+                if (window.imagesActives) {
+                    image.mesh.visible = true;
+                    image.line.visible = true;
     
-                if (window.imagesActives && !img.textureLoaded) {
-                    new THREE.TextureLoader().load(img.imageUrl, tex => {
-                        img.mesh.material.map  = tex;
-                        img.mesh.material.needsUpdate = true;
-                        img.textureLoaded = true;
-                    });
+                    // Charger la texture si elle n'est pas encore chargée
+                    if (!image.textureLoaded) {
+                        new THREE.TextureLoader().load(image.imageUrl, (texture) => {
+                            image.mesh.material.map = texture;
+                            image.mesh.material.needsUpdate = true;
+                            image.textureLoaded = true;
+                        });
+                    }
+                } else {
+                    image.mesh.visible = false;
+                    image.line.visible = false;
                 }
-            }));
+            });
     
             toggleBtn.textContent = window.imagesActives
                 ? "Désactiver Images orientées"
                 : "Activer Images orientées";
         });
+    
     })();
+    
 
 
 

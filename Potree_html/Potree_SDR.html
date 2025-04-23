@@ -425,9 +425,10 @@
             toggleBtn.textContent = "Activer Images orientées";
         }
     
-        [...orientedImages1.images, ...orientedImages2.images].forEach(image => {
-            image.addEventListener('activated', () => {
-                focusOnSingleImage(image);
+        [orientedImages1, orientedImages2].forEach(orientedImages => {
+            orientedImages.addEventListener('imageActivated', (event) => {
+                const activeImage = event.image;
+                focusOnSingleImage(activeImage);
             });
         });
     

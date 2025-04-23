@@ -390,7 +390,7 @@
             // Alterner l'état d'activation des images
             window.imagesActives = !window.imagesActives;
     
-            // Mettre à jour la visibilité des images et des frustums pour chaque configuration
+            // Mettre à jour la visibilité des images et des frustums pour toutes les configurations
             window.allOrientedImages.forEach((orientedImages) => {
                 for (const image of orientedImages.images) {
                     if (window.imagesActives) {
@@ -417,31 +417,8 @@
                 : "Activer Images orientées";
         });
     
-        // Fonction pour masquer toutes les autres images sauf celle capturée
-        function capture(image) {
-            // Masquer toutes les images de tous les jeux de données sauf celle capturée
-            window.allOrientedImages.forEach((orientedImages) => {
-                orientedImages.images.forEach((img) => {
-                    if (img !== image) {
-                        img.mesh.visible = false;
-                        img.line.visible = false;
-                    }
-                });
-            });
-        }
-    
-        // Fonction pour réafficher toutes les images lorsque l'image orientée est relâchée
-        function release() {
-            // Réafficher toutes les images de tous les jeux de données
-            window.allOrientedImages.forEach((orientedImages) => {
-                orientedImages.images.forEach((img) => {
-                    img.mesh.visible = true;
-                    img.line.visible = true;
-                });
-            });
-        }
-    
     })();
+
 
 
     // Ajout d'une lumière ambiante dans la scène

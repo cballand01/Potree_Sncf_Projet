@@ -325,71 +325,63 @@
     viewer.setEDLOpacity(1);
 
     (async () => {
-        // === LOT 1 ===
-        const cameraParamsPath1 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.xml";
-        const imageParamsPath1 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.txt";
-        const imageBaseURL1 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/";
-    
-        const orientedImages1 = await OrientedImageLoader.load(cameraParamsPath1, imageParamsPath1, viewer);
-        window.orientedImages1 = orientedImages1;
-    
-        const response1 = await fetch(imageParamsPath1);
-        const text1 = await response1.text();
-        const lines1 = text1.split('\n');
-    
-        orientedImages1.images.forEach((image, index) => {
-            const line = lines1[index];
-            if (line) {
-                const tokens = line.split(/\s+/);
-                const imageName = tokens[0];
-                image.imageUrl = `${imageBaseURL1}${imageName}`;
-                image.textureLoaded = false;
-                image.mesh.visible = false;
-                image.line.visible = false;
-            }
-        });
-    
-        viewer.scene.scene.add(orientedImages1.node);
-    
-        // === LOT 2 ===
-        const cameraParamsPath2 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Orientation_SDR_Armoire2_Arriere.xml";
-        const imageParamsPath2 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Orientation_SDR_Armoire2_Arriere.txt";
-        const imageBaseURL2 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/";
-    
-        const orientedImages2 = await OrientedImageLoader.load(cameraParamsPath2, imageParamsPath2, viewer);
-        window.orientedImages2 = orientedImages2;
-    
-        const response2 = await fetch(imageParamsPath2);
-        const text2 = await response2.text();
-        const lines2 = text2.split('\n');
-    
-        orientedImages2.images.forEach((image, index) => {
-            const line = lines2[index];
-            if (line) {
-                const tokens = line.split(/\s+/);
-                const imageName = tokens[0];
-                image.imageUrl = `${imageBaseURL2}${imageName}`;
-                image.textureLoaded = false;
-                image.mesh.visible = false;
-                image.line.visible = false;
-            }
-        });
-    
-        viewer.scene.scene.add(orientedImages2.node);
-    
-        // === BOUTON GLOBAL POUR TOUS LES LOTS ===
         window.imagesActives = false;
     
+        async function chargerLotImagesOrientées({ cameraParamsPath, imageParamsPath, imageBaseURL }) {
+            const orientedImages = await OrientedImageLoader.load(cameraParamsPath, imageParamsPath, viewer);
+    
+            const response = await fetch(imageParamsPath);
+            const text = await response.text();
+            const lines = text.split('\n');
+    
+            orientedImages.images.forEach((image, index) => {
+                const line = lines[index];
+                if (line) {
+                    const tokens = line.split(/\s+/);
+                    const imageName = tokens[0];
+                    image.imageUrl = `${imageBaseURL}${imageName}`;
+                    image.textureLoaded = false;
+                    image.mesh.visible = false;
+                    image.line.visible = false;
+                }
+            });
+    
+            viewer.scene.scene.add(orientedImages.node);
+    
+            // Important : comportement image unique
+            orientedImages.addEventListener('imageActivated', () => {
+                if (!window.imagesActives) {
+                    orientedImages.exit(); // ça masque toutes les autres images du même lot
+                }
+            });
+    
+            return orientedImages;
+        }
+    
+        // === Charger les lots ici ===
+        const orientedImages1 = await chargerLotImagesOrientées({
+            cameraParamsPath: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.xml",
+            imageParamsPath: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.txt",
+            imageBaseURL: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/"
+        });
+    
+        const orientedImages2 = await chargerLotImagesOrientées({
+            cameraParamsPath: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Orientation_SDR_Armoire2_Arriere.xml",
+            imageParamsPath: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Orientation_SDR_Armoire2_Arriere.txt",
+            imageBaseURL: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/"
+        });
+    
+        // === Bouton global pour tous les lots ===
         const toggleBtn = document.getElementById('toggleOrientedImages');
         toggleBtn.textContent = "Activer Images orientées";
+    
+        const allLots = [orientedImages1, orientedImages2];
     
         toggleBtn.addEventListener('click', () => {
             window.imagesActives = !window.imagesActives;
     
-            const lots = [orientedImages1, orientedImages2];
-    
-            for (const orientedImages of lots) {
-                for (const image of orientedImages.images) {
+            for (const lot of allLots) {
+                for (const image of lot.images) {
                     image.mesh.visible = window.imagesActives;
                     image.line.visible = window.imagesActives;
     
@@ -408,19 +400,8 @@
                 : "Activer Images orientées";
         });
     
-        // === COMPORTEMENT : Masquer les autres images du lot au clic ===
-        orientedImages1.addEventListener('imageActivated', () => {
-            if (!window.imagesActives) {
-                orientedImages1.exit();
-            }
-        });
-    
-        orientedImages2.addEventListener('imageActivated', () => {
-            if (!window.imagesActives) {
-                orientedImages2.exit();
-            }
-        });
     })();
+
 
 
     // Ajout d'une lumière ambiante dans la scène

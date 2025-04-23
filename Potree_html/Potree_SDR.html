@@ -350,16 +350,11 @@
         });
     
         viewer.scene.scene.add(orientedImages1.node);
-        orientedImages1.addEventListener('imageActivated', () => {
-            if (!window.imagesActives) {
-                orientedImages1.exit();
-            }
-        });
     
         // === LOT 2 ===
-        const cameraParamsPath2 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.xml";
-        const imageParamsPath2 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.txt";
-        const imageBaseURL2 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/";
+        const cameraParamsPath2 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Avant/Orientation_SDR_Armoire2_Avant.xml";
+        const imageParamsPath2 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Avant/Orientation_SDR_Armoire2_Avant.txt";
+        const imageBaseURL2 = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Avant/";
     
         const orientedImages2 = await OrientedImageLoader.load(cameraParamsPath2, imageParamsPath2, viewer);
         window.orientedImages2 = orientedImages2;
@@ -381,11 +376,6 @@
         });
     
         viewer.scene.scene.add(orientedImages2.node);
-        orientedImages2.addEventListener('imageActivated', () => {
-            if (!window.imagesActives) {
-                orientedImages2.exit();
-            }
-        });
     
         // === GESTION DU BOUTON GLOBAL ===
         window.imagesActives = false;
@@ -420,7 +410,29 @@
                 : "Activer Images orientées";
         });
     
+        // === COMPORTEMENT : Afficher uniquement l’image cliquée ===
+        function focusOnSingleImage(activeImage) {
+            const lots = [window.orientedImages1, window.orientedImages2];
+            for (const lot of lots) {
+                for (const image of lot.images) {
+                    const isActive = image === activeImage;
+                    image.mesh.visible = isActive;
+                    image.line.visible = isActive;
+                }
+            }
+            // Désactive le mode "images orientées" global
+            window.imagesActives = false;
+            toggleBtn.textContent = "Activer Images orientées";
+        }
+    
+        [...orientedImages1.images, ...orientedImages2.images].forEach(image => {
+            image.addEventListener('activated', () => {
+                focusOnSingleImage(image);
+            });
+        });
+    
     })();
+
 
 
 

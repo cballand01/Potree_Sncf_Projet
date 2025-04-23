@@ -408,7 +408,33 @@
                 ? "Désactiver Images orientées"
                 : "Activer Images orientées";
         });
+    
+        // Méthode pour capturer une image orientée et masquer les autres images
+        function capture(image) {
+            if (window.orientedImages && window.orientedImages.images) {
+                // Masquer toutes les autres images sauf celle sélectionnée
+                for (const img of window.orientedImages.images) {
+                    if (img !== image) {
+                        img.mesh.visible = false;
+                        img.line.visible = false;
+                    }
+                }
+            }
+        }
+    
+        // Méthode pour relâcher les images orientées et rétablir l'affichage des autres
+        function release() {
+            if (window.orientedImages && window.orientedImages.images) {
+                // Réafficher toutes les images
+                for (const img of window.orientedImages.images) {
+                    img.mesh.visible = true;
+                    img.line.visible = true;
+                }
+            }
+        }
+    
     })();
+
 
     // Ajout d'une lumière ambiante dans la scène
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);

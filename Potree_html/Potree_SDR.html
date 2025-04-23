@@ -325,82 +325,101 @@
     viewer.setEDLOpacity(1);
 
     (async () => {
-        window.imagesActives = false;
+        // ------------------------------------------------------------------
+        // 1.  PARAMÉTRAGE DES LOTS  –  ajoute ici autant d’objets que tu veux
+        // ------------------------------------------------------------------
+        const lots = [
+            {
+                xml : "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.xml",
+                txt : "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.txt",
+                base: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/"
+            },
+            {
+                xml : "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Orientation_SDR_Armoire2_Arriere.xml",
+                txt : "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Orientation_SDR_Armoire2_Arriere.txt",
+                base: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/"
+            }
+        ];
     
-        async function chargerLotImagesOrientées({ cameraParamsPath, imageParamsPath, imageBaseURL }) {
-            const orientedImages = await OrientedImageLoader.load(cameraParamsPath, imageParamsPath, viewer);
+        // ------------------------------------------------------------------
+        // 2.  VARIABLES GLOBALES
+        // ------------------------------------------------------------------
+        window.imagesActives = false;                 // état du bouton
+        const allLots = [];                            // stocke les objets OrientedImages
+        const toggleBtn = document.getElementById('toggleOrientedImages');
+        toggleBtn.textContent = "Activer Images orientées";
     
-            const response = await fetch(imageParamsPath);
-            const text = await response.text();
-            const lines = text.split('\n');
+        // ------------------------------------------------------------------
+        // 3.  FONCTION GÉNÉRIQUE POUR CHARGER UN LOT
+        // ------------------------------------------------------------------
+        async function chargeLot({ xml, txt, base }) {
+            const orientedImages = await OrientedImageLoader.load(xml, txt, viewer);
+            allLots.push(orientedImages);
     
-            orientedImages.images.forEach((image, index) => {
-                const line = lines[index];
-                if (line) {
-                    const tokens = line.split(/\s+/);
-                    const imageName = tokens[0];
-                    image.imageUrl = `${imageBaseURL}${imageName}`;
-                    image.textureLoaded = false;
-                    image.mesh.visible = false;
-                    image.line.visible = false;
-                }
+            // associe les URL d’images et masque tout
+            const lignes = (await (await fetch(txt)).text()).split('\n');
+            orientedImages.images.forEach((img, i) => {
+                const nom = lignes[i]?.split(/\s+/)[0];
+                img.imageUrl       = `${base}${nom}`;   // ⚠️ ajoute .JPG dans le .txt si besoin
+                img.textureLoaded  = false;
+                img.mesh.visible   = false;
+                img.line.visible   = false;
             });
     
             viewer.scene.scene.add(orientedImages.node);
     
-            // Important : comportement image unique
-            orientedImages.addEventListener('imageActivated', () => {
-                if (!window.imagesActives) {
-                    orientedImages.exit(); // ça masque toutes les autres images du même lot
-                }
-            });
+            //-----------------------------------------------------------------
+            // Quand UNE image est activée :
+            //-----------------------------------------------------------------
+            orientedImages.addEventListener('imageActivated', ev => {
+                const active = ev.image;                // l’image cliquée
     
-            return orientedImages;
+                // 1) masquer absolument tout, partout
+                allLots.forEach(lot => lot.images.forEach(img => {
+                    img.mesh.visible = false;
+                    img.line.visible = false;
+                }));
+    
+                // 2) afficher UNIQUEMENT l’image cliquée
+                active.mesh.visible = true;
+                active.line.visible = true;
+    
+                // 3) repasser le bouton en mode désactivé
+                window.imagesActives = false;
+                toggleBtn.textContent = "Activer Images orientées";
+            });
         }
     
-        // === Charger les lots ici ===
-        const orientedImages1 = await chargerLotImagesOrientées({
-            cameraParamsPath: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.xml",
-            imageParamsPath: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.txt",
-            imageBaseURL: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/"
-        });
+        // ------------------------------------------------------------------
+        // 4.  CHARGE TOUS LES LOTS DÉFINIS PLUS HAUT
+        // ------------------------------------------------------------------
+        for (const lot of lots) await chargeLot(lot);
     
-        const orientedImages2 = await chargerLotImagesOrientées({
-            cameraParamsPath: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Orientation_SDR_Armoire2_Arriere.xml",
-            imageParamsPath: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Orientation_SDR_Armoire2_Arriere.txt",
-            imageBaseURL: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/"
-        });
-    
-        // === Bouton global pour tous les lots ===
-        const toggleBtn = document.getElementById('toggleOrientedImages');
-        toggleBtn.textContent = "Activer Images orientées";
-    
-        const allLots = [orientedImages1, orientedImages2];
-    
+        // ------------------------------------------------------------------
+        // 5.  BOUTON GLOBAL  –  (dé-)montre toutes les images de tous les lots
+        // ------------------------------------------------------------------
         toggleBtn.addEventListener('click', () => {
             window.imagesActives = !window.imagesActives;
     
-            for (const lot of allLots) {
-                for (const image of lot.images) {
-                    image.mesh.visible = window.imagesActives;
-                    image.line.visible = window.imagesActives;
+            allLots.forEach(lot => lot.images.forEach(img => {
+                img.mesh.visible = window.imagesActives;
+                img.line.visible = window.imagesActives;
     
-                    if (window.imagesActives && !image.textureLoaded) {
-                        new THREE.TextureLoader().load(image.imageUrl, (texture) => {
-                            image.mesh.material.map = texture;
-                            image.mesh.material.needsUpdate = true;
-                            image.textureLoaded = true;
-                        });
-                    }
+                if (window.imagesActives && !img.textureLoaded) {
+                    new THREE.TextureLoader().load(img.imageUrl, tex => {
+                        img.mesh.material.map  = tex;
+                        img.mesh.material.needsUpdate = true;
+                        img.textureLoaded = true;
+                    });
                 }
-            }
+            }));
     
             toggleBtn.textContent = window.imagesActives
                 ? "Désactiver Images orientées"
                 : "Activer Images orientées";
         });
-    
     })();
+
 
 
 

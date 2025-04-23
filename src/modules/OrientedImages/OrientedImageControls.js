@@ -144,7 +144,7 @@ export class OrientedImageControls extends EventDispatcher{
 	    // Réafficher toutes les images
 	    if (window.orientedImages && window.orientedImages.images) {
 	        window.orientedImages.images.forEach(function(img) {
-	            img.mesh.visible = false;
+	            img.mesh.visible = true;
 	            img.line.visible = true;
 	        });
 	    }

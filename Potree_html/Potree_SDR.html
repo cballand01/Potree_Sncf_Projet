@@ -339,8 +339,11 @@
             }
         ];
     
+        // Variable globale pour stocker toutes les images orientées
+        window.allOrientedImages = [];
+    
         // Charger les paramètres de la caméra et des images pour chaque configuration
-        const allOrientedImages = await Promise.all(configurations.map(async (config) => {
+        const allOrientedImagesPromises = configurations.map(async (config) => {
             const orientedImages = await OrientedImageLoader.load(config.cameraParamsPath, config.imageParamsPath, viewer);
     
             // Lire le fichier orientation.txt
@@ -362,17 +365,22 @@
                     // Ne pas charger la texture au départ, juste créer l'URL
                     image.textureLoaded = false;
     
-                    // Ne rendre les frustums visibles que lorsque les images sont activées
-                    image.mesh.visible = false;  // Image cachée au départ
-                    image.line.visible = false;  // Frustums cachés au départ
+                    // Initialiser la visibilité des images et des frustums
+                    image.mesh.visible = false;  // Image cachée par défaut
+                    image.line.visible = false;  // Frustums cachés par défaut
                 }
             });
     
             // Ajouter les images à la scène
             viewer.scene.scene.add(orientedImages.node);
     
+            // Sauvegarder toutes les images de cette configuration
+            window.allOrientedImages.push(orientedImages);
+    
             return orientedImages;
-        }));
+        });
+    
+        await Promise.all(allOrientedImagesPromises);
     
         // Gestion du bouton pour activer/désactiver les images
         const toggleBtn = document.getElementById('toggleOrientedImages');
@@ -383,7 +391,7 @@
             window.imagesActives = !window.imagesActives;
     
             // Mettre à jour la visibilité des images et des frustums pour chaque configuration
-            allOrientedImages.forEach((orientedImages) => {
+            window.allOrientedImages.forEach((orientedImages) => {
                 for (const image of orientedImages.images) {
                     if (window.imagesActives) {
                         image.mesh.visible = true;  // Afficher l'image
@@ -409,28 +417,28 @@
                 : "Activer Images orientées";
         });
     
-        // Méthode pour capturer une image orientée et masquer les autres images
+        // Fonction pour masquer toutes les autres images sauf celle capturée
         function capture(image) {
-            if (window.orientedImages && window.orientedImages.images) {
-                // Masquer toutes les autres images sauf celle sélectionnée
-                for (const img of window.orientedImages.images) {
+            // Masquer toutes les images de tous les jeux de données sauf celle capturée
+            window.allOrientedImages.forEach((orientedImages) => {
+                orientedImages.images.forEach((img) => {
                     if (img !== image) {
                         img.mesh.visible = false;
                         img.line.visible = false;
                     }
-                }
-            }
+                });
+            });
         }
     
-        // Méthode pour relâcher les images orientées et rétablir l'affichage des autres
+        // Fonction pour réafficher toutes les images lorsque l'image orientée est relâchée
         function release() {
-            if (window.orientedImages && window.orientedImages.images) {
-                // Réafficher toutes les images
-                for (const img of window.orientedImages.images) {
+            // Réafficher toutes les images de tous les jeux de données
+            window.allOrientedImages.forEach((orientedImages) => {
+                orientedImages.images.forEach((img) => {
                     img.mesh.visible = true;
                     img.line.visible = true;
-                }
-            }
+                });
+            });
         }
     
     })();

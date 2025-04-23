@@ -377,8 +377,9 @@
     
         viewer.scene.scene.add(orientedImages2.node);
     
-        // === BOUTON UNIQUE
+        // === BOUTON GLOBAL POUR TOUS LES LOTS ===
         window.imagesActives = false;
+    
         const toggleBtn = document.getElementById('toggleOrientedImages');
         toggleBtn.textContent = "Activer Images orientées";
     
@@ -407,21 +408,20 @@
                 : "Activer Images orientées";
         });
     
-        // === LOGIQUE QUI FONCTIONNAIT (adaptée à plusieurs lots)
-        [orientedImages1, orientedImages2].forEach(orientedImages => {
-            orientedImages.addEventListener('imageActivated', () => {
-                if (!window.imagesActives) {
-                    // cacher toutes les autres images dans ce lot
-                    orientedImages.exit();
-                    // cacher les images dans les autres lots aussi
-                    const autresLots = [orientedImages1, orientedImages2].filter(lot => lot !== orientedImages);
-                    for (const lot of autresLots) {
-                        lot.exit();
-                    }
-                }
-            });
+        // === COMPORTEMENT : Masquer les autres images du lot au clic ===
+        orientedImages1.addEventListener('imageActivated', () => {
+            if (!window.imagesActives) {
+                orientedImages1.exit();
+            }
+        });
+    
+        orientedImages2.addEventListener('imageActivated', () => {
+            if (!window.imagesActives) {
+                orientedImages2.exit();
+            }
         });
     })();
+
 
     // Ajout d'une lumière ambiante dans la scène
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);

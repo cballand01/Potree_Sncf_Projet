@@ -325,59 +325,66 @@
     viewer.setEDLOpacity(1);
 
     (async () => {
-        // Définir les chemins XML, TXT et URLs des images
+        // Chemins des fichiers XML, TXT et URLs de base des images pour chaque configuration
         const configurations = [
             {
-                xmlPath: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.xml",  
-                txtPath: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.txt",  
+                cameraParamsPath: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.xml",
+                imageParamsPath: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/Orientation_SDR_Armoire1_Arriere.txt",
                 imageBaseURL: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire1_Arriere/"
             },
             {
-                xmlPath: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Orientation_SDR_Armoire2_Arriere.xml",  
-                txtPath: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Orientation_SDR_Armoire2_Arriere.txt",  
+                cameraParamsPath: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Orientation_SDR_Armoire2_Arriere.xml",
+                imageParamsPath: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/Orientation_SDR_Armoire2_Arriere.txt",
                 imageBaseURL: "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/SDR_Armoire2_Arriere/"
             }
         ];
     
-        // Fonction pour charger les images orientées pour chaque configuration
-        const loadOrientedImages = async (config) => {
-            const orientedImages = await OrientedImageLoader.load(config.xmlPath, config.txtPath, viewer);
+        // Charger les paramètres de la caméra et des images pour chaque configuration
+        const allOrientedImages = await Promise.all(configurations.map(async (config) => {
+            const orientedImages = await OrientedImageLoader.load(config.cameraParamsPath, config.imageParamsPath, viewer);
+    
+            // Lire le fichier orientation.txt
+            const response = await fetch(config.imageParamsPath);
+            const text = await response.text();
+            const lines = text.split('\n');
+    
+            // Générer l'URL pour chaque image pour cette configuration
             orientedImages.images.forEach((image, index) => {
-                const line = await fetch(config.txtPath).then(res => res.text()).then(text => text.split('\n')[index]);
+                const line = lines[index]; // Trouver la ligne correspondante pour l'image
+    
                 if (line) {
                     const tokens = line.split(/\s+/);
-                    const imageName = tokens[0];  // Nom de l'image (ex: "1H3A8819")
-                    
+                    const imageName = tokens[0]; // Récupérer le nom de l'image (ex: "1H3A8819")
+    
                     // Construire l'URL de l'image en ajoutant l'extension .JPG
-                    image.imageUrl = `${config.imageBaseURL}${imageName}.JPG`;  // Assurez-vous que l'extension est correcte
+                    image.imageUrl = `${config.imageBaseURL}${imageName}.JPG`;
     
                     // Ne pas charger la texture au départ, juste créer l'URL
                     image.textureLoaded = false;
     
-                    // Initialiser la visibilité des images et des frustums
-                    image.mesh.visible = false;  // Image cachée par défaut
-                    image.line.visible = false;  // Frustums cachés par défaut
+                    // Ne rendre les frustums visibles que lorsque les images sont activées
+                    image.mesh.visible = false;  // Image cachée au départ
+                    image.line.visible = false;  // Frustums cachés au départ
                 }
             });
     
             // Ajouter les images à la scène
             viewer.scene.scene.add(orientedImages.node);
-            return orientedImages;
-        };
     
-        // Charger les images pour chaque configuration de manière indépendante
-        const allOrientedImages = await Promise.all(configurations.map(config => loadOrientedImages(config)));
+            return orientedImages;
+        }));
     
         // Gestion du bouton pour activer/désactiver les images
         const toggleBtn = document.getElementById('toggleOrientedImages');
         toggleBtn.textContent = "Activer Images orientées";
     
         toggleBtn.addEventListener('click', () => {
+            // Alterner l'état d'activation des images
             window.imagesActives = !window.imagesActives;
     
             // Mettre à jour la visibilité des images et des frustums pour chaque configuration
-            allOrientedImages.forEach(orientedImages => {
-                orientedImages.images.forEach(image => {
+            allOrientedImages.forEach((orientedImages) => {
+                for (const image of orientedImages.images) {
                     if (window.imagesActives) {
                         image.mesh.visible = true;  // Afficher l'image
                         image.line.visible = true;  // Afficher les frustums
@@ -394,7 +401,7 @@
                         image.mesh.visible = false;  // Cacher l'image
                         image.line.visible = false;  // Cacher les frustums
                     }
-                });
+                }
             });
     
             toggleBtn.textContent = window.imagesActives
@@ -402,7 +409,6 @@
                 : "Activer Images orientées";
         });
     })();
-
 
     // Ajout d'une lumière ambiante dans la scène
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);

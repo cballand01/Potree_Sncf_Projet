@@ -581,6 +581,142 @@
       annotationImage3.visible = true;
       viewer.scene.annotations.add(annotationImage3);
 
+      // Annotation Image 4 (Armoire_stockage)
+      let iconImage4 = $(`
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      iconImage4.find("img").click((event) => {
+        event.stopPropagation();
+        viewer.scene.view.setView(annotationImage4.cameraPosition, annotationImage4.cameraTarget, 1000);
+        setTimeout(() => {
+          const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/175A0738.JPG";
+          const imageDescription = "Armoire de stockage d'éléments techniques";
+          $("#popupImage").attr("src", imageUrl);
+          $("#popupText").text(imageDescription);
+          $("#imagePopup").css("display", "flex");
+        }, 2000);
+      });
+      let annotationImage4 = new Potree.Annotation({
+        position: new THREE.Vector3(17.94, 13.20, 1.52),
+        title: iconImage4,
+        cameraPosition: new THREE.Vector3(16.90, 13.24, 1.51),
+        cameraTarget: new THREE.Vector3(17.94, 13.20, 1.52)
+      });
+      addAnnotationClickHandler(annotationImage4);
+      annotationImage4.visible = true;
+      viewer.scene.annotations.add(annotationImage4);
+
+      // Annotation Image 5 (Armoire relais1)
+      let iconImage5 = $(`
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      iconImage5.find("img").click((event) => {
+        event.stopPropagation();
+        viewer.scene.view.setView(annotationImage5.cameraPosition, annotationImage5.cameraTarget, 1000);
+        setTimeout(() => {
+          const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/175A0602.JPG";
+          const imageDescription = "Armoire relais";
+          $("#popupImage").attr("src", imageUrl);
+          $("#popupText").text(imageDescription);
+          $("#imagePopup").css("display", "flex");
+        }, 2000);
+      });
+      let annotationImage5 = new Potree.Annotation({
+        position: new THREE.Vector3(12.19, 15.97, 1.99),
+        title: iconImage5,
+        cameraPosition: new THREE.Vector3(12.63, 16.70, 1.84),
+        cameraTarget: new THREE.Vector3(12.19, 15.97, 1.99)
+      });
+      addAnnotationClickHandler(annotationImage5);
+      annotationImage5.visible = true;
+      viewer.scene.annotations.add(annotationImage5);
+
+      // Annotation Image 6 (Armoire relais2)
+      let iconImage6 = $(`
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      iconImage6.find("img").click((event) => {
+        event.stopPropagation();
+        viewer.scene.view.setView(annotationImage6.cameraPosition, annotationImage6.cameraTarget, 1000);
+        setTimeout(() => {
+          const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/175A0600.JPG";
+          const imageDescription = "Armoire relais";
+          $("#popupImage").attr("src", imageUrl);
+          $("#popupText").text(imageDescription);
+          $("#imagePopup").css("display", "flex");
+        }, 2000);
+      });
+      let annotationImage6 = new Potree.Annotation({
+        position: new THREE.Vector3(12.19, 15.97, 0.8),
+        title: iconImage6,
+        cameraPosition: new THREE.Vector3(12.53, 16.60, 1.23),
+        cameraTarget: new THREE.Vector3(12.19, 15.97, 0.8)
+      });
+      addAnnotationClickHandler(annotationImage6);
+      annotationImage6.visible = true;
+      viewer.scene.annotations.add(annotationImage6);
+
+      // Annotation Image 7 (Armoire relais2)
+      let iconImage7 = $(`
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      iconImage7.find("img").click((event) => {
+        event.stopPropagation();
+        viewer.scene.view.setView(annotationImage7.cameraPosition, annotationImage7.cameraTarget, 1000);
+        setTimeout(() => {
+          const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/175A0611.JPG";
+          const imageDescription = "Armoire relais";
+          $("#popupImage").attr("src", imageUrl);
+          $("#popupText").text(imageDescription);
+          $("#imagePopup").css("display", "flex");
+        }, 2000);
+      });
+      let annotationImage7 = new Potree.Annotation({
+        position: new THREE.Vector3(8.47, 17.43, 0.97),
+        title: iconImage7,
+        cameraPosition: new THREE.Vector3(8.10, 16.73, 1.34),
+        cameraTarget: new THREE.Vector3(8.47, 17.43, 0.97)
+      });
+      addAnnotationClickHandler(annotationImage7);
+      annotationImage7.visible = true;
+      viewer.scene.annotations.add(annotationImage7);
+
+      // Annotation Image 8 (Armoire relais2)
+      let iconImage8 = $(`
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      iconImage8.find("img").click((event) => {
+        event.stopPropagation();
+        viewer.scene.view.setView(annotationImage8.cameraPosition, annotationImage8.cameraTarget, 1000);
+        setTimeout(() => {
+          const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/175A0613.JPG";
+          const imageDescription = "Armoire relais";
+          $("#popupImage").attr("src", imageUrl);
+          $("#popupText").text(imageDescription);
+          $("#imagePopup").css("display", "flex");
+        }, 2000);
+      });
+      let annotationImage8 = new Potree.Annotation({
+        position: new THREE.Vector3(8.47, 17.43, 1.91),
+        title: iconImage8,
+        cameraPosition: new THREE.Vector3(8.15, 16.78, 1.71),
+        cameraTarget: new THREE.Vector3(8.47, 17.43, 1.91)
+      });
+      addAnnotationClickHandler(annotationImage8);
+      annotationImage8.visible = true;
+      viewer.scene.annotations.add(annotationImage8);
+
+
 
       //---------------- Liens visualisation 3D ----------------//
 
@@ -728,7 +864,17 @@
         let distImage2 = cameraPos.distanceTo(annotationImage2.position);
         annotationImage2.visible = (distImage2 < distanceThresholdImage);
         let distImage3 = cameraPos.distanceTo(annotationImage3.position);
-        annotationImage3.visible = (distImage3 < distanceThresholdImage);      
+        annotationImage3.visible = (distImage3 < distanceThresholdImage);
+        let distImage4 = cameraPos.distanceTo(annotationImage4.position);
+        annotationImage4.visible = (distImage4 < distanceThresholdImage);  
+        let distImage5 = cameraPos.distanceTo(annotationImage5.position);
+        annotationImage5.visible = (distImage5 < distanceThresholdImage);  
+        let distImage6 = cameraPos.distanceTo(annotationImage6.position);
+        annotationImage6.visible = (distImage6 < distanceThresholdImage);  
+        let distImage7 = cameraPos.distanceTo(annotationImage7.position);
+        annotationImage7.visible = (distImage7 < distanceThresholdImage);  
+        let distImage8 = cameraPos.distanceTo(annotationImage8.position);
+        annotationImage8.visible = (distImage8 < distanceThresholdImage);  
 
         let distgoto1 = cameraPos.distanceTo(lienTCO.position);
         lienTCO.visible = (distgoto1 < distanceGoto);

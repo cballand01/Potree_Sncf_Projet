@@ -252,9 +252,9 @@ a:hover, a:visited, a:link, a:active{
 	cursor:			default;
 }
 
-.annotation-item:hover {
-	opacity:		1.0;
-	box-shadow:		0 0 5px #ffffff;
+.annotation-item.active {
+	opacity: 1.0;
+	box-shadow: 0 0 5px #ffffff;
 }
 
 .annotation-main{
@@ -294,6 +294,7 @@ a:hover, a:visited, a:link, a:active{
 }
 
 
+
 .annotation-description-close{
 	filter:			invert(100%);
 	float:			right;
@@ -312,6 +313,16 @@ a:hover, a:visited, a:link, a:active{
 	filter:		invert(100%);
 	margin:		2px 2px;
 	opacity:	0.5;
+}
+
+.annotation.clicked {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.annotation.clicked .annotation-titlebar {
+	background-color: rgba(0, 0, 0, 0.5);
+	box-shadow: 0 0 5px white;
+	opacity: 1;
 }
 
 
@@ -574,16 +585,6 @@ body{
 	margin-left: 5px;
 }
 
-
-
-
-
-
-
-
-
-
-
 .ol-dragbox {
   background-color: rgba(255,255,255,0.4);
   border-color: rgba(100,150,0,1);
@@ -593,10 +594,6 @@ body{
 .text-icon{
 	opacity:	0.5;
 	height:		24px;
-}
-
-.text-icon:hover{
-	opacity:	1.0;
 }
 
 .input-grid-cell{
@@ -617,31 +614,6 @@ body{
 .invalid_value{
 	color: #e05e5e;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

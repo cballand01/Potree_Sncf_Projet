@@ -42,7 +42,7 @@
       <input type="range" id="pointBudgetSlider" min="100000" max="10000000" step="100000" value="2000000">
     </div>
     <button id="toggleLissage">Désactiver lissage</button>
-    <button id="toggleOrientedImages">Activer les images orientées</button>
+    <!--<button id="toggleOrientedImages">Activer les images orientées</button>-->
   </div>
 
   <!-- Boutons de contrôle pour la caméra et les outils -->
@@ -324,6 +324,8 @@
     viewer.setEDLStrength(0);
     viewer.setEDLOpacity(1);
 
+    /*
+
     (async () => {
         const cameraParamsPath = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/Orientation_g%C3%A9n%C3%A9rale.xml";
         const imageParamsPath = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Orient%C3%A9es/Orientation_g%C3%A9n%C3%A9rale_test2.txt";
@@ -403,7 +405,7 @@
                 : "Activer Images orientées";
         });
     
-    })();
+    })();*/
 
     // Ajout d'une lumière ambiante dans la scène
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);

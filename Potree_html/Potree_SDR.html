@@ -983,7 +983,15 @@
         let distImage7 = cameraPos.distanceTo(annotationImage7.position);
         annotationImage7.visible = (distImage7 < distanceThresholdImage);  
         let distImage8 = cameraPos.distanceTo(annotationImage8.position);
-        annotationImage8.visible = (distImage8 < distanceThresholdImage);  
+        annotationImage8.visible = (distImage8 < distanceThresholdImage);
+        let distImage9 = cameraPos.distanceTo(annotationImage9.position);
+        annotationImage9.visible = (distImage9 < distanceThresholdImage);  
+        let distImage10 = cameraPos.distanceTo(annotationImage10.position);
+        annotationImage10.visible = (distImage10 < distanceThresholdImage);  
+        let distImage11 = cameraPos.distanceTo(annotationImage11.position);
+        annotationImage11.visible = (distImage11 < distanceThresholdImage);  
+        let distImage12 = cameraPos.distanceTo(annotationImage12.position);
+        annotationImage12.visible = (distImage12 < distanceThresholdImage);  
 
         let distgoto1 = cameraPos.distanceTo(lienTCO.position);
         lienTCO.visible = (distgoto1 < distanceGoto);

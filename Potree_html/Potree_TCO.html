@@ -1396,7 +1396,7 @@
         // Gisement (yaw) en radians → degrés sans THREE
         const azimRad = view.yaw;
         let azimDeg = azimRad * 180 / Math.PI;         // <-- ici
-        azimDeg = (azimDeg + 360) % 360;               // normalisation
+        azimDeg = ((azimDeg % 360) + 360) % 360;        // normalisation propre 0° à 360°
 
         // Met à jour la ligne texte (1er child = img, 2e = texte)
         camDiv.childNodes[1].textContent =

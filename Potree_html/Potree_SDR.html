@@ -958,12 +958,12 @@
 
       //---------------- Seuils de distance d'affichage ----------------//
       const distanceThresholdText = 0; //textes
-      const distanceThresholdImage = 4; //images
+      const distanceThresholdImage = 2; //images
       const distanceThreshold3D = 0; //liens3D
       const distanceGoto = 4; //liens html
       const distanceThresholdExp = 1; //textes rapprochés
       const distanceThresholdAnimation = 0; //video
-      const distanceThreshold360 = 4; //360
+      const distanceThreshold360 = 3; //360
       
       // Fonction pour vérifier si la caméra est dans la plage de gisement et dans la distance de l'annotation
       function isCameraInVisibilityCone(cameraPos, annotationPos, maxDistance, minGisement, maxGisement) {
@@ -1027,12 +1027,12 @@
 
           { position: annotationcam1.position, maxDistance: distanceThresholdAnimation, minGisement: 0, maxGisement: 0, annotation: annotationcam1 },
 
-          { position: annotation3601.position, maxDistance: distanceThreshold360, minGisement: -30, maxGisement: 30, annotation: annotation3601 },
-          { position: annotation3602.position, maxDistance: distanceThreshold360, minGisement: -30, maxGisement: 30, annotation: annotation3602 },
-          { position: annotation3603.position, maxDistance: distanceThreshold360, minGisement: -30, maxGisement: 30, annotation: annotation3603 },
-          { position: annotation3604.position, maxDistance: distanceThreshold360, minGisement: -30, maxGisement: 30, annotation: annotation3604 },
-          { position: annotation3605.position, maxDistance: distanceThreshold360, minGisement: -30, maxGisement: 30, annotation: annotation3605 },
-          { position: annotation3606.position, maxDistance: distanceThreshold360, minGisement: -30, maxGisement: 30, annotation: annotation3606 }
+          { position: annotation3601.position, maxDistance: distanceThreshold360, minGisement: -180, maxGisement: 180, annotation: annotation3601 },
+          { position: annotation3602.position, maxDistance: distanceThreshold360, minGisement: -180, maxGisement: 180, annotation: annotation3602 },
+          { position: annotation3603.position, maxDistance: distanceThreshold360, minGisement: -180, maxGisement: 180, annotation: annotation3603 },
+          { position: annotation3604.position, maxDistance: distanceThreshold360, minGisement: -180, maxGisement: 180, annotation: annotation3604 },
+          { position: annotation3605.position, maxDistance: distanceThreshold360, minGisement: -180, maxGisement: 180, annotation: annotation3605 },
+          { position: annotation3606.position, maxDistance: distanceThreshold360, minGisement: -180, maxGisement: 180, annotation: annotation3606 }
           ];
 
           // Vérification de la visibilité de chaque annotation

@@ -732,6 +732,15 @@ html, body {
   align-items: center;
   padding-left: 10px;
 }
+/* Icône caméra bien petite, alignée sur le même axe que le texte */
+#cameraPosition .camera-icon {
+  height: 16px;        /* passe à 16px de haut */
+  width: auto;         /* garde les proportions */
+  margin-right: 4px;
+  /* transforme toute couleur en blanc */
+  filter: brightness(0) invert(1);
+}
+
 /* Conteneur boutons caméra */
 #buttonAndCameraContainer {
   position: fixed;

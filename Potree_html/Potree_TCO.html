@@ -1385,14 +1385,22 @@
     camDiv.insertBefore(camIcon, camDiv.firstChild);
 
     setInterval(function() {
-    let cam = viewer.scene.getActiveCamera();
-      if(cam && cam.position) {
-        let x = cam.position.x.toFixed(2).replace('.', ',');
-        let y = cam.position.y.toFixed(2).replace('.', ',');
-        let z = cam.position.z.toFixed(2).replace('.', ',');
-        // On met à jour le texte (childNodes[0] pointe désormais sur le texte, pas sur l'icône)
+      const cam = viewer.scene.getActiveCamera();
+      const view = viewer.scene.view;
+      if (cam && view) {
+        // Coordonnées
+        const x = cam.position.x.toFixed(2).replace('.', ',');
+        const y = cam.position.y.toFixed(2).replace('.', ',');
+        const z = cam.position.z.toFixed(2).replace('.', ',');
+
+        // Gisement (yaw) en radians → degrés sans THREE
+        const azimRad = view.yaw;
+        let azimDeg = azimRad * 180 / Math.PI;         // <-- ici
+        azimDeg = (azimDeg + 360) % 360;               // normalisation
+
+        // Met à jour la ligne texte (1er child = img, 2e = texte)
         camDiv.childNodes[1].textContent =
-          "X: " + x + " - Y: " + y + " - Z: " + z;
+          `X : ${x}  - Y : ${y}  - Z : ${z} |  Az : ${azimDeg.toFixed(1)}°`;
       }
     }, 100);
   </script>

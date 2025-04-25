@@ -1377,14 +1377,22 @@
       viewer.setPointBudget(val);
     });
     // Affichage en temps réel de la position de la caméra
+    const camDiv = document.getElementById("cameraPosition");
+    const camIcon = document.createElement("img");
+    camIcon.src = "../build/potree/resources/icons/orthographic-camera.svg";
+    camIcon.alt = "Caméra";
+    camIcon.className = "camera-icon";
+    camDiv.insertBefore(camIcon, camDiv.firstChild);
+
     setInterval(function() {
-      let cam = viewer.scene.getActiveCamera();
+    let cam = viewer.scene.getActiveCamera();
       if(cam && cam.position) {
         let x = cam.position.x.toFixed(2).replace('.', ',');
         let y = cam.position.y.toFixed(2).replace('.', ',');
         let z = cam.position.z.toFixed(2).replace('.', ',');
-        document.getElementById("cameraPosition").childNodes[0].textContent =
-          "X: " + x + " ; Y: " + y + " ; Z: " + z;
+        // On met à jour le texte (childNodes[0] pointe désormais sur le texte, pas sur l'icône)
+        camDiv.childNodes[1].textContent =
+          "X: " + x + " - Y: " + y + " - Z: " + z;
       }
     }, 100);
   </script>

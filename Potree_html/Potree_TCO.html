@@ -42,6 +42,7 @@
       <input type="range" id="pointBudgetSlider" min="100000" max="10000000" step="100000" value="2000000">
     </div>
     <button id="toggleLissage">Désactiver lissage</button>
+    <button id="toggleGuidedMode">Aller à la visite guidée</button>
   </div>
 
   <!-- Boutons de contrôle pour la caméra et les outils -->
@@ -1353,6 +1354,12 @@
     function formatNumber(num) {
       return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
+    function blockMouseHandler(e) {
+        if (!e.target.closest(".annotation") && !e.target.closest(".potree_annotation")) {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+        }
+    }
     $(document).ready(function () {
       // Toggle de la slidebar
       $("#slidebarToggle").click(function () {
@@ -1370,6 +1377,53 @@
       viewer.useHQ = !viewer.useHQ;
       this.textContent = viewer.useHQ ? "Désactiver lissage" : "Activer lissage";
     });
+    // Gestion du bouton pour activer/désactiver la navigation guidée
+    document.getElementById("toggleGuidedMode").addEventListener("click", function () {
+        const button = this;
+        const potreeContainer = document.querySelector(".potree_container");
+
+        if (!window.guidedMode) {
+            // === Passage en mode VISITE GUIDÉE ===
+            window.guidedMode = true;
+            button.textContent = "Sortir de la visite guidée";
+
+            document.getElementById('splat_buttons').style.display = 'flex';
+            document.getElementById('splat_buttons').classList.add('guided-mode');
+            document.getElementById('pointBudgetContainer').style.display = 'none';
+            document.getElementById('toggleLissage').style.display = 'none';
+            button.style.display = 'inline-block';
+
+            document.getElementById('buttonAndCameraContainer').style.display = 'none';
+            document.querySelector('.hotspot-controls-bar').style.display = 'flex';
+
+            goToHotspot(0, false);
+
+            ["mousedown", "mousemove", "mouseup", "wheel", "click"].forEach(evtType => {
+                potreeContainer.addEventListener(evtType, blockMouseHandler, true);
+            });
+
+        } else {
+            // === Passage en mode EXPLORATION LIBRE ===
+            window.guidedMode = false;
+            button.textContent = "Aller à la visite guidée";
+
+            document.getElementById('splat_buttons').style.display = 'flex';
+            document.getElementById('splat_buttons').classList.remove('guided-mode');
+            document.getElementById('pointBudgetContainer').style.display = 'block';
+            document.getElementById('toggleLissage').style.display = 'inline-block';
+            button.style.display = 'inline-block';
+
+            document.getElementById('buttonAndCameraContainer').style.display = 'flex';
+            document.querySelector('.hotspot-controls-bar').style.display = 'none';
+            document.getElementById('audioBar').style.display = 'none';
+
+            ["mousedown", "mousemove", "mouseup", "wheel", "click"].forEach(evtType => {
+                potreeContainer.removeEventListener(evtType, blockMouseHandler, true);
+            });
+        }
+    });
+
+
     // Mise à jour dynamique du point budget en fonction du slider
     document.getElementById("pointBudgetSlider").addEventListener("input", function (e) {
       let val = parseInt(e.target.value);
@@ -1713,7 +1767,10 @@
     });
     
     document.getElementById('btnSimplified').addEventListener('click', function() {
-      document.getElementById('splat_buttons').style.display = 'none';
+      document.getElementById('splat_buttons').style.display = 'flex';
+      document.getElementById('pointBudgetContainer').style.display = 'none';
+      document.getElementById('toggleLissage').style.display = 'none';
+      document.getElementById('toggleGuidedMode').textContent = "Sortir de la visite guidée";
       document.getElementById('buttonAndCameraContainer').style.display = 'none';
       viewer.useHQ = true;
       window.guidedMode = true;
@@ -1727,12 +1784,7 @@
       const potreeContainer = document.querySelector(".potree_container");
       // Désactivation des interactions sur le conteneur Potree sauf sur les annotations
       ["mousedown", "mousemove", "mouseup", "wheel", "click"].forEach(evtType => {
-        potreeContainer.addEventListener(evtType, function(e) {
-          if (!e.target.closest(".annotation") && !e.target.closest(".potree_annotation")) {
-            e.stopImmediatePropagation();
-            e.preventDefault();
-          }
-        }, true);
+          potreeContainer.addEventListener(evtType, blockMouseHandler, true);
       });
       
       // Ajustement dynamique du pointBudget en fonction du FPS

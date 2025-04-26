@@ -41,7 +41,7 @@
       <label for="pointBudgetSlider">Points affichés : <span id="pointBudgetValue">2 000 000</span></label>
       <input type="range" id="pointBudgetSlider" min="100000" max="10000000" step="100000" value="2000000">
     </div>
-    <button id="toggleLissage">Désactiver lissage</button>
+    <button id="toggleLissage">Activer lissage</button>
     <!--<button id="toggleOrientedImages">Activer les images orientées</button>-->
     <button id="toggleGuidedMode">Aller à la visite guidée</button>
   </div>
@@ -1332,6 +1332,13 @@
             ["mousedown", "mousemove", "mouseup", "wheel", "click"].forEach(evtType => {
                 potreeContainer.removeEventListener(evtType, blockMouseHandler, true);
             });
+          
+            if (viewer.useHQ) {
+                document.getElementById("toggleLissage").textContent = "Désactiver lissage";
+            } else {
+                document.getElementById("toggleLissage").textContent = "Activer lissage";
+            }
+          
         }
     });
     // Affichage en temps réel de la position de la caméra
@@ -1678,6 +1685,7 @@
       document.getElementById('buttonAndCameraContainer').style.display = 'none';
       viewer.useHQ = true;
       window.guidedMode = true;
+      document.getElementById("toggleLissage").textContent = "Désactiver lissage";
       document.getElementById('welcomePopup').style.display = 'none';
 
       goToHotspot(0, false);

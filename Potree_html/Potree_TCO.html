@@ -1436,6 +1436,12 @@
 
             stopFPSAdjust();
 
+            // Mettre à jour le curseur de pointBudget
+            const slider = document.getElementById("pointBudgetRange");
+            if (slider) {
+                slider.value = viewer.getPointBudget();
+            }
+
             if (viewer.useHQ) {
                 document.getElementById("toggleLissage").textContent = "Désactiver lissage";
             } else {

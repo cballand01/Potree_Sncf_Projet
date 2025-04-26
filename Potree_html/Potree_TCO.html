@@ -1398,7 +1398,8 @@
             document.getElementById('buttonAndCameraContainer').style.display = 'none';
             // Afficher la barre de navigation entre hotspots
             document.querySelector('.hotspot-controls-bar').style.display = 'flex';
-
+          
+            currentHotspotIndex = 0; //Réinitialise l'index du hotspot
             // Aller au premier hotspot (ou rester au hotspot actuel si besoin)
             goToHotspot(0, false);
 

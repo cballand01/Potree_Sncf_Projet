@@ -41,7 +41,7 @@
       <label for="pointBudgetSlider">Points affichés : <span id="pointBudgetValue">2 000 000</span></label>
       <input type="range" id="pointBudgetSlider" min="100000" max="10000000" step="100000" value="2000000">
     </div>
-    <button id="toggleLissage">Désactiver lissage</button>
+    <button id="toggleLissage">Activer lissage</button>
     <button id="toggleGuidedMode">Aller à la visite guidée</button>
   </div>
 
@@ -1387,42 +1387,62 @@
             window.guidedMode = true;
             button.textContent = "Sortir de la visite guidée";
 
+            // Masquer certains boutons pour simplifier l'affichage
             document.getElementById('splat_buttons').style.display = 'flex';
             document.getElementById('splat_buttons').classList.add('guided-mode');
             document.getElementById('pointBudgetContainer').style.display = 'none';
             document.getElementById('toggleLissage').style.display = 'none';
             button.style.display = 'inline-block';
 
+            // Masquer le conteneur des boutons caméra
             document.getElementById('buttonAndCameraContainer').style.display = 'none';
+            // Afficher la barre de navigation entre hotspots
             document.querySelector('.hotspot-controls-bar').style.display = 'flex';
 
+            // Aller au premier hotspot (ou rester au hotspot actuel si besoin)
             goToHotspot(0, false);
 
+            viewer.useHQ = true;
+            document.getElementById("toggleLissage").textContent = "Désactiver lissage";
+
+            // BLOQUER la souris pour empêcher la navigation libre
             ["mousedown", "mousemove", "mouseup", "wheel", "click"].forEach(evtType => {
                 potreeContainer.addEventListener(evtType, blockMouseHandler, true);
             });
 
+            startFPSAdjust();
         } else {
             // === Passage en mode EXPLORATION LIBRE ===
             window.guidedMode = false;
             button.textContent = "Aller à la visite guidée";
 
+            // Afficher tous les boutons normalement
             document.getElementById('splat_buttons').style.display = 'flex';
             document.getElementById('splat_buttons').classList.remove('guided-mode');
             document.getElementById('pointBudgetContainer').style.display = 'block';
             document.getElementById('toggleLissage').style.display = 'inline-block';
             button.style.display = 'inline-block';
 
+            // Réafficher les contrôles de caméra
             document.getElementById('buttonAndCameraContainer').style.display = 'flex';
+            // Cacher la barre de navigation entre hotspots
             document.querySelector('.hotspot-controls-bar').style.display = 'none';
             document.getElementById('audioBar').style.display = 'none';
 
+            // DÉBLOQUER la souris pour autoriser la navigation libre
             ["mousedown", "mousemove", "mouseup", "wheel", "click"].forEach(evtType => {
                 potreeContainer.removeEventListener(evtType, blockMouseHandler, true);
             });
+
+            stopFPSAdjust();
+
+            if (viewer.useHQ) {
+                document.getElementById("toggleLissage").textContent = "Désactiver lissage";
+            } else {
+                document.getElementById("toggleLissage").textContent = "Activer lissage";
+            }
         }
     });
-
 
     // Mise à jour dynamique du point budget en fonction du slider
     document.getElementById("pointBudgetSlider").addEventListener("input", function (e) {
@@ -1774,6 +1794,7 @@
       document.getElementById('buttonAndCameraContainer').style.display = 'none';
       viewer.useHQ = true;
       window.guidedMode = true;
+      document.getElementById("toggleLissage").textContent = "Désactiver lissage";
       document.getElementById('welcomePopup').style.display = 'none';
 
       goToHotspot(0, false);
@@ -1795,25 +1816,43 @@
       viewer.addEventListener("update", function() {
         frameCount++;
       });
-      setInterval(function() {
-        if (window.guidedMode) {
-          let now = performance.now();
-          let delta = (now - lastTime) / 1000;
-          let fps = frameCount / delta;
-          console.log("FPS mesuré : " + fps.toFixed(2));
-          if (fps < 15) {
-            currentPointBudget = Math.max(currentPointBudget * 0.8, 100000);
-            console.log("Réduction du pointBudget à " + currentPointBudget);
-            viewer.setPointBudget(currentPointBudget);
-          } else if (fps > 30) {
-            currentPointBudget = Math.min(currentPointBudget * 1.2, 10000000);
-            console.log("Augmentation du pointBudget à " + currentPointBudget);
-            viewer.setPointBudget(currentPointBudget);
+      function startFPSAdjust() {
+          if (fpsIntervalId !== null) return; // Ne pas recréer plusieurs fois
+
+          console.log("Début ajustement FPS + lissage");
+          fpsIntervalId = setInterval(function() {
+              let now = performance.now();
+              let delta = (now - lastTime) / 1000;
+              let fps = frameCount / delta;
+              console.log("FPS mesuré : " + fps.toFixed(2));
+
+              if (fps < 15) {
+                  // Si FPS très bas ➔ réduire qualité et désactiver lissage
+                  currentPointBudget = Math.max(currentPointBudget * 0.8, 100000);
+                  console.log("Réduction du pointBudget à " + currentPointBudget);
+                  viewer.setPointBudget(currentPointBudget);
+                  viewer.useHQ = false;
+                  document.getElementById("toggleLissage").textContent = "Activer lissage";
+              } else if (fps > 30) {
+                  // Si FPS bon ➔ augmenter qualité et activer lissage
+                  currentPointBudget = Math.min(currentPointBudget * 1.2, 10000000);
+                  console.log("Augmentation du pointBudget à " + currentPointBudget);
+                  viewer.setPointBudget(currentPointBudget);
+                  viewer.useHQ = true;
+                  document.getElementById("toggleLissage").textContent = "Désactiver lissage";
+              }
+
+              frameCount = 0;
+              lastTime = now;
+          }, 1000); // toutes les 1 seconde
+      }
+      function stopFPSAdjust() {
+          if (fpsIntervalId !== null) {
+              console.log("Arrêt ajustement FPS + lissage");
+              clearInterval(fpsIntervalId);
+              fpsIntervalId = null;
           }
-          frameCount = 0;
-          lastTime = now;
-        }
-      }, 1000);
+      }
     });
   </script>
 

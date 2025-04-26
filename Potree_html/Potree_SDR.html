@@ -1305,13 +1305,15 @@
             // Aller au premier hotspot (ou rester au hotspot actuel si besoin)
             goToHotspot(0, false);
 
+            viewer.useHQ = true;
+            document.getElementById("toggleLissage").textContent = "Désactiver lissage";
+
             // BLOQUER la souris pour empêcher la navigation libre
             ["mousedown", "mousemove", "mouseup", "wheel", "click"].forEach(evtType => {
                 potreeContainer.addEventListener(evtType, blockMouseHandler, true);
             });
 
             startFPSAdjust();
-
         } else {
             // === Passage en mode EXPLORATION LIBRE ===
             window.guidedMode = false;
@@ -1336,14 +1338,12 @@
             });
 
             stopFPSAdjust();
-          
+
             if (viewer.useHQ) {
                 document.getElementById("toggleLissage").textContent = "Désactiver lissage";
             } else {
                 document.getElementById("toggleLissage").textContent = "Activer lissage";
             }
-          
-          
         }
     });
     // Affichage en temps réel de la position de la caméra

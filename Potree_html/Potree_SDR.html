@@ -1713,34 +1713,41 @@
         frameCount++;
       });
       function startFPSAdjust() {
-          if (fpsIntervalId !== null) return; // Ne pas recréer plusieurs fois
-
-          console.log("Début ajustement FPS + lissage");
+          if (fpsIntervalId !== null) return; // Ne pas créer plusieurs intervalles en même temps
+      
+          console.log("▶️ Début ajustement dynamique du FPS");
           fpsIntervalId = setInterval(function() {
               let now = performance.now();
               let delta = (now - lastTime) / 1000;
               let fps = frameCount / delta;
               console.log("FPS mesuré : " + fps.toFixed(2));
-
-              if (fps < 15) {
-                  // Si FPS très bas ➔ réduire qualité et désactiver lissage
-                  currentPointBudget = Math.max(currentPointBudget * 0.8, 100000);
-                  console.log("Réduction du pointBudget à " + currentPointBudget);
+      
+              if (fps < 20) {
+                  // FPS faible ➔ réduire rapidement
+                  currentPointBudget = Math.max(currentPointBudget * 0.7, 300000);
+                  console.log("⚡ FPS faible ➔ Réduction du pointBudget à " + Math.round(currentPointBudget));
                   viewer.setPointBudget(currentPointBudget);
                   viewer.useHQ = false;
                   document.getElementById("toggleLissage").textContent = "Activer lissage";
-              } else if (fps > 30) {
-                  // Si FPS bon ➔ augmenter qualité et activer lissage
-                  currentPointBudget = Math.min(currentPointBudget * 1.2, 10000000);
-                  console.log("Augmentation du pointBudget à " + currentPointBudget);
+              } else if (fps >= 20 && fps <= 40) {
+                  // FPS moyen ➔ ajustement doux
+                  currentPointBudget = currentPointBudget * 0.95 + 0.05 * 5000000;
+                  console.log("🌟 FPS moyen ➔ Ajustement doux du pointBudget à " + Math.round(currentPointBudget));
+                  viewer.setPointBudget(currentPointBudget);
+                  viewer.useHQ = true;
+                  document.getElementById("toggleLissage").textContent = "Désactiver lissage";
+              } else if (fps > 40) {
+                  // FPS haut ➔ augmenter lentement
+                  currentPointBudget = Math.min(currentPointBudget * 1.1, 15000000); // Limite supérieure à 15 millions
+                  console.log("🚀 FPS haut ➔ Augmentation du pointBudget à " + Math.round(currentPointBudget));
                   viewer.setPointBudget(currentPointBudget);
                   viewer.useHQ = true;
                   document.getElementById("toggleLissage").textContent = "Désactiver lissage";
               }
-
+      
               frameCount = 0;
               lastTime = now;
-          }, 1000); // toutes les 1 seconde
+          }, 1000); // Toutes les 1 secondes
       }
       function stopFPSAdjust() {
           if (fpsIntervalId !== null) {

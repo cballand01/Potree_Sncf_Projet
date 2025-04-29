@@ -394,6 +394,18 @@
         });
       }
 
+      // fonction qui permet de cliquer sur une annotation textuelle même si l'animation du hotpsot n'est pas terminée
+      function addTextAnnotationClickHandler(annotation, duration = 1000) {
+          annotation.title.find("img").click((event) => {
+              event.stopPropagation();
+              if (typeof TWEEN !== 'undefined') {
+                  TWEEN.removeAll();
+              }
+              viewer.scene.view.setView(annotation.cameraPosition, annotation.cameraTarget, duration);
+              showTextAnnotationCustom(annotation.description); 
+          });
+      }
+
       // Bouton de retour à la vue initiale
       const btn = document.getElementById("recenterButton");
       btn.querySelector(".custom-tooltip").textContent = "Retour à la vue initiale";
@@ -417,7 +429,7 @@
           cameraPosition: new THREE.Vector3(6.19, 6.30, 1.99),
           cameraTarget: new THREE.Vector3(5.31, 8.20, 1.25)
       });
-      addAnnotationClickHandler(annotationTexte1);
+      addTextAnnotationClickHandler(annotationTexte1);
       annotationTexte1.visible = true;
       viewer.scene.annotations.add(annotationTexte1);
       
@@ -433,7 +445,7 @@
           cameraPosition: new THREE.Vector3(1.58, 9.79, 2.70),
           cameraTarget: new THREE.Vector3(0.93, 10.07, 2.70)
       });
-      addAnnotationClickHandler(annotationTexte2);
+      aaddTextAnnotationClickHandler(annotationTexte2);
       annotationTexte2.visible = true;
       viewer.scene.annotations.add(annotationTexte2);
       
@@ -448,7 +460,7 @@
           title: iconExp1, // Ici on met l'élément HTML au lieu du texte
           description: "<b>Numérotation des TGV :</b><br><br>Les TGV sont représentés par des numéros à <b>quatre chiffres</b> :<br>- <b>Pairs</b> en direction de Paris<br>- <b>Impairs</b> en direction de Lyon<br><br>Les TGV <i>sans voyageurs</i> portent des numéros à <b>six chiffres</b>.<br>Les trains <i>exceptionnels</i> sont identifiés par des numéros à <b>cinq chiffres</b>.",
         });
-      addAnnotationClickHandler(annotationExp1);
+      addTextAnnotationClickHandler(annotationExp1);
       annotationExp1.visible = true;
       viewer.scene.annotations.add(annotationExp1);
       
@@ -462,7 +474,7 @@
           title: iconExp2, // Ici on met l'élément HTML au lieu du texte
           description: "Il y a en moyenne un poste tous les 20 km de voies, pouvant être contrôlé soit depuis le PAR, soit en local.  ",
       });
-      addAnnotationClickHandler(annotationExp2);
+      addTextAnnotationClickHandler(annotationExp2);
       annotationExp2.visible = true;
       viewer.scene.annotations.add(annotationExp2);
       
@@ -476,7 +488,7 @@
           title: iconExp3, // Ici on met l'élément HTML au lieu du texte
           description: "<span style='font-weight: bold;'>&larr; Direction Paris</span> <span style='color: gray;'>(haut)</span><br><span style='font-weight: bold;'>&rarr; Direction Lyon</span> <span style='color: gray;'>(bas)</span>",
       });
-      addAnnotationClickHandler(annotationExp3);
+      addTextAnnotationClickHandler(annotationExp3);
       annotationExp3.visible = true;
       viewer.scene.annotations.add(annotationExp3);
       
@@ -490,7 +502,7 @@
           title: iconExp4, // Ici on met l'élément HTML au lieu du texte
           description: "<span style='color: yellow;'>Lumière jaune</span> = Section libre<br><span style='color: red;'>Lumière rouge</span> = TGV en ligne",
       });
-      addAnnotationClickHandler(annotationExp4);
+      addTextAnnotationClickHandler(annotationExp4);
       annotationExp4.visible = true;
       viewer.scene.annotations.add(annotationExp4);
       
@@ -1996,6 +2008,21 @@
       document.getElementById("popup360").style.display = "none";
       document.getElementById("panorama").innerHTML = ""; // Réinitialise le viewer
     });
+  </script>
+
+  <!-- Gestion de la fenetre popup des textes -->
+  <script>
+    function showTextAnnotationCustom(description) {
+        const popup = document.getElementById('textAnnotationPopupCustom');
+        const content = document.getElementById('textAnnotationContentCustom');
+        content.innerHTML = description;
+        popup.style.display = 'block';
+    }
+    
+    function hideTextAnnotationCustom() {
+        const popup = document.getElementById('textAnnotationPopupCustom');
+        popup.style.display = 'none';
+    }
   </script>
   
 </body>

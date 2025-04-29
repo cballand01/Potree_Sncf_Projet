@@ -999,7 +999,7 @@
           let annotations = [
           // Annotations textuelles
           { position: annotationTexte1.position, maxDistance: distanceThresholdText, minGisement: 150, maxGisement: 300, annotation: annotationTexte1 },
-          { position: annotationTexte2.position, maxDistance: distanceThresholdText, minGisement: 170, maxGisement: 330, annotation: annotationTexte2 },
+          { position: annotationTexte2.position, maxDistance: 5, minGisement: 170, maxGisement: 330, annotation: annotationTexte2 },
 
           // Annotations explicatives
           { position: annotationExp1.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp1 },
@@ -1024,7 +1024,7 @@
           { position: annotation3D4.position, maxDistance: distanceThreshold3D, minGisement: 180, maxGisement: 330, annotation: annotation3D4 },  //PRS 2
           { position: annotation3D5.position, maxDistance: distanceThreshold3D, minGisement: 150, maxGisement: 300, annotation: annotation3D5 },  //PRS 3
           { position: annotation3D6.position, maxDistance: 3.5, minGisement: 300, maxGisement: 50, annotation: annotation3D6 },  //Tableau IDF
-          { position: annotation3D7.position, maxDistance: distanceThreshold3D, minGisement: 170, maxGisement: 330, annotation: annotation3D7 },  //Tableau Total
+          { position: annotation3D7.position, maxDistance: 5, minGisement: 170, maxGisement: 330, annotation: annotation3D7 },  //Tableau Total
 
           // Lien vers autre salle
           { position: lienSDR.position, maxDistance: distanceGoto, minGisement: 130, maxGisement: 165, annotation: lienSDR },

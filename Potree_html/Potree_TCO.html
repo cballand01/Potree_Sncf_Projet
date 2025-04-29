@@ -954,68 +954,97 @@
       const distanceThresholdExp = 1; //textes rapprochés
       const distanceThresholdAnimation = 4; //video
       const distanceThreshold360 = 5; //360
-      // Mise à jour de la visibilité des annotations en fonction de la distance de la caméra
+
+      // Fonction pour vérifier si la caméra est dans la plage de gisement et dans la distance de l'annotation
+      function isCameraInVisibilityCone(cameraPos, annotationPos, maxDistance, minGisement, maxGisement) {
+          let camera = viewer.scene.getActiveCamera();
+
+          if (!camera || !camera.position) {
+              console.error("La caméra ou sa position sont indéfinis.");
+              return false;
+          }
+
+          // 1. Calculer la distance entre la caméra et l'annotation
+          let distance = cameraPos.distanceTo(annotationPos);
+          if (distance > maxDistance) {
+              return false;
+          }
+
+          // 2. Calculer la direction de l'annotation VERS la caméra (INVERSION ici)
+          let directionToCamera = new THREE.Vector3().subVectors(cameraPos, annotationPos);
+          directionToCamera.z = 0;
+          directionToCamera.normalize();
+
+          // 3. Calculer l'angle en degrés avec alignement à 0°=Nord
+          let angleRad = Math.atan2(directionToCamera.y, directionToCamera.x);
+          let angleDeg = THREE.MathUtils.radToDeg(angleRad);
+          angleDeg = (angleDeg - 90 + 360) % 360; // corriger pour mettre Nord à 0°
+
+          // 4. Normaliser minGisement et maxGisement entre 0° et 360°
+          if (minGisement < 0) minGisement += 360;
+          if (maxGisement < 0) maxGisement += 360;
+
+          // 5. Vérifier si l'angle est dans l'intervalle
+          if (minGisement <= maxGisement) {
+              return angleDeg >= minGisement && angleDeg <= maxGisement;
+          } else {
+              return angleDeg >= minGisement || angleDeg <= maxGisement;
+          }
+      }
+
+      // Mise à jour de la visibilité des annotations en fonction de la distance et du gisement
       viewer.addEventListener("update", () => {
-        let cameraPos = viewer.scene.getActiveCamera().position;
-        
-        let distTexte1 = cameraPos.distanceTo(annotationTexte1.position);
-        annotationTexte1.visible = (distTexte1 < distanceThresholdText);
-        let distTexte2 = cameraPos.distanceTo(annotationTexte2.position);
-        annotationTexte2.visible = (distTexte2 < distanceThresholdText);
-        
-        let distExp1 = cameraPos.distanceTo(annotationExp1.position);
-        annotationExp1.visible = (distExp1 < distanceThresholdExp);
-        let distExp2 = cameraPos.distanceTo(annotationExp2.position);
-        annotationExp2.visible = (distExp2 < distanceThresholdExp);
-        let distExp3 = cameraPos.distanceTo(annotationExp3.position);
-        annotationExp3.visible = (distExp3 < distanceThresholdExp);
-        let distExp4 = cameraPos.distanceTo(annotationExp4.position);
-        annotationExp4.visible = (distExp4 < distanceThresholdExp);
+          let cameraPos = viewer.scene.getActiveCamera().position;
 
-        let distImage1 = cameraPos.distanceTo(annotationImage1.position);
-        annotationImage1.visible = (distImage1 < distanceThresholdImage);
-        let distImage2 = cameraPos.distanceTo(annotationImage2.position);
-        annotationImage2.visible = (distImage2 < distanceThresholdImage);
-        let distImage3 = cameraPos.distanceTo(annotationImage3.position);
-        annotationImage3.visible = (distImage3 < distanceThresholdImage);
-        let distImage4 = cameraPos.distanceTo(annotationImage4.position);
-        annotationImage4.visible = (distImage4 < distanceThresholdImage);
-        let distImage5 = cameraPos.distanceTo(annotationImage5.position);
-        annotationImage5.visible = (distImage5 < distanceThresholdImage);
-        let distImage6 = cameraPos.distanceTo(annotationImage6.position);
-        annotationImage6.visible = (distImage6 < distanceThresholdImage);
-        let distImage7 = cameraPos.distanceTo(annotationImage7.position);
-        annotationImage7.visible = (distImage7 < distanceThresholdImage);
-        let distImage8 = cameraPos.distanceTo(annotationImage8.position);
-        annotationImage8.visible = (distImage8 < distanceThresholdImage);
-        
-        let dist3D1 = cameraPos.distanceTo(annotation3D1.position);
-        annotation3D1.visible = (dist3D1 < distanceThreshold3D);       
-        let dist3D2 = cameraPos.distanceTo(annotation3D2.position);
-        annotation3D2.visible = (dist3D2 < distanceThreshold3D);
-        let dist3D3 = cameraPos.distanceTo(annotation3D3.position);
-        annotation3D3.visible = (dist3D3 < distanceThreshold3D);
-        let dist3D4 = cameraPos.distanceTo(annotation3D4.position);
-        annotation3D4.visible = (dist3D4 < distanceThreshold3D);
-        let dist3D5 = cameraPos.distanceTo(annotation3D5.position);
-        annotation3D5.visible = (dist3D5 < distanceThreshold3D);
-        let dist3D6 = cameraPos.distanceTo(annotation3D6.position);
-        annotation3D6.visible = (dist3D6 < distanceThreshold3D);
-        let dist3D7 = cameraPos.distanceTo(annotation3D7.position);
-        annotation3D7.visible = (dist3D7 < distanceThreshold3D);
+          const allAnnotations = [
+              // Annotations textuelles
+              { position: annotationTexte1.position, maxDistance: distanceThresholdText, minGisement: 0, maxGisement: 360, annotation: annotationTexte1 },
+              { position: annotationTexte2.position, maxDistance: distanceThresholdText, minGisement: 0, maxGisement: 360, annotation: annotationTexte2 },
 
-        let distgoto1 = cameraPos.distanceTo(lienSDR.position);
-        lienSDR.visible = (distgoto1 < distanceGoto);
+              // Annotations explicatives
+              { position: annotationExp1.position, maxDistance: distanceThresholdExp, minGisement: 0, maxGisement: 360, annotation: annotationExp1 },
+              { position: annotationExp2.position, maxDistance: distanceThresholdExp, minGisement: 0, maxGisement: 360, annotation: annotationExp2 },
+              { position: annotationExp3.position, maxDistance: distanceThresholdExp, minGisement: 0, maxGisement: 360, annotation: annotationExp3 },
+              { position: annotationExp4.position, maxDistance: distanceThresholdExp, minGisement: 0, maxGisement: 360, annotation: annotationExp4 },
 
-        let distAnim1 = cameraPos.distanceTo(annotationcam1.position);
-        annotationcam1.visible = (distAnim1 < distanceThresholdAnimation);
-        let distAnim2 = cameraPos.distanceTo(annotationcam2.position);
-        annotationcam2.visible = (distAnim2 < distanceThresholdAnimation);
+              // Annotations images
+              { position: annotationImage1.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage1 },
+              { position: annotationImage2.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage2 },
+              { position: annotationImage3.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage3 },
+              { position: annotationImage4.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage4 },
+              { position: annotationImage5.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage5 },
+              { position: annotationImage6.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage6 },
+              { position: annotationImage7.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage7 },
+              { position: annotationImage8.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage8 },
 
-        let dist3601 = cameraPos.distanceTo(annotation3601.position);
-        annotation3601.visible = (dist3601 < distanceThreshold360);
-        let dist3602 = cameraPos.distanceTo(annotation3602.position);
-        annotation3602.visible = (dist3602 < distanceThreshold360);
+              // Annotations 3D
+              { position: annotation3D1.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D1 },
+              { position: annotation3D2.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D2 },
+              { position: annotation3D3.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D3 },
+              { position: annotation3D4.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D4 },
+              { position: annotation3D5.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D5 },
+              { position: annotation3D6.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D6 },
+              { position: annotation3D7.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D7 },
+
+              // Lien vers autre salle
+              { position: lienSDR.position, maxDistance: distanceGoto, minGisement: 0, maxGisement: 360, annotation: lienSDR },
+
+              // Animations
+              { position: annotationcam1.position, maxDistance: distanceThresholdAnimation, minGisement: 0, maxGisement: 360, annotation: annotationcam1 },
+              { position: annotationcam2.position, maxDistance: distanceThresholdAnimation, minGisement: 0, maxGisement: 360, annotation: annotationcam2 },
+
+              // Panoramiques 360
+              { position: annotation3601.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3601 },
+              { position: annotation3602.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3602 }
+          ];
+
+          allAnnotations.forEach(({ position, maxDistance, annotation }) => {
+              if (isCameraInVisibilityCone(cameraPos, position, maxDistance, 0, 360)) {
+                  annotation.visible = true;
+              } else {
+                  annotation.visible = false;
+              }
+          });
       });
     });
     

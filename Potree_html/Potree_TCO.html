@@ -936,7 +936,7 @@
       viewer.addEventListener("update", () => {
         let cameraPos = viewer.scene.getActiveCamera().position;
         
-        let distTexte1 = cameraPos.distanceTo(annotationTexte2.position);
+        let distTexte1 = cameraPos.distanceTo(annotationTexte1.position);
         annotationTexte1.visible = (distTexte1 < distanceThresholdText);
         let distTexte2 = cameraPos.distanceTo(annotationTexte2.position);
         annotationTexte2.visible = (distTexte2 < distanceThresholdText);

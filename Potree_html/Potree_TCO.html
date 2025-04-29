@@ -407,8 +407,12 @@
               if (typeof TWEEN !== 'undefined') {
                   TWEEN.removeAll();
               }
-              viewer.scene.view.setView(annotation.cameraPosition, annotation.cameraTarget, duration);
-              showTextAnnotationCustom(annotation.description); 
+              // Ne fait un setView que si les coordonnées sont définies
+              if (annotation.cameraPosition && annotation.cameraTarget) {
+                  viewer.scene.view.setView(annotation.cameraPosition, annotation.cameraTarget, duration);
+              }
+              // Toujours afficher la popup
+              showTextAnnotationCustom(annotation.description);
           });
       }
 

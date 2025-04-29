@@ -1176,8 +1176,9 @@
     viewer.scene.addCameraAnimation(animation1);
 
     // Création du bouton pour la première animation
-    let iconcam1 = $(`<span>
-        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/camera.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+    let iconcam1 = $(`<span style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+        <img src="../build/potree/resources/icons/camera.svg" class="annotation-action-icon" style="filter: invert(1);" />
+        <span style="color: white; font-size: 14px;">${animationDuration1}s</span>
     </span>`);
 
     // Ajouter un événement de clic sur le bouton pour lancer la première animation
@@ -1262,8 +1263,9 @@
     viewer.scene.addCameraAnimation(animation2);
 
     // Création du bouton pour la deuxième animation
-    let iconcam2 = $(`<span>
-        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/camera.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+    let iconcam2 = $(`<span style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+        <img src="../build/potree/resources/icons/camera.svg" class="annotation-action-icon" style="filter: invert(1);" />
+        <span style="color: white; font-size: 14px;">${animationDuration2}s</span>
     </span>`);
 
     // Ajouter un événement de clic sur le bouton pour lancer la deuxième animation

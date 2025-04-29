@@ -1351,18 +1351,21 @@
     
       
     // Fonction pour jouer l'audio associé à un hotspot
-    function playHotspotAudio(index) {
-      for (let i = 0; i < 3; i++) {
-        let audioElem = document.getElementById("audioHotspot" + i);
-        if (audioElem) {
-          audioElem.pause();
-          audioElem.currentTime = 0;
-        }
-      }
-      let currentAudio = document.getElementById("audioHotspot" + index);
-      if (currentAudio) {
-        window.currentHotspotAudio = currentAudio;
-        currentAudio.play();
+      function playHotspotAudio(idOrIndex){
+      // Arrêt des autres pistes
+      document.querySelectorAll('audio[id^="audioHotspot"]').forEach(a=>{
+        a.pause(); a.currentTime = 0;
+      });
+    
+      // ➜ détermine l’id réel
+      const id = (typeof idOrIndex === 'string' && idOrIndex.startsWith('audioHotspot'))
+                 ? idOrIndex
+                 : 'audioHotspot' + idOrIndex;
+    
+      const current = document.getElementById(id);
+      if(current){
+        window.currentHotspotAudio = current;
+        current.play();
       }
     }
     

@@ -35,6 +35,12 @@
     <div class="loader"></div>
   </div>
 
+  <!-- Popup Textes -->
+  <div id="textAnnotationPopupCustom">
+      <button id="closeTextAnnotationPopupCustom" onclick="hideTextAnnotationCustom()">×</button>
+      <div id="textAnnotationContentCustom"></div>
+  </div>
+
   <!-- Boutons d'actions en mode Expert -->
   <div id="splat_buttons">
     <div id="pointBudgetContainer">
@@ -481,6 +487,22 @@
           // Utilise les coordonnées déjà stockées dans l'annotation
           viewer.scene.view.setView(annotation.cameraPosition, annotation.cameraTarget, duration);
         });
+      }
+
+      // fonction qui permet de cliquer sur une annotation textuelle même si l'animation du hotpsot n'est pas terminée
+      function addTextAnnotationClickHandler(annotation, duration = 1000) {
+          annotation.title.find("img").click((event) => {
+              event.stopPropagation();
+              if (typeof TWEEN !== 'undefined') {
+                  TWEEN.removeAll();
+              }
+              // Ne fait un setView que si les coordonnées sont définies
+              if (annotation.cameraPosition && annotation.cameraTarget) {
+                  viewer.scene.view.setView(annotation.cameraPosition, annotation.cameraTarget, duration);
+              }
+              // Toujours afficher la popup
+              showTextAnnotationCustom(annotation.description);
+          });
       }
       
       //bouton de recentrage sur la vue initiale
@@ -1871,6 +1893,21 @@
       "https://storage.googleapis.com/projet-potree-sncf/Images_orient%C3%A9es/Armoire2_arri%C3%A8re/1H3A8819.JPG",
       // Ajoutez ici d'autres liens si nécessaire
     ];
+  </script>
+
+  <!-- Gestion de la fenetre popup des textes -->
+  <script>
+    function showTextAnnotationCustom(description) {
+        const popup = document.getElementById('textAnnotationPopupCustom');
+        const content = document.getElementById('textAnnotationContentCustom');
+        content.innerHTML = description;
+        popup.style.display = 'block';
+    }
+    
+    function hideTextAnnotationCustom() {
+        const popup = document.getElementById('textAnnotationPopupCustom');
+        popup.style.display = 'none';
+    }
   </script>
   
 </body>

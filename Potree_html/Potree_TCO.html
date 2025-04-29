@@ -996,50 +996,54 @@
       viewer.addEventListener("update", () => {
           let cameraPos = viewer.scene.getActiveCamera().position;
 
-          const allAnnotations = [
-              // Annotations textuelles
-              { position: annotationTexte1.position, maxDistance: distanceThresholdText, minGisement: 0, maxGisement: 50, annotation: annotationTexte1 },
-              { position: annotationTexte2.position, maxDistance: distanceThresholdText, minGisement: 0, maxGisement: 360, annotation: annotationTexte2 },
+          let annotations = [
+          // Annotations textuelles
+          { position: annotationTexte1.position, maxDistance: distanceThresholdText, minGisement: 0, maxGisement: 50, annotation: annotationTexte1 },
+          { position: annotationTexte2.position, maxDistance: distanceThresholdText, minGisement: 0, maxGisement: 360, annotation: annotationTexte2 },
 
-              // Annotations explicatives
-              { position: annotationExp1.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp1 },
-              { position: annotationExp2.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp2 },
-              { position: annotationExp3.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp3 },
-              { position: annotationExp4.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp4 },
+          // Annotations explicatives
+          { position: annotationExp1.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp1 },
+          { position: annotationExp2.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp2 },
+          { position: annotationExp3.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp3 },
+          { position: annotationExp4.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp4 },
 
-              // Annotations images
-              { position: annotationImage1.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage1 },
-              { position: annotationImage2.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage2 },
-              { position: annotationImage3.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage3 },
-              { position: annotationImage4.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage4 },
-              { position: annotationImage5.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage5 },
-              { position: annotationImage6.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage6 },
-              { position: annotationImage7.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage7 },
-              { position: annotationImage8.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage8 },
+          // Annotations images
+          { position: annotationImage1.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage1 },
+          { position: annotationImage2.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage2 },
+          { position: annotationImage3.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage3 },
+          { position: annotationImage4.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage4 },
+          { position: annotationImage5.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage5 },
+          { position: annotationImage6.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage6 },
+          { position: annotationImage7.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage7 },
+          { position: annotationImage8.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage8 },
 
-              // Annotations 3D
-              { position: annotation3D1.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D1 },
-              { position: annotation3D2.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D2 },
-              { position: annotation3D3.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D3 },
-              { position: annotation3D4.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D4 },
-              { position: annotation3D5.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D5 },
-              { position: annotation3D6.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D6 },
-              { position: annotation3D7.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D7 },
+          // Annotations 3D
+          { position: annotation3D1.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D1 },
+          { position: annotation3D2.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D2 },
+          { position: annotation3D3.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D3 },
+          { position: annotation3D4.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D4 },
+          { position: annotation3D5.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D5 },
+          { position: annotation3D6.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D6 },
+          { position: annotation3D7.position, maxDistance: distanceThreshold3D, minGisement: 0, maxGisement: 360, annotation: annotation3D7 },
 
-              // Lien vers autre salle
-              { position: lienSDR.position, maxDistance: distanceGoto, minGisement: 0, maxGisement: 360, annotation: lienSDR },
+          // Lien vers autre salle
+          { position: lienSDR.position, maxDistance: distanceGoto, minGisement: 0, maxGisement: 360, annotation: lienSDR },
 
-              // Animations
-              { position: annotationcam1.position, maxDistance: distanceThresholdAnimation, minGisement: 0, maxGisement: 360, annotation: annotationcam1 },
-              { position: annotationcam2.position, maxDistance: distanceThresholdAnimation, minGisement: 0, maxGisement: 360, annotation: annotationcam2 },
+          // Animations
+          { position: annotationcam1.position, maxDistance: distanceThresholdAnimation, minGisement: 0, maxGisement: 360, annotation: annotationcam1 },
+          { position: annotationcam2.position, maxDistance: distanceThresholdAnimation, minGisement: 0, maxGisement: 360, annotation: annotationcam2 },
 
-              // Panoramiques 360
-              { position: annotation3601.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3601 },
-              { position: annotation3602.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3602 }
+          // Panoramiques 360
+          { position: annotation3601.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3601 },
+          { position: annotation3602.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3602 }
           ];
 
-          allAnnotations.forEach(({ position, maxDistance, annotation }) => {
-              if (isCameraInVisibilityCone(cameraPos, position, maxDistance, 0, 360)) {
+          // Vérification de la visibilité de chaque annotation
+          annotations.forEach(item => {
+              let {position, maxDistance, minGisement, maxGisement, annotation} = item;
+
+              // Vérifie si l'annotation doit être visible en fonction de la distance et du gisement
+              if (isCameraInVisibilityCone(cameraPos, position, maxDistance, minGisement, maxGisement)) {
                   annotation.visible = true;
               } else {
                   annotation.visible = false;

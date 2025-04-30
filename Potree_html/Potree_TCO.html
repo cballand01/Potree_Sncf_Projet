@@ -1458,8 +1458,6 @@
             // Affiche le conteneur général des commandes
             const container = document.getElementById('buttonAndCameraContainer');
             container.style.display = 'flex';
-
-            cancelCameraTransition();
             
             // Cache tous les boutons sauf le plein-écran
             [
@@ -2110,22 +2108,6 @@
         popup.style.display = 'none';
     }
   </script>
-
-  <!-- Fonction de stop de la transition de dépalcement en sortie de visite guidée  -->
-  <script>
-  function cancelCameraTransition() {
-  
-    /*  Couper la mini-state de Potree -------------------------- */
-    if (viewer && viewer.scene && viewer.scene.view) {
-      viewer.scene.view.animation = null;   // ← stop immédiat
-    }
-  
-    /* Supprimer les tweens TWEEN.js --------------------------- */
-    if (typeof TWEEN !== 'undefined') {
-      TWEEN.removeAll();
-    }
-  }
-</script>
   
 </body>
 </html>

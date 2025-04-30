@@ -2113,15 +2113,19 @@
 
   <!-- Fonction de stop de la transition de dépalcement en sortie de visite guidée  -->
   <script>
-  // -----------------------------------------------------------------
-  // Stoppe tous les tweens Potree/TWEEN.js en cours (caméra, etc.)
-  // -----------------------------------------------------------------
   function cancelCameraTransition() {
+  
+    /*  Couper la mini-state de Potree -------------------------- */
+    if (viewer && viewer.scene && viewer.scene.view) {
+      viewer.scene.view.animation = null;   // ← stop immédiat
+    }
+  
+    /* Supprimer les tweens TWEEN.js --------------------------- */
     if (typeof TWEEN !== 'undefined') {
-      TWEEN.removeAll();           // tue toutes les interpolations
+      TWEEN.removeAll();
     }
   }
-  </script>
+</script>
   
 </body>
 </html>

@@ -1457,7 +1457,9 @@
             // Masquer le conteneur des boutons caméra
             // Affiche le conteneur général des commandes
             const container = document.getElementById('buttonAndCameraContainer');
-            container.style.display = 'flex';          // ou '' si ton CSS le prévoit
+            container.style.display = 'flex';
+
+            cancelCameraTransition();
             
             // Cache tous les boutons sauf le plein-écran
             [
@@ -2107,6 +2109,18 @@
         const popup = document.getElementById('textAnnotationPopupCustom');
         popup.style.display = 'none';
     }
+  </script>
+
+  <!-- Fonction de stop de la transition de dépalcement en sortie de visite guidée  -->
+  <script>
+  // -----------------------------------------------------------------
+  // Stoppe tous les tweens Potree/TWEEN.js en cours (caméra, etc.)
+  // -----------------------------------------------------------------
+  function cancelCameraTransition() {
+    if (typeof TWEEN !== 'undefined') {
+      TWEEN.removeAll();           // tue toutes les interpolations
+    }
+  }
   </script>
   
 </body>

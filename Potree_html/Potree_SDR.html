@@ -1318,7 +1318,20 @@
             button.style.display = 'inline-block';
 
             // Masquer le conteneur des boutons caméra
-            document.getElementById('buttonAndCameraContainer').style.display = 'none';
+            const container = document.getElementById('buttonAndCameraContainer');
+            container.style.display = 'flex';          // ou '' si ton CSS le prévoit
+            
+            // Cache tous les boutons sauf le plein-écran
+            [
+              'measureButton',
+              'deleteButton',
+              'recenterButton',
+              'instructionButton',
+              'cameraPosition'        // le texte XY ;Z
+            ].forEach(id => {
+              const el = document.getElementById(id);
+              if (el) el.style.display = 'none';
+            });
             // Afficher la barre de navigation entre hotspots
             document.querySelector('.hotspot-controls-bar').style.display = 'flex';
           
@@ -1714,7 +1727,19 @@
       document.getElementById('pointBudgetContainer').style.display = 'none';
       document.getElementById('toggleLissage').style.display = 'none';
       document.getElementById('toggleGuidedMode').textContent = "Sortir de la visite guidée";
-      document.getElementById('buttonAndCameraContainer').style.display = 'none';
+      const container = document.getElementById('buttonAndCameraContainer');
+      container.style.display = 'flex';    
+      // Cache tous les boutons sauf le plein-écran
+      [
+        'measureButton',
+        'deleteButton',
+        'recenterButton',
+        'instructionButton',
+        'cameraPosition'        // le texte XY ;Z
+      ].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
       viewer.useHQ = true;
       window.guidedMode = true;
       document.getElementById("toggleLissage").textContent = "Désactiver lissage";

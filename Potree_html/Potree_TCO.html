@@ -1456,6 +1456,7 @@
 
             // Masquer le conteneur des boutons caméra
             document.getElementById('buttonAndCameraContainer').style.display = 'none';
+            document.getElementById('fullscreenButton').style.display = 'flex'; // --- PATCH rapide : on remet seulement le bouton plein-écran ---
             // Afficher la barre de navigation entre hotspots
             document.querySelector('.hotspot-controls-bar').style.display = 'flex';
           
@@ -1859,6 +1860,7 @@
       document.getElementById('toggleLissage').style.display = 'none';
       document.getElementById('toggleGuidedMode').textContent = "Sortir de la visite guidée";
       document.getElementById('buttonAndCameraContainer').style.display = 'none';
+      document.getElementById('fullscreenButton').style.display = 'flex'; // --- PATCH rapide : on remet seulement le bouton plein-écran ---
       viewer.useHQ = true;
       window.guidedMode = true;
       document.getElementById("toggleLissage").textContent = "Désactiver lissage";

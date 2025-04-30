@@ -1500,6 +1500,16 @@
 
             // Réafficher les contrôles de caméra
             document.getElementById('buttonAndCameraContainer').style.display = 'flex';
+            [
+              'measureButton',
+              'deleteButton',
+              'recenterButton',
+              'instructionButton',
+              'cameraPosition'   // le petit panneau de coordonnées
+            ].forEach(id => {
+              const el = document.getElementById(id);
+              if (el) el.style.display = 'flex';
+            });
             // Cacher la barre de navigation entre hotspots
             document.querySelector('.hotspot-controls-bar').style.display = 'none';
             document.getElementById('audioBar').style.display = 'none';

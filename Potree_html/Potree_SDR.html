@@ -1122,41 +1122,40 @@
       const distanceThreshold360 = 3; //360
       
       // Fonction pour vérifier si la caméra est dans la plage de gisement et dans la distance de l'annotation
-      function isCameraInVisibilityCone(cameraPos, annotationPos, maxDistance, minGisement, maxGisement) {
-          let camera = viewer.scene.getActiveCamera();
-
-          if (!camera || !camera.position) {
-              console.error("La caméra ou sa position sont indéfinis.");
-              return false;
-          }
-
-          // 1. Calculer la distance entre la caméra et l'annotation
-          let distance = cameraPos.distanceTo(annotationPos);
-          if (distance > maxDistance) {
-              return false;
-          }
-
-          // 2. Calculer la direction de l'annotation VERS la caméra (INVERSION ici)
-          let directionToCamera = new THREE.Vector3().subVectors(cameraPos, annotationPos);
-          directionToCamera.z = 0;
-          directionToCamera.normalize();
-
-          // 3. Calculer l'angle en degrés avec alignement à 0°=Nord
-          let angleRad = Math.atan2(directionToCamera.y, directionToCamera.x);
-          let angleDeg = THREE.MathUtils.radToDeg(angleRad);
-          angleDeg = (angleDeg - 90 + 360) % 360; // corriger pour mettre Nord à 0°
-
-          // 4. Normaliser minGisement et maxGisement entre 0° et 360°
-          if (minGisement < 0) minGisement += 360;
-          if (maxGisement < 0) maxGisement += 360;
-
-          // 5. Vérifier si l'angle est dans l'intervalle
-          if (minGisement <= maxGisement) {
-              return angleDeg >= minGisement && angleDeg <= maxGisement;
+      function isCameraInVisibilityCone(cameraPos, annotationPos, maxDistance, gisementRanges) {
+        let camera = viewer.scene.getActiveCamera();
+      
+        if (!camera || !camera.position) {
+          console.error("La caméra ou sa position sont indéfinies.");
+          return false;
+        }
+      
+        // 1. Vérifier la distance
+        let distance = cameraPos.distanceTo(annotationPos);
+        if (distance > maxDistance) return false;
+      
+        // 2. Calculer la direction annotation → caméra
+        let directionToCamera = new THREE.Vector3().subVectors(cameraPos, annotationPos);
+        directionToCamera.z = 0;
+        directionToCamera.normalize();
+      
+        // 3. Angle en degrés (0° = Nord)
+        let angleRad = Math.atan2(directionToCamera.y, directionToCamera.x);
+        let angleDeg = THREE.MathUtils.radToDeg(angleRad);
+        angleDeg = (angleDeg - 90 + 360) % 360;
+      
+        // 4. Vérifier les plages multiples
+        for (let range of gisementRanges) {
+          let { min, max } = range;
+          if (min < 0) min += 360;
+          if (max < 0) max += 360;
+      
+          if (min <= max) {
+            if (angleDeg >= min && angleDeg <= max) return true;
           } else {
-              return angleDeg >= minGisement || angleDeg <= maxGisement;
+            if (angleDeg >= min || angleDeg <= max) return true;
           }
-      }
+        }
 
 
       // Mise à jour de la visibilité des annotations en fonction de la distance et du gisement
@@ -1188,24 +1187,19 @@
 
           { position: annotationcam1.position, maxDistance: distanceThresholdAnimation, minGisement: 0, maxGisement: 0, annotation: annotationcam1 },
 
-          { position: annotation3601.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3601 },
+          { position: annotation3601.position, maxDistance: distanceThreshold360, gisementRanges: minGisement: 0, maxGisement: 360, annotation: annotation3601 },
           { position: annotation3602.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3602 },
           { position: annotation3603.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3603 },
           { position: annotation3604.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3604 },
-          { position: annotation3605.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3605 },
+          { position: annotation3605.position, maxDistance: distanceThreshold360,[{ min: 8, max: 100 },{ min: 200, max: 250 }], annotation: annotation3605 },
           { position: annotation3606.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3606 }
           ];
 
           // Vérification de la visibilité de chaque annotation
           annotations.forEach(item => {
-              let {position, maxDistance, minGisement, maxGisement, annotation} = item;
-
-              // Vérifie si l'annotation doit être visible en fonction de la distance et du gisement
-              if (isCameraInVisibilityCone(cameraPos, position, maxDistance, minGisement, maxGisement)) {
-                  annotation.visible = true;
-              } else {
-                  annotation.visible = false;
-              }
+            let { position, maxDistance, gisementRanges, annotation } = item;
+          
+            annotation.visible = isCameraInVisibilityCone(cameraPos, position, maxDistance, gisementRanges);
           });
       });
     });

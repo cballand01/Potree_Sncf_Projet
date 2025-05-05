@@ -1406,6 +1406,9 @@
       delete hotspotNameEl.dataset.origName;
       _origGoToHotspot(index, playAudio);
     };
+
+    // → on ré-affecte la nouvelle fonction sur window pour que tous les clics l’utilisent
+    window.goToHotspot = goToHotspot;
     
     // 3) Listener sur chaque update de la caméra
     viewer.addEventListener("update", () => {

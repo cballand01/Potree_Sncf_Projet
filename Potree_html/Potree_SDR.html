@@ -1900,29 +1900,28 @@
       });
       
       // Ajustement dynamique du pointBudget en fonction du FPS
+      // Variables pour calcul du FPS et régulation
       let fpsIntervalId = null;
       let currentPointBudget = 1000000;
-      viewer.setPointBudget(currentPointBudget);
       let lastTime = performance.now();
       let frameCount = 0;
-      viewer.addEventListener("update", function() {
+      
+      // Compte les frames à chaque update du viewer
+      viewer.addEventListener("update", () => {
         frameCount++;
       });
+      
+      // Démarre l’ajustement automatique du point budget
       function startFPSAdjust() {
-        if (fpsIntervalId !== null) return; // déjà en cours
-      
+        if (fpsIntervalId !== null) return;
         console.log("▶️ Début ajustement dynamique du FPS");
-        viewer.addEventListener("update", () => {
-          frameCount++;
-        });
-      
-        fpsIntervalId = setInterval(function() {
-          const now = performance.now();
+        fpsIntervalId = setInterval(() => {
+          const now   = performance.now();
           const delta = (now - lastTime) / 1000;
-          const fps = frameCount / delta;
-          console.log(`FPS mesuré : ${fps.toFixed(2)}`);
+          const fps   = frameCount / delta;
+          console.log(`FPS mesuré : ${fps.toFixed(1)}`);
       
-          // Ajustement du pointBudget en fonction du FPS
+          // logique d’ajustement (copier-coller telle quelle)
           if (fps < 20) {
             currentPointBudget = Math.max(currentPointBudget * 0.7, 300000);
             viewer.useHQ = false;
@@ -1939,29 +1938,28 @@
       
           viewer.setPointBudget(currentPointBudget);
       
-          // ← Bloc qui arrondit et met à jour slider + texte
-          {
-            const rounded = Math.round(currentPointBudget);
-            const slider = document.getElementById("pointBudgetSlider");
-            if (slider) slider.value = rounded;
-            document.getElementById("pointBudgetValue").textContent = formatNumber(rounded);
-          }
+          // Met à jour le slider et le texte
+          const rounded = Math.round(currentPointBudget);
+          const slider  = document.getElementById("pointBudgetSlider");
+          if (slider) slider.value = rounded;
+          document.getElementById("pointBudgetValue").textContent = formatNumber(rounded);
       
-          // Réinit pour la prochaine mesure
+          // Réinit
           frameCount = 0;
           lastTime   = now;
         }, 1000);
       }
       
+      // Arrête l’ajustement
       function stopFPSAdjust() {
         if (fpsIntervalId !== null) {
-          console.log("Arrêt ajustement FPS + lissage");
           clearInterval(fpsIntervalId);
           fpsIntervalId = null;
+          console.log("⏹ Arrêt ajustement FPS");
         }
       }
       
-      // Expose pour toggleGuidedMode
+      // Expose pour les handlers de mode
       window.startFPSAdjust = startFPSAdjust;
       window.stopFPSAdjust  = stopFPSAdjust;
     });

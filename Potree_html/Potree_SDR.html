@@ -1395,51 +1395,6 @@
     window.hotspots = hotspots;
     window.goToHotspot = goToHotspot;
     window.currentHotspotIndex = currentHotspotIndex;
-
-    // Récupère une référence à l'élément qui affiche le nom
-    const hotspotNameEl = document.getElementById("hotspotName");
-
-    // 2) On « wrap » goToHotspot pour effacer dataset.origName à chaque appel
-    const _origGoToHotspot = goToHotspot;
-    goToHotspot = (index, playAudio = true) => {
-      // on efface l’ancien marqueur
-      delete hotspotNameEl.dataset.origName;
-      _origGoToHotspot(index, playAudio);
-    };
-
-    // → on ré-affecte la nouvelle fonction sur window pour que tous les clics l’utilisent
-    window.goToHotspot = goToHotspot;
-    
-    // 3) Listener sur chaque update de la caméra
-    viewer.addEventListener("update", () => {
-      const cam  = viewer.scene.getActiveCamera();
-      const view = viewer.scene.view;
-      // gardes pour éviter un undefined.distanceTo(...)
-      if (!cam?.position || !view?.target || !lastHotspotView?.position || !lastHotspotView?.target) {
-        return;
-      }
-    
-      // calcul des distances
-      const dPos = cam.position.distanceTo(lastHotspotView.position);
-      const dTgt = view.target.distanceTo(lastHotspotView.target);
-    
-      // seuil un peu plus généreux
-      const threshold = 0.2; // en mètres
-    
-      if (dPos > threshold || dTgt > threshold) {
-        // si on n’a pas déjà basculé le texte
-        if (!hotspotNameEl.dataset.origName) {
-          hotspotNameEl.dataset.origName = hotspotNameEl.textContent;
-          hotspotNameEl.textContent       = "Cliquer pour recentrer";
-        }
-      } else {
-        // une fois revenu « dans le cône » : on remet le texte d’origine
-        if (hotspotNameEl.dataset.origName) {
-          hotspotNameEl.textContent = hotspotNameEl.dataset.origName;
-          delete hotspotNameEl.dataset.origName;
-        }
-      }
-    });
   </script>
   
   <!-- Script pour gérer les interactions sur la page -->

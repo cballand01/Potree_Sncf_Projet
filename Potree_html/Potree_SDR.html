@@ -1434,7 +1434,8 @@
     });
     // Mise à jour dynamique du point budget en fonction du slider
     document.getElementById("pointBudgetSlider").addEventListener("input", function (e) {
-      let val = parseInt(e.target.value);
+      const val = Math.round(parseInt(e.target.value));   
+      //mise à jour du DOM et du viewer
       document.getElementById("pointBudgetValue").textContent = formatNumber(val);
       viewer.setPointBudget(val);
     });
@@ -1911,7 +1912,6 @@
         if (fpsIntervalId !== null) return; // déjà en cours
       
         console.log("▶️ Début ajustement dynamique du FPS");
-        // On compte les frames à chaque update
         viewer.addEventListener("update", () => {
           frameCount++;
         });
@@ -1924,17 +1924,14 @@
       
           // Ajustement du pointBudget en fonction du FPS
           if (fps < 20) {
-            // FPS faible → diminution rapide
             currentPointBudget = Math.max(currentPointBudget * 0.7, 300000);
             viewer.useHQ = false;
             document.getElementById("toggleLissage").textContent = "Activer lissage";
           } else if (fps <= 40) {
-            // FPS moyen → ajustement doux vers 5 000 000
             currentPointBudget = currentPointBudget * 0.95 + 0.05 * 5000000;
             viewer.useHQ = true;
             document.getElementById("toggleLissage").textContent = "Désactiver lissage";
           } else {
-            // FPS élevé → augmentation lente jusqu’à 10 000 000
             currentPointBudget = Math.min(currentPointBudget * 1.1, 10000000);
             viewer.useHQ = true;
             document.getElementById("toggleLissage").textContent = "Désactiver lissage";
@@ -1942,7 +1939,7 @@
       
           viewer.setPointBudget(currentPointBudget);
       
-          // ← Bloc qui arrondit et met à jour slider + texte sans décimales
+          // ← Bloc qui arrondit et met à jour slider + texte
           {
             const rounded = Math.round(currentPointBudget);
             const slider = document.getElementById("pointBudgetSlider");
@@ -1955,13 +1952,16 @@
           lastTime   = now;
         }, 1000);
       }
+      
       function stopFPSAdjust() {
-          if (fpsIntervalId !== null) {
-              console.log("Arrêt ajustement FPS + lissage");
-              clearInterval(fpsIntervalId);
-              fpsIntervalId = null;
-          }
+        if (fpsIntervalId !== null) {
+          console.log("Arrêt ajustement FPS + lissage");
+          clearInterval(fpsIntervalId);
+          fpsIntervalId = null;
+        }
       }
+      
+      // Expose pour toggleGuidedMode
       window.startFPSAdjust = startFPSAdjust;
       window.stopFPSAdjust  = stopFPSAdjust;
     });

@@ -429,6 +429,9 @@
       // Positionnement initial de la vue
       viewer.scene.view.setView(initialPosition, initialTarget);
 
+      // On récupère le span qui affiche le nom
+      const hotspotNameEl = document.getElementById("hotspotName");
+
       // Fonction de définition d'une boite limitante pour le déplacement
       const cameraLimitBox = {
           minX: -100,
@@ -486,6 +489,8 @@
           }
           // Utilise les coordonnées déjà stockées dans l'annotation
           viewer.scene.view.setView(annotation.cameraPosition, annotation.cameraTarget, duration);
+          // et on change le label
+          hotspotNameEl.textContent = "RECENTRER LA VUE";
         });
       }
 
@@ -502,6 +507,7 @@
               }
               // Toujours afficher la popup
               showTextAnnotationCustom(annotation.description);
+              hotspotNameEl.textContent = "RECENTRER LA VUE";
           });
       }
       

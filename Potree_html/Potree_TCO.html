@@ -1667,13 +1667,7 @@
   <!-- Script pour la navigation entre les hotspots de la visite guidée -->
   <script>
     document.getElementById("hotspots").addEventListener("click", function() {
-      if (this.textContent.trim() === "Commencez la visite guidée") {
-          currentHotspotIndex = 0;
-          goToHotspot(currentHotspotIndex);
-      } else {
-          let hp = hotspots[currentHotspotIndex];
-          viewer.scene.view.setView(hp.position, hp.target, 1000);
-      }
+      goToHotspot(currentHotspotIndex);
     });
 
     // Navigation vers le hotspot précédent

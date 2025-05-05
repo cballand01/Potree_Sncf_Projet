@@ -9,14 +9,16 @@
     /* Reset & box-sizing */
     *, *::before, *::after { box-sizing: border-box; }
     html, body {
-      height: 100%;
       margin: 0; padding: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #fafafa; color: #333; line-height: 1.6;
+      min-height: 100vh;
+      position: relative;
+      padding-bottom: 4rem; /* espace pour le banner */
     }
     a { text-decoration: none; color: inherit; }
 
-    /* Bandeau modernisé */
+    /* Header modernisé */
     header {
       position: sticky; top: 0; z-index: 1000;
       background-color: #111; color: #fff;
@@ -29,134 +31,89 @@
     header p { margin: 0; font-size: 1.2rem; opacity: 0.8; }
 
     /* Contenu principal */
-    main {
-      flex: 1;
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
+    main { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
     .section { margin-bottom: 2rem; }
     .section h2 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      text-align: center;
-      color: #222;
+      font-size: 2rem; margin-bottom: 1rem; text-align: center; color: #222;
     }
 
-    /* Cartes génériques (3DHOP) */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
+    /* Cartes 3DHOP */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap:1.5rem; }
     .card {
-      border-radius: 8px;
-      overflow: hidden;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius:8px; overflow:hidden;
+      background-size:cover; background-position:center;
+      box-shadow:0 2px 8px rgba(0,0,0,0.1);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
+    .card:hover { transform:translateY(-5px); box-shadow:0 4px 12px rgba(0,0,0,0.15); }
     .card a {
-      display: block;
-      padding: 2rem;
-      text-align: center;
-      font-weight: 500;
-      font-size: 1.2rem;
-      background: rgba(0,0,0,0.5);
-      color: #fff;
+      display:block; padding:2rem; text-align:center;
+      font-weight:500; font-size:1.2rem;
+      background:rgba(0,0,0,0.5); color:#fff;
     }
-    .hide-mobile { display: block; }
+    .hide-mobile { display:block; }
     @media (max-width:480px) {
-      .card a { padding:1rem; font-size:1rem; }
       .hide-mobile { display:none; }
-      .cards { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+      .cards { grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); }
+      .card a { padding:1rem; font-size:1rem; }
     }
 
     /* Cartes POTREE modernisées */
     .potree-card {
-      position: relative;
-      width: 100%;
-      height: 320px;
-      margin-bottom: 2rem;
-      border-radius: 12px;
-      overflow: hidden;
-      background-color: #000;
+      position:relative; width:100%; height:320px;
+      margin-bottom:2rem; border-radius:12px; overflow:hidden;
+      background-color:#000;
     }
-    .potree-card a {
-      display: block;
-      width:100%;
-      height:100%;
-      position: relative;
-      color: inherit;
-    }
+    .potree-card a { display:block; width:100%; height:100%; position:relative; color:inherit; }
     .potree-card .bg {
-      position: absolute;
-      inset:0;
-      background-size: cover;
-      background-position: center;
-      transition: transform 0.5s ease;
-      z-index:1;
+      position:absolute; inset:0;
+      background-size:cover; background-position:center;
+      transition: transform 0.5s ease; z-index:1;
     }
     .potree-card .overlay {
-      position: absolute;
-      inset:0;
-      display:flex;
-      align-items:flex-end;
-      padding:2rem;
-      background: rgba(0,0,0,0.2);
-      transition: background 0.5s ease;
-      z-index:2;
+      position:absolute; inset:0;
+      display:flex; align-items:flex-end;
+      padding:2rem; background:rgba(0,0,0,0.2);
+      transition: background 0.5s ease; z-index:2;
     }
     .potree-card .text {
       background:#fff; color:#000;
       padding:1.5rem; max-width:400px; border-radius:8px;
-      transform: translateX(-120%);
-      transition: transform 0.5s ease;
+      transform:translateX(-120%); transition: transform 0.5s ease;
     }
-    .potree-card:hover .bg { transform: scale(1.1); }
-    .potree-card:hover .overlay { background: rgba(0,0,0,0.4); }
-    .potree-card:hover .text { transform: translateX(0); }
+    .potree-card:hover .bg { transform:scale(1.1); }
+    .potree-card:hover .overlay { background:rgba(0,0,0,0.4); }
+    .potree-card:hover .text { transform:translateX(0); }
     @media (max-width:768px) {
       .potree-card { height:auto; }
       .potree-card .overlay { flex-direction:column; padding:1rem; }
-      .potree-card .text {
-        transform: translateY(100%);
-        max-width:100%;
-      }
-      .potree-card:hover .text { transform: translateY(0); }
+      .potree-card .text { transform:translateY(100%); max-width:100%; }
+      .potree-card:hover .text { transform:translateY(0); }
     }
-    /* Visibilité potree text mobile */
     @media (max-width:480px) {
-      .potree-card .text { transform: translateX(0) !important; }
-      .potree-card .overlay { background: rgba(0,0,0,0.4); }
+      .potree-card .text { transform:translateX(0) !important; }
+      .potree-card .overlay { background:rgba(0,0,0,0.4); }
     }
 
-    /* Bandeau bas */
+    /* Bandeau bas (initialement masqué) */
     .bottom-banner {
-      position: fixed;
-      bottom: 0; left: 0; width: 100%;
-      background-color: #111; color: #fff;
-      text-align: center; padding: 1rem;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
-      font-size: 1rem;
+      position: fixed; bottom:0; left:0; width:100%;
+      background-color:#111; color:#fff;
+      text-align:center; padding:1rem;
+      box-shadow:0 -2px 10px rgba(0,0,0,0.3);
+      font-size:1rem;
+      display:none;
     }
-    .bottom-banner a {
-      color: #4a90e2; text-decoration: underline;
-    }
+    .bottom-banner.show { display:block; }
+    .bottom-banner a { color:#4a90e2; text-decoration:underline; }
 
     /* Images de fond */
     .img-prs1 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS1.png'); }
     .img-prs2 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS2.png'); }
     .img-prs3 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS3.png'); }
     .img-prs4 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS4.png'); }
-    .img-idf  { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_IDF.png'); }
-    .img-tableau1  { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau1.png'); }
+    .img-idf { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_IDF.png'); }
+    .img-tableau1 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau1.png'); }
     .img-tab-haut { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_Haut.png'); }
     .img-tab-central { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_Central.png'); }
     .img-tab-bas { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_Bas.png'); }
@@ -180,28 +137,18 @@
       <div class="potree-card">
         <a href="#" id="tco-link">
           <div class="bg img-tco"></div>
-          <div class="overlay">
-            <div class="text">
-              <h3>Salle du Tableau de Contrôle Optique</h3>
-              <p>Centre névralgique du contrôle et de la régulation des circulations ferroviaires.</p>
-            </div>
-          </div>
+          <div class="overlay"><div class="text"><h3>Salle du Tableau de Contrôle Optique</h3><p>Centre névralgique du contrôle et de la régulation des circulations ferroviaires.</p></div></div>
         </a>
       </div>
       <div class="potree-card">
         <a href="/Potree_Sncf_Projet/Potree_html/Potree_SDR.html" id="sdr-link">
           <div class="bg img-sdr"></div>
-          <div class="overlay">
-            <div class="text">
-              <h3>Salle des Relais</h3>
-              <p>Explorez les armoires électriques responsables de la gestion du trafic.</p>
-            </div>
-          </div>
+          <div class="overlay"><div class="text"><h3>Salle des Relais</h3><p>Explorez les armoires électriques responsables de la gestion du trafic.</p></div></div>
         </a>
       </div>
     </section>
 
-    <!-- Section pour les contenus 3DHOP -->
+    <!-- Section 3DHOP intacte -->
     <section class="section">
       <h2>Modèles 3D - 3DHOP</h2>
       <div class="cards">
@@ -225,8 +172,10 @@
   </footer>
 
   <!-- Bandeau bas -->
-  <div class="bottom-banner">
-    <a href="/Potree_Sncf_Projet/Potree_html/Potree.html">Accéder à Potree</a>
+  <div class="bottom-banner" id="bottom-banner">
+    <span>&copy; Charles BALLAND - Projet de fin d'études - INSA Strasbourg.</span>
+    &nbsp;|&nbsp;
+    <a href="https://github.com/potree/potree" target="_blank">Potree sur GitHub</a>
   </div>
 
   <script>
@@ -247,14 +196,18 @@
           ? "/Potree_Sncf_Projet/Potree_html/Potree_SDR_Phone.html"
           : "/Potree_Sncf_Projet/Potree_html/Potree_SDR.html";
       });
-      // Header shrink on scroll
+      // Header shrink
       let lastScrollTop = 0;
       const header = document.querySelector("header");
+      const banner = document.getElementById("bottom-banner");
       window.addEventListener("scroll", () => {
         const st = window.pageYOffset || document.documentElement.scrollTop;
-        if (st > lastScrollTop && st > 100) header.classList.add("shrink");
-        else header.classList.remove("shrink");
+        // header
+        if (st > lastScrollTop && st > 100) header.classList.add("shrink"); else header.classList.remove("shrink");
         lastScrollTop = st <= 0 ? 0 : st;
+        // bottom banner
+        const atBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight;
+        banner.classList.toggle("show", atBottom);
       });
     });
   </script>

@@ -1400,25 +1400,34 @@
     const hotspotNameEl = document.getElementById("hotspotName");
     
     viewer.addEventListener("update", () => {
-      // Positions caméra + cible
-      const camPos    = viewer.scene.getActiveCamera().position;
-      const camTarget = viewer.scene.view.target;
+    // 1) On vérifie que tout existe
+      const cam = viewer.scene.getActiveCamera();
+      const view = viewer.scene.view;
+      if (
+        !cam ||
+        !cam.position ||
+        !view ||
+        !view.target ||
+        !lastHotspotView ||
+        !lastHotspotView.position ||
+        !lastHotspotView.target
+      ) {
+        return;
+      }
     
-      // Distance à la position & au target du dernier hotspot
+      // 2) On peut maintenant calculer la distance en toute sécurité
+      const camPos    = cam.position;
+      const camTarget = view.target;
       const dPos = camPos.distanceTo(lastHotspotView.position);
       const dTgt = camTarget.distanceTo(lastHotspotView.target);
     
-      // Seulement si on s'éloigne de plus de 0,5m (ajustez ce seuil si besoin)
       const threshold = 0.5;
       if (dPos > threshold || dTgt > threshold) {
-        // on n'a pas encore changé le texte ?
         if (!hotspotNameEl.dataset.origName) {
-          // mémorise l'ancien nom
           hotspotNameEl.dataset.origName = hotspotNameEl.textContent;
           hotspotNameEl.textContent       = "Cliquer pour recentrer";
         }
       } else {
-        // revenu dans le cône : on remet le nom d'origine
         if (hotspotNameEl.dataset.origName) {
           hotspotNameEl.textContent = hotspotNameEl.dataset.origName;
           delete hotspotNameEl.dataset.origName;

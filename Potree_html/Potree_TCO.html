@@ -1959,6 +1959,20 @@
                 document.getElementById("pointBudgetValue").textContent =
                   currentPointBudget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
               }
+              // === mise à jour du slider sans décimales ===
+              {
+                // on arrondit à l'entier le plus proche
+                const rounded = Math.round(currentPointBudget);
+              
+                // mise à jour de la position du slider
+                const slider = document.getElementById("pointBudgetSlider");
+                if (slider) {
+                  slider.value = rounded;
+                }
+              
+                // mise à jour du texte (partie entière seulement)
+                document.getElementById("pointBudgetValue").textContent = formatNumber(rounded);
+              }
       
               frameCount = 0;
               lastTime = now;

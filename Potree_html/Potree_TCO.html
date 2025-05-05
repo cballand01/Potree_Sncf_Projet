@@ -1489,7 +1489,7 @@
                 potreeContainer.addEventListener(evtType, blockMouseHandler, true);
             });
 
-            startFPSAdjust();
+             window.startFPSAdjust();
         } else {
             // === Passage en mode EXPLORATION LIBRE ===
             window.guidedMode = false;
@@ -1523,7 +1523,7 @@
                 potreeContainer.removeEventListener(evtType, blockMouseHandler, true);
             });
 
-            stopFPSAdjust();
+            window.stopFPSAdjust();
 
             // Mettre à jour le curseur de pointBudget
             const slider = document.getElementById("pointBudgetRange");
@@ -1963,6 +1963,8 @@
               fpsIntervalId = null;
           }
       }
+      window.startFPSAdjust = startFPSAdjust;
+      window.stopFPSAdjust  = stopFPSAdjust;
     });
   </script>
 

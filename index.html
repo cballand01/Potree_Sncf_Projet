@@ -4,24 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Accueil - Projet PAR Sud-Est</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    /* Appliquer box-sizing pour tous les éléments */
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-    }
-
-    /* Reset de base et configuration flex pour la page */
+    *, *::before, *::after { box-sizing: border-box; }
     html, body {
-      height: 100%;
       margin: 0;
       padding: 0;
-    }
-    body {
-      display: flex;
-      flex-direction: column;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Roboto', sans-serif;
       background: #fafafa;
       color: #333;
       line-height: 1.6;
@@ -31,185 +20,214 @@
       color: inherit;
     }
 
-    /* Header */
+    /* HEADER */
     header {
-      background: linear-gradient(135deg, #4a90e2, #145da0);
-      color: #fff;
-      padding: 2rem 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: #111;
+      color: white;
+      padding: 3rem 1rem;
       text-align: center;
+      transition: transform 0.3s ease;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
-    header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-    }
-    header p {
-      font-size: 1.2rem;
-    }
+    header.shrink { transform: translateY(-100%); }
+    header h1 { margin: 0; font-size: 2.5rem; }
+    header p { font-size: 1.2rem; opacity: 0.8; }
 
-    /* Contenu principal qui s'étend pour pousser le footer en bas */
     main {
-      flex: 1;
       max-width: 1200px;
-      width: 100%;
-      margin: 2rem auto;
+      margin: 3rem auto;
       padding: 0 1rem;
     }
+
     .section {
-      margin-bottom: 2rem;
+      margin-bottom: 3rem;
     }
+
     .section h2 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
       text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+      color: #222;
     }
+
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
     }
+
     .card {
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      position: relative;
+      border-radius: 12px;
       overflow: hidden;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      background-size: cover;
+      background-position: center;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      background-size: cover;       /* L'image de fond s'étend sur toute la carte */
-      background-position: center;  /* L'image est centrée */
-      background-repeat: no-repeat; /* Pas de répétition */
-      position: relative;           /* Pour positionner les overlays si nécessaire */
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 5);
     }
+
     .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
     }
+
     .card a {
       display: block;
       padding: 2rem;
       text-align: center;
-      color: #333;
       font-weight: 500;
       font-size: 1.2rem;
       background: rgba(0, 0, 0, 0.5);
       color: #fff;
     }
 
-    /* Disposition verticale pour Potree avec pleine largeur */
     .cards.vertical {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
-    }
-    .cards.vertical .card {
-      width: 100%;
+      gap: 2rem;
     }
 
-    /* Footer collant */
+    /* FULL WIDTH POTREE CARDS */
+    .potree-card {
+      position: relative;
+      width: 100%;
+      height: 320px;
+      border-radius: 12px;
+      overflow: hidden;
+      background-color: #000;
+    }
+    .potree-card a {
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      text-decoration: none;
+      color: inherit;
+    }
+    .potree-card .bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.5s ease;
+      z-index: 1;
+    }
+    .potree-card .overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      padding: 2rem;
+      background: rgba(0,0,0,0.2);
+      transition: background 0.5s ease;
+      z-index: 2;
+    }
+    .potree-card .text {
+      background: white;
+      color: black;
+      padding: 1.5rem;
+      max-width: 400px;
+      border-radius: 8px;
+      transform: translateX(-120%);
+      transition: transform 0.5s ease;
+    }
+    .potree-card:hover .bg {
+      transform: scale(1.1);
+    }
+    .potree-card:hover .overlay {
+      background: rgba(0, 0, 0, 0.4);
+    }
+    .potree-card:hover .text {
+      transform: translateX(0);
+    }
+
     footer {
-      background: #333;
-      color: #fff;
+      background: #111;
+      color: white;
       text-align: center;
       padding: 1rem;
+      font-size: 0.9rem;
     }
 
-    /* Media query pour les petits écrans */
+    .hide-mobile { display: block; }
     @media (max-width: 480px) {
-      .cards {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      .cards { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+      .card a { padding: 1rem; font-size: 1rem; }
+      .hide-mobile { display: none; }
+      .potree-card { height: auto; }
+      .potree-card .overlay { flex-direction: column; padding: 1rem; }
+      .potree-card .text {
+        transform: translateY(100%);
+        max-width: 100%;
       }
-      .card a {
-        padding: 1rem;
-        font-size: 1rem;
+      .potree-card:hover .text {
+        transform: translateY(0);
       }
     }
-
-    @media (max-width: 480px) {
-      .hide-mobile {
-        display: none;
-      }
-    }
-  
-    /* Définition des images de fond pour chaque bouton */
-    .img-prs1 { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS1.png'); }
-    .img-prs2 { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS2.png'); }
-    .img-prs3 { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS3.png'); }
-    .img-prs4 { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS4.png'); }
-    .img-idf  { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_IDF.png'); }
-    .img-tableau1  { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau1.png'); }
-    .img-tab-haut { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_Haut.png'); }
-    .img-tab-central { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_Central.png'); }
-    .img-tab-bas { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_Bas.png'); }
-    .img-tab-total { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_tableau_Complet.png'); }
-    .img-tco { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO.png'); }
-    .img-sdr { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/SDR.png'); }
-    .img-arm1-avant { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/SDR_Armoire1_Avant.png'); }
-    .img-arm2-arriere { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/SDR_Armoire2_Arriere.png'); }
   </style>
 </head>
 <body>
   <header>
-    <h1>Projet du PAR de la LGV Paris-Lyon </h1>
+    <h1>Projet du PAR de la LGV Paris-Lyon</h1>
     <p>Visualisez et explorez les modèles et nuages de points</p>
   </header>
+
   <main>
-    <!-- Section pour les contenus POTREE -->
     <section class="section">
       <h2>Nuages de points & Visite guidée - POTREE</h2>
-      <div class="cards vertical">
-        <div class="card img-tco">
-          <a href="#" id="tco-link">Salle du Tableau de Contrôle Optique</a>
-        </div>
-        <div class="card img-sdr">
-          <a href="/Potree_Sncf_Projet/Potree_html/Potree_SDR.html" id="sdr-link">Salle des Relais</a>
-        </div>
+
+      <div class="potree-card">
+        <a href="#" id="tco-link">
+          <div class="bg" style="background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO.png');"></div>
+          <div class="overlay">
+            <div class="text">
+              <h3>Salle du Tableau de Contrôle Optique</h3>
+              <p>Centre névralgique du contrôle et de la régulation des circulations ferroviaires.</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="potree-card">
+        <a href="/Potree_Sncf_Projet/Potree_html/Potree_SDR.html" id="sdr-link">
+          <div class="bg" style="background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/SDR.png');"></div>
+          <div class="overlay">
+            <div class="text">
+              <h3>Salle des Relais</h3>
+              <p>Explorez les armoires électriques responsables de la gestion du trafic.</p>
+            </div>
+          </div>
+        </a>
       </div>
     </section>
-    <!-- Section pour les contenus 3DHOP -->
+
     <section class="section">
       <h2>Modèles 3D - 3DHOP</h2>
       <div class="cards">
-        <div class="card img-prs1">
-          <a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_PRS1.html">P.R.S. n°1</a>
-        </div>
-        <div class="card img-prs2">
-          <a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_PRS2.html">P.R.S. n°2</a>
-        </div>
-        <div class="card img-prs3">
-          <a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_PRS3.html">P.R.S. n°3</a>
-        </div>
-        <div class="card img-prs4">
-          <a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_PRS4.html">P.R.S. n°4</a>
-        </div>
-        <div class="card img-idf">
-          <a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_IDF.html">Tableau Île-de-France</a>
-        </div>
-        <div class="card hide-mobile img-tab-haut">
-          <a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_Haut.html">T.C.O. haut</a>
-        </div>
-        <div class="card hide-mobile img-tab-central">
-          <a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_Central.html">T.C.O. central</a>
-        </div>
-        <div class="card hide-mobile img-tab-bas">
-          <a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_Bas.html">T.C.O. bas</a>
-        </div>
-        <div class="card hide-mobile img-tab-total">
-          <a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_Complet.html">T.C.O. complet</a>
-        </div>
-        <div class="card hide-mobile img-arm1-avant">
-          <a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_SDR_Armoire1_Avant.html">Armoire Relais n°1 (avant)</a>
-        </div>
-        <div class="card hide-mobile img-arm2-arriere">
-          <a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_SDR_Armoire2_Arriere.html">Armoire Relais n°2 (arrière)</a>
-        </div>
+        <div class="card img-prs1"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_PRS1.html">P.R.S. n°1</a></div>
+        <div class="card img-prs2"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_PRS2.html">P.R.S. n°2</a></div>
+        <div class="card img-prs3"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_PRS3.html">P.R.S. n°3</a></div>
+        <div class="card img-prs4"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_PRS4.html">P.R.S. n°4</a></div>
+        <div class="card img-idf"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_IDF.html">Tableau Île-de-France</a></div>
+        <div class="card hide-mobile img-tab-haut"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_Haut.html">T.C.O. haut</a></div>
+        <div class="card hide-mobile img-tab-central"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_Central.html">T.C.O. central</a></div>
+        <div class="card hide-mobile img-tab-bas"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_Bas.html">T.C.O. bas</a></div>
+        <div class="card hide-mobile img-tab-total"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_Complet.html">T.C.O. complet</a></div>
+        <div class="card hide-mobile img-arm1-avant"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_SDR_Armoire1_Avant.html">Armoire Relais n°1 (avant)</a></div>
+        <div class="card hide-mobile img-arm2-arriere"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_SDR_Armoire2_Arriere.html">Armoire Relais n°2 (arrière)</a></div>
       </div>
     </section>
   </main>
+
   <footer>
-    <p>&copy;  Charles BALLAND - Projet de fin d'études - INSA Strasbourg. Tous droits réservés.</p>
+    <p>&copy; Charles BALLAND - Projet de fin d'études - INSA Strasbourg. Tous droits réservés.</p>
   </footer>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // Pour TCO
       const tcoLink = document.getElementById("tco-link");
       tcoLink.addEventListener("click", (e) => {
         e.preventDefault();
@@ -217,8 +235,7 @@
         const targetUrl = isMobile ? "/Potree_Sncf_Projet/Potree_html/Potree_TCO_Phone.html" : "/Potree_Sncf_Projet/Potree_html/Potree_TCO.html";
         window.location.href = targetUrl;
       });
-  
-      // Pour SDR
+
       const sdrLink = document.getElementById("sdr-link");
       sdrLink.addEventListener("click", (e) => {
         e.preventDefault();
@@ -226,8 +243,19 @@
         const targetUrl = isMobile ? "/Potree_Sncf_Projet/Potree_html/Potree_SDR_Phone.html" : "/Potree_Sncf_Projet/Potree_html/Potree_SDR.html";
         window.location.href = targetUrl;
       });
+
+      let lastScrollTop = 0;
+      const header = document.querySelector("header");
+      window.addEventListener("scroll", () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if (scrollTop > lastScrollTop && scrollTop > 100) {
+          header.classList.add("shrink");
+        } else {
+          header.classList.remove("shrink");
+        }
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+      });
     });
   </script>
-  
 </body>
 </html>

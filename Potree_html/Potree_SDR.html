@@ -1398,36 +1398,39 @@
 
     // Récupère une référence à l'élément qui affiche le nom
     const hotspotNameEl = document.getElementById("hotspotName");
+
+    // 2) On « wrap » goToHotspot pour effacer dataset.origName à chaque appel
+    const _origGoToHotspot = goToHotspot;
+    goToHotspot = (index, playAudio = true) => {
+      // on efface l’ancien marqueur
+      delete hotspotNameEl.dataset.origName;
+      _origGoToHotspot(index, playAudio);
+    };
     
+    // 3) Listener sur chaque update de la caméra
     viewer.addEventListener("update", () => {
-    // 1) On vérifie que tout existe
-      const cam = viewer.scene.getActiveCamera();
+      const cam  = viewer.scene.getActiveCamera();
       const view = viewer.scene.view;
-      if (
-        !cam ||
-        !cam.position ||
-        !view ||
-        !view.target ||
-        !lastHotspotView ||
-        !lastHotspotView.position ||
-        !lastHotspotView.target
-      ) {
+      // gardes pour éviter un undefined.distanceTo(...)
+      if (!cam?.position || !view?.target || !lastHotspotView?.position || !lastHotspotView?.target) {
         return;
       }
     
-      // 2) On peut maintenant calculer la distance en toute sécurité
-      const camPos    = cam.position;
-      const camTarget = view.target;
-      const dPos = camPos.distanceTo(lastHotspotView.position);
-      const dTgt = camTarget.distanceTo(lastHotspotView.target);
+      // calcul des distances
+      const dPos = cam.position.distanceTo(lastHotspotView.position);
+      const dTgt = view.target.distanceTo(lastHotspotView.target);
     
-      const threshold = 0.5;
+      // seuil un peu plus généreux
+      const threshold = 1.0; // en mètres
+    
       if (dPos > threshold || dTgt > threshold) {
+        // si on n’a pas déjà basculé le texte
         if (!hotspotNameEl.dataset.origName) {
           hotspotNameEl.dataset.origName = hotspotNameEl.textContent;
           hotspotNameEl.textContent       = "Cliquer pour recentrer";
         }
       } else {
+        // une fois revenu « dans le cône » : on remet le texte d’origine
         if (hotspotNameEl.dataset.origName) {
           hotspotNameEl.textContent = hotspotNameEl.dataset.origName;
           delete hotspotNameEl.dataset.origName;

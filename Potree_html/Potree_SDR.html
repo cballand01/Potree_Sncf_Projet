@@ -1160,34 +1160,34 @@
 
           // Liste des annotations avec leurs critères de visibilité
           let annotations = [
-          { position: annotationImage1.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 110, annotation: annotationImage1 },
-          { position: annotationImage2.position, maxDistance: distanceThresholdImage, minGisement: -20, maxGisement: 150, annotation: annotationImage2 },
-          { position: annotationImage3.position, maxDistance: distanceThresholdImage, minGisement: -20, maxGisement: 130, annotation: annotationImage3 },
-          { position: annotationImage4.position, maxDistance: distanceThresholdImage, minGisement: 20, maxGisement: 150, annotation: annotationImage4 },
-          { position: annotationImage5.position, maxDistance: distanceThresholdImage, minGisement: -110, maxGisement: 50, annotation: annotationImage5 },
-          { position: annotationImage6.position, maxDistance: distanceThresholdImage, minGisement: -110, maxGisement: 50, annotation: annotationImage6 },
-          { position: annotationImage7.position, maxDistance: distanceThresholdImage, minGisement: 60, maxGisement: 230, annotation: annotationImage7 },
-          { position: annotationImage8.position, maxDistance: distanceThresholdImage, minGisement: 60, maxGisement: 230, annotation: annotationImage8 },
-          { position: annotationImage9.position, maxDistance: distanceThresholdImage, minGisement: -110, maxGisement: 10, annotation: annotationImage9 },
-          { position: annotationImage10.position, maxDistance: distanceThresholdImage, minGisement: -110, maxGisement: 10, annotation: annotationImage10 },
-          { position: annotationImage11.position, maxDistance: distanceThresholdImage, minGisement: -120, maxGisement: 50, annotation: annotationImage11 },
-          { position: annotationImage12.position, maxDistance: distanceThresholdImage, minGisement: -120, maxGisement: 50, annotation: annotationImage12 },
-          { position: annotationImage13.position, maxDistance: 1.5, minGisement: 60, maxGisement: 240, annotation: annotationImage13 },
-          { position: annotationImage14.position, maxDistance: 1.5, minGisement: 60, maxGisement: 240, annotation: annotationImage14 },
-          { position: annotationImage15.position, maxDistance: 3, minGisement: 60, maxGisement: 240, annotation: annotationImage15 },
-          { position: annotationImage16.position, maxDistance: 3, minGisement: 60, maxGisement: 240, annotation: annotationImage16 },
-          { position: annotationImage17.position, maxDistance: 3, minGisement: 60, maxGisement: 240, annotation: annotationImage17 },
-
-          { position: lienTCO.position, maxDistance: distanceGoto, minGisement: -20, maxGisement: 140, annotation: lienTCO },
-
-          { position: annotationcam1.position, maxDistance: distanceThresholdAnimation, minGisement: 0, maxGisement: 0, annotation: annotationcam1 },
-
-          { position: annotation3601.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3601 },
-          { position: annotation3602.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3602 },
-          { position: annotation3603.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3603 },
-          { position: annotation3604.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3604 },
-          { position: annotation3605.position, maxDistance: distanceThreshold360, gisementRanges: [{ min: 8, max: 100 },{ min: 200, max: 250 }], annotation: annotation3605 },
-          { position: annotation3606.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3606 }
+            { position: annotationImage1.position, maxDistance: distanceThresholdImage, gisementRanges: [{ min: 0, max: 110 }], annotation: annotationImage1 },
+            { position: annotationImage2.position, maxDistance: distanceThresholdImage, gisementRanges: [{ min: -20, max: 150 }], annotation: annotationImage2 },
+            { position: annotationImage3.position, maxDistance: distanceThresholdImage, gisementRanges: [{ min: -20, max: 130 }], annotation: annotationImage3 },
+            { position: annotationImage4.position, maxDistance: distanceThresholdImage, gisementRanges: [{ min: 20, max: 150 }], annotation: annotationImage4 },
+            { position: annotationImage5.position, maxDistance: distanceThresholdImage, gisementRanges: [{ min: -110, max: 50 }], annotation: annotationImage5 },
+            { position: annotationImage6.position, maxDistance: distanceThresholdImage, gisementRanges: [{ min: -110, max: 50 }], annotation: annotationImage6 },
+            { position: annotationImage7.position, maxDistance: distanceThresholdImage, gisementRanges: [{ min: 60, max: 230 }], annotation: annotationImage7 },
+            { position: annotationImage8.position, maxDistance: distanceThresholdImage, gisementRanges: [{ min: 60, max: 230 }], annotation: annotationImage8 },
+            { position: annotationImage9.position, maxDistance: distanceThresholdImage, gisementRanges: [{ min: -110, max: 10 }], annotation: annotationImage9 },
+            { position: annotationImage10.position, maxDistance: distanceThresholdImage, gisementRanges: [{ min: -110, max: 10 }], annotation: annotationImage10 },
+            { position: annotationImage11.position, maxDistance: distanceThresholdImage, gisementRanges: [{ min: -120, max: 50 }], annotation: annotationImage11 },
+            { position: annotationImage12.position, maxDistance: distanceThresholdImage, gisementRanges: [{ min: -120, max: 50 }], annotation: annotationImage12 },
+            { position: annotationImage13.position, maxDistance: 1.5, gisementRanges: [{ min: 60, max: 240 }], annotation: annotationImage13 },
+            { position: annotationImage14.position, maxDistance: 1.5, gisementRanges: [{ min: 60, max: 240 }], annotation: annotationImage14 },
+            { position: annotationImage15.position, maxDistance: 3, gisementRanges: [{ min: 60, max: 240 }], annotation: annotationImage15 },
+            { position: annotationImage16.position, maxDistance: 3, gisementRanges: [{ min: 60, max: 240 }], annotation: annotationImage16 },
+            { position: annotationImage17.position, maxDistance: 3, gisementRanges: [{ min: 60, max: 240 }], annotation: annotationImage17 },
+          
+            { position: lienTCO.position, maxDistance: distanceGoto, gisementRanges: [{ min: -20, max: 140 }], annotation: lienTCO },
+          
+            { position: annotationcam1.position, maxDistance: distanceThresholdAnimation, gisementRanges: [{ min: 0, max: 360 }], annotation: annotationcam1 },
+          
+            { position: annotation3601.position, maxDistance: distanceThreshold360, gisementRanges: [{ min: 0, max: 360 }], annotation: annotation3601 },
+            { position: annotation3602.position, maxDistance: distanceThreshold360, gisementRanges: [{ min: 0, max: 360 }], annotation: annotation3602 },
+            { position: annotation3603.position, maxDistance: distanceThreshold360, gisementRanges: [{ min: 0, max: 360 }], annotation: annotation3603 },
+            { position: annotation3604.position, maxDistance: distanceThreshold360, gisementRanges: [{ min: 0, max: 360 }], annotation: annotation3604 },
+            { position: annotation3605.position, maxDistance: distanceThreshold360, gisementRanges: [{ min: 8, max: 100 }, { min: 200, max: 250 }], annotation: annotation3605 },
+            { position: annotation3606.position, maxDistance: distanceThreshold360, gisementRanges: [{ min: 0, max: 360 }], annotation: annotation3606 }
           ];
 
           // Vérification de la visibilité de chaque annotation

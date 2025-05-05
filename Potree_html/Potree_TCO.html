@@ -332,6 +332,46 @@
     // Ajout d'une lumière ambiante dans la scène
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.1);
     viewer.scene.scene.add(ambientLight);
+
+    // ——— Réglage global pour l’ajustement dynamique du pointBudget ———
+    let fpsIntervalId = null;
+    let currentPointBudget = 1000000;
+    let lastTime = performance.now();
+    let frameCount = 0;    
+    // On compte les frames à chaque update
+    viewer.addEventListener("update", () => {
+      frameCount++;
+    });
+    function startFPSAdjust() {
+      if (fpsIntervalId !== null) return;  // déjà en cours
+      fpsIntervalId = setInterval(() => {
+        const now = performance.now();
+        const delta = (now - lastTime) / 1000;
+        const fps = frameCount / delta;
+    
+        // Ajuster currentPointBudget selon le FPS
+        if (fps < 20) {
+          currentPointBudget = Math.max(currentPointBudget * 0.7, 300000);
+          viewer.useHQ = false;
+        } else if (fps <= 40) {
+          currentPointBudget = currentPointBudget * 0.95 + 0.05 * 5000000;
+          viewer.useHQ = true;
+        } else {
+          currentPointBudget = Math.min(currentPointBudget * 1.1, 15000000);
+          viewer.useHQ = true;
+        }
+        viewer.setPointBudget(Math.round(currentPointBudget));
+        frameCount = 0;
+        lastTime = now;
+      }, 1000);
+    }
+    function stopFPSAdjust() {
+      if (fpsIntervalId !== null) {
+        clearInterval(fpsIntervalId);
+        fpsIntervalId = null;
+      }
+    }
+    // ————————————————————————————————————————————————————————
     
     // Chargement du nuage de points via Potree.loadPointCloud
     Potree.loadPointCloud("https://storage.googleapis.com/projet-potree-sncf/NuageTCO/Nuage_Sans_Sol_et_Tableaux/metadata.json", "Salle_TCO", function(e){
@@ -1919,50 +1959,6 @@
       viewer.addEventListener("update", function() {
         frameCount++;
       });
-      function startFPSAdjust() {
-          if (fpsIntervalId !== null) return; // Ne pas créer plusieurs intervalles en même temps
-      
-          console.log("▶️ Début ajustement dynamique du FPS");
-          fpsIntervalId = setInterval(function() {
-              let now = performance.now();
-              let delta = (now - lastTime) / 1000;
-              let fps = frameCount / delta;
-              console.log("FPS mesuré : " + fps.toFixed(2));
-      
-              if (fps < 20) {
-                  // FPS faible ➔ réduire rapidement
-                  currentPointBudget = Math.max(currentPointBudget * 0.7, 300000);
-                  console.log("⚡ FPS faible ➔ Réduction du pointBudget à " + Math.round(currentPointBudget));
-                  viewer.setPointBudget(currentPointBudget);
-                  viewer.useHQ = false;
-                  document.getElementById("toggleLissage").textContent = "Activer lissage";
-              } else if (fps >= 20 && fps <= 40) {
-                  // FPS moyen ➔ ajustement doux
-                  currentPointBudget = currentPointBudget * 0.95 + 0.05 * 5000000;
-                  console.log("🌟 FPS moyen ➔ Ajustement doux du pointBudget à " + Math.round(currentPointBudget));
-                  viewer.setPointBudget(currentPointBudget);
-                  viewer.useHQ = true;
-                  document.getElementById("toggleLissage").textContent = "Désactiver lissage";
-              } else if (fps > 40) {
-                  // FPS haut ➔ augmenter lentement
-                  currentPointBudget = Math.min(currentPointBudget * 1.1, 15000000); // Limite supérieure à 15 millions
-                  console.log("🚀 FPS haut ➔ Augmentation du pointBudget à " + Math.round(currentPointBudget));
-                  viewer.setPointBudget(currentPointBudget);
-                  viewer.useHQ = true;
-                  document.getElementById("toggleLissage").textContent = "Désactiver lissage";
-              }
-      
-              frameCount = 0;
-              lastTime = now;
-          }, 1000); // Toutes les 1 secondes
-      }
-      function stopFPSAdjust() {
-          if (fpsIntervalId !== null) {
-              console.log("Arrêt ajustement FPS + lissage");
-              clearInterval(fpsIntervalId);
-              fpsIntervalId = null;
-          }
-      }
     });
   </script>
 

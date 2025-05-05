@@ -1395,6 +1395,36 @@
     window.hotspots = hotspots;
     window.goToHotspot = goToHotspot;
     window.currentHotspotIndex = currentHotspotIndex;
+
+    // Récupère une référence à l'élément qui affiche le nom
+    const hotspotNameEl = document.getElementById("hotspotName");
+    
+    viewer.addEventListener("update", () => {
+      // Positions caméra + cible
+      const camPos    = viewer.scene.getActiveCamera().position;
+      const camTarget = viewer.scene.view.target;
+    
+      // Distance à la position & au target du dernier hotspot
+      const dPos = camPos.distanceTo(lastHotspotView.position);
+      const dTgt = camTarget.distanceTo(lastHotspotView.target);
+    
+      // Seulement si on s'éloigne de plus de 0,5m (ajustez ce seuil si besoin)
+      const threshold = 0.5;
+      if (dPos > threshold || dTgt > threshold) {
+        // on n'a pas encore changé le texte ?
+        if (!hotspotNameEl.dataset.origName) {
+          // mémorise l'ancien nom
+          hotspotNameEl.dataset.origName = hotspotNameEl.textContent;
+          hotspotNameEl.textContent       = "Cliquer pour recentrer";
+        }
+      } else {
+        // revenu dans le cône : on remet le nom d'origine
+        if (hotspotNameEl.dataset.origName) {
+          hotspotNameEl.textContent = hotspotNameEl.dataset.origName;
+          delete hotspotNameEl.dataset.origName;
+        }
+      }
+    });
   </script>
   
   <!-- Script pour gérer les interactions sur la page -->

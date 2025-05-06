@@ -990,6 +990,24 @@
 
 
       //---------------- Liens visualisation 3D ----------------//
+      // Annotation 3D 1
+      let icon3D1 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_Tableau.html --> 
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      icon3D1.find("img").click((event) => {
+        event.stopPropagation();
+        window.open("/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_1.html", "_blank");
+      });
+      let annotation3D1 = new Potree.Annotation({
+        position: new THREE.Vector3(7.35, 16.01, 1.54),
+        title: icon3D1,
+        description: "",
+      });
+      addAnnotationClickHandler(annotation3D1);
+      annotation3D1.visible = true;
+      viewer.scene.annotations.add(annotation3D1);
 
       //---------------- Liens autre salle ----------------//
       // Annotation Goto 1
@@ -1244,7 +1262,7 @@
     
         let objLoader2 = new OBJLoader(manager);
         objLoader2.setMaterials(materials);
-        objLoader2.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/SDR_3DModel_Armoire1_Avant/SDR_Armoire1_avant_model.obj', function ( object ) {
+        objLoader2.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/SDR_3DModel_Armoire1_Avant/Armoire1_avant_model.obj', function ( object ) {
           object.position.set(0, 0, 0);
           object.scale.set(1, 1, 1);
           object.rotation.set(0, 0, 0);

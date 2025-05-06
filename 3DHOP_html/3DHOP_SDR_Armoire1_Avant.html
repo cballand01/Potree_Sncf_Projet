@@ -129,25 +129,25 @@
             useLighting : false,
             // Transformation : rotation de 45° autour de l'axe X
             transform: {
-              matrix: SglMat4.rotationAngleAxis(sglDegToRad(4), [1, 1, 1])
+              matrix: SglMat4.rotationAngleAxis(sglDegToRad(240), [1, 1, 1])
             }
           }
         },
         trackball: { 
           type : TurntablePanTrackball,
           trackOptions: {
-            startPhi      : 0.0,
-            startTheta    : -30.0,
-            startDistance : 1.5,
+            startPhi      : 62.0,
+            startTheta    : 5.0,
+            startDistance : 2,
             startPanX     : 0.0,
             startPanY     : 0.1,
             startPanZ     : 0.0,
-            minMaxPhi     : [-20, 20],
-            minMaxTheta   : [-50.0, -10.0],
-            minMaxDist    : [0.2, 3.0],
-            minMaxPanX    : [-0.5, 0.5],
-            minMaxPanY    : [-0.6, 0.6],
-            minMaxPanZ    : [-0.3, 0.3]
+            minMaxPhi     : [62, 62],
+            minMaxTheta   : [5, 5],
+            minMaxDist    : [0.1, 3.0],
+            minMaxPanX    : [-1, 1],
+            minMaxPanY    : [-1, 1],
+            minMaxPanZ    : [-1, 1]
           }
         }
       });

@@ -1401,6 +1401,66 @@
     window.hotspots = hotspots;
     window.goToHotspot = goToHotspot;
     window.currentHotspotIndex = currentHotspotIndex;
+    // ------------------------------------------
+    // Ajustement dynamique du pointBudget en fonction du FPS
+    // ------------------------------------------
+    let fpsIntervalId = null;
+    let currentPointBudget = 1000000;
+    let lastTime = performance.now();
+    let frameCount = 0;
+    
+    // On incrémente frameCount à chaque update
+    viewer.addEventListener("update", () => {
+      frameCount++;
+    });
+    
+    window.startFPSAdjust = function() {
+      if (fpsIntervalId !== null) return;
+      console.log("▶️ Début ajustement dynamique du FPS");
+      frameCount = 0;
+      lastTime = performance.now();
+    
+      fpsIntervalId = setInterval(() => {
+        const now = performance.now();
+        const delta = (now - lastTime) / 1000;
+        const fps = frameCount / delta;
+        console.log(`FPS : ${fps.toFixed(1)}`);
+    
+        // Logique d’ajustement du budget
+        if (fps < 20) {
+          currentPointBudget = Math.max(currentPointBudget * 0.7, 300000);
+          viewer.useHQ = false;
+          document.getElementById("toggleLissage").textContent = "Activer lissage";
+        } else if (fps <= 40) {
+          currentPointBudget = currentPointBudget * 0.95 + 0.05 * 5000000;
+          viewer.useHQ = true;
+          document.getElementById("toggleLissage").textContent = "Désactiver lissage";
+        } else {
+          currentPointBudget = Math.min(currentPointBudget * 1.1, 10000000);
+          viewer.useHQ = true;
+          document.getElementById("toggleLissage").textContent = "Désactiver lissage";
+        }
+    
+        // Appliquer et afficher
+        viewer.setPointBudget(currentPointBudget);
+        const rounded = Math.round(currentPointBudget);
+        const slider = document.getElementById("pointBudgetSlider");
+        if (slider) slider.value = rounded;
+        document.getElementById("pointBudgetValue").textContent = formatNumber(rounded);
+    
+        // Reset pour la prochaine mesure
+        frameCount = 0;
+        lastTime = now;
+      }, 1000);
+    };
+    
+    window.stopFPSAdjust = function() {
+      if (fpsIntervalId !== null) {
+        console.log("🛑 Arrêt ajustement FPS");
+        clearInterval(fpsIntervalId);
+        fpsIntervalId = null;
+      }
+    };
   </script>
   
   <!-- Script pour gérer les interactions sur la page -->
@@ -1869,6 +1929,7 @@
       document.getElementById('splat_buttons').style.display = 'flex';
       document.getElementById('pointBudgetContainer').style.display = 'none';
       document.getElementById('toggleLissage').style.display = 'none';
+      window.startFPSAdjust();
       document.getElementById('toggleGuidedMode').textContent = "Sortir de la visite guidée";
       const container = document.getElementById('buttonAndCameraContainer');
       container.style.display = 'flex';    
@@ -1898,70 +1959,6 @@
       ["mousedown", "mousemove", "mouseup", "wheel", "click"].forEach(evtType => {
           potreeContainer.addEventListener(evtType, blockMouseHandler, true);
       });
-      
-      // Ajustement dynamique du pointBudget en fonction du FPS
-      // Variables pour calcul du FPS et régulation
-      let fpsIntervalId = null;
-      let currentPointBudget = 1000000;
-      let lastTime = performance.now();
-      let frameCount = 0;
-      
-      // Compte les frames à chaque update du viewer
-      viewer.addEventListener("update", () => {
-        frameCount++;
-      });
-      
-      // Démarre l’ajustement automatique du point budget
-      function startFPSAdjust() {
-        if (fpsIntervalId !== null) return;
-        console.log("▶️ Début ajustement dynamique du FPS");
-        fpsIntervalId = setInterval(() => {
-          const now   = performance.now();
-          const delta = (now - lastTime) / 1000;
-          const fps   = frameCount / delta;
-          console.log(`FPS mesuré : ${fps.toFixed(1)}`);
-      
-          // logique d’ajustement (copier-coller telle quelle)
-          if (fps < 20) {
-            currentPointBudget = Math.max(currentPointBudget * 0.7, 300000);
-            viewer.useHQ = false;
-            document.getElementById("toggleLissage").textContent = "Activer lissage";
-          } else if (fps <= 40) {
-            currentPointBudget = currentPointBudget * 0.95 + 0.05 * 5000000;
-            viewer.useHQ = true;
-            document.getElementById("toggleLissage").textContent = "Désactiver lissage";
-          } else {
-            currentPointBudget = Math.min(currentPointBudget * 1.1, 10000000);
-            viewer.useHQ = true;
-            document.getElementById("toggleLissage").textContent = "Désactiver lissage";
-          }
-      
-          viewer.setPointBudget(currentPointBudget);
-      
-          // Met à jour le slider et le texte
-          const rounded = Math.round(currentPointBudget);
-          const slider  = document.getElementById("pointBudgetSlider");
-          if (slider) slider.value = rounded;
-          document.getElementById("pointBudgetValue").textContent = formatNumber(rounded);
-      
-          // Réinit
-          frameCount = 0;
-          lastTime   = now;
-        }, 1000);
-      }
-      
-      // Arrête l’ajustement
-      function stopFPSAdjust() {
-        if (fpsIntervalId !== null) {
-          clearInterval(fpsIntervalId);
-          fpsIntervalId = null;
-          console.log("⏹ Arrêt ajustement FPS");
-        }
-      }
-      
-      // Expose pour les handlers de mode
-      window.startFPSAdjust = startFPSAdjust;
-      window.stopFPSAdjust  = stopFPSAdjust;
     });
   </script>
 

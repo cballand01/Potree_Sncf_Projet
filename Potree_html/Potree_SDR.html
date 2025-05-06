@@ -1139,7 +1139,7 @@
       //---------------- Seuils de distance d'affichage ----------------//
       const distanceThresholdText = 0; //textes
       const distanceThresholdImage = 2; //images
-      const distanceThreshold3D = 0; //liens3D
+      const distanceThreshold3D = 2; //liens3D
       const distanceGoto = 4; //liens html
       const distanceThresholdExp = 1; //textes rapprochés
       const distanceThresholdAnimation = 0; //video
@@ -1201,7 +1201,9 @@
             { position: annotationImage15.position, maxDistance: 3, gisementRanges: [{ min: 60, max: 240 }], annotation: annotationImage15 },
             { position: annotationImage16.position, maxDistance: 3, gisementRanges: [{ min: 60, max: 240 }], annotation: annotationImage16 },
             { position: annotationImage17.position, maxDistance: 3, gisementRanges: [{ min: 60, max: 240 }], annotation: annotationImage17 },
-          
+
+            { position: annotation3D1.position, maxDistance: distanceThreshold3D, gisementRanges: [{ min: 240, max: 60 }], annotation: annotation3D1 },
+            
             { position: lienTCO.position, maxDistance: distanceGoto, gisementRanges: [{ min: -20, max: 140 }], annotation: lienTCO },
           
             { position: annotationcam1.position, maxDistance: distanceThresholdAnimation, gisementRanges: [{ min: 0, max: 360 }], annotation: annotationcam1 },

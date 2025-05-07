@@ -107,6 +107,19 @@
     .bottom-banner.show { display:block; }
     .bottom-banner a { color:#4a90e2; text-decoration:underline; }
 
+    .dev-banner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #c00;
+      color: #fff;
+      text-align: center;
+      font-weight: bold;
+      padding: 0.5rem 0;
+      z-index: 3;
+    }
+
     /* Images de fond */
     .img-prs1 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS1.png'); }
     .img-prs2 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS2.png'); }
@@ -137,23 +150,40 @@
       <h2>Nuages de points & Visite guidée - POTREE</h2>
       <!-- Visite Extérieur -->
       <div class="potree-card">
+        <!-- Bandeau rouge -->
+        <div class="dev-banner">En développement</div>
         <a href="#" id="ext-link">
           <div class="bg img-ext"></div>
-          <div class="overlay"><div class="text"><h3>Extérieur du centre Henri Lang</h3><p>Découvrez l'extérieur du centre Henri Lang et l'environnement du PAR de la LGV Paris-Lyon.</p></div></div>
+          <div class="overlay">
+            <div class="text">
+              <h3>Extérieur du centre Henri Lang</h3>
+              <p>Découvrez l'extérieur du centre Henri Lang et l'environnement du PAR de la LGV Paris-Lyon.</p>
+            </div>
+          </div>
         </a>
       </div>
       <!-- Salle du Tableau de Contrôle Optique -->
       <div class="potree-card">
         <a href="#" id="tco-link">
           <div class="bg img-tco"></div>
-          <div class="overlay"><div class="text"><h3>Salle du Tableau de Contrôle Optique</h3><p>Centre névralgique du contrôle et de la régulation des circulations ferroviaires.</p></div></div>
+          <div class="overlay">
+            <div class="text">
+              <h3>Salle du Tableau de Contrôle Optique</h3>
+              <p>Centre névralgique du contrôle et de la régulation des circulations ferroviaires.</p>
+            </div>
+          </div>
         </a>
       </div>
       <!-- Salle des Relais -->
       <div class="potree-card">
         <a href="/Potree_Sncf_Projet/Potree_html/Potree_SDR.html" id="sdr-link">
           <div class="bg img-sdr"></div>
-          <div class="overlay"><div class="text"><h3>Salle des Relais</h3><p>Explorez les armoires électriques responsables de la gestion du trafic.</p></div></div>
+          <div class="overlay">
+            <div class="text">
+              <h3>Salle des Relais</h3>
+              <p>Explorez les armoires électriques responsables de la gestion du trafic.</p>
+            </div>
+          </div>
         </a>
       </div>
     </section>

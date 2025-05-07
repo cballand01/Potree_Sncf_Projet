@@ -789,11 +789,6 @@
       return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
     function blockMouseHandler(e) {
-        // Si on clique/glisse sur le canvas, on laisse passer (rotation)
-        if (e.target.tagName === "CANVAS") {
-            return;
-        }
-        // Sinon, on bloque tout sauf les annotations
         if (!e.target.closest(".annotation") && !e.target.closest(".potree_annotation")) {
             e.stopImmediatePropagation();
             e.preventDefault();
@@ -1174,7 +1169,7 @@
       const potreeContainer = document.querySelector(".potree_container");
       // Désactivation des interactions sur le conteneur Potree sauf sur les annotations
       ["mousedown", "mousemove", "mouseup", "wheel", "click"].forEach(evtType => {
-          potreeContainer.addEventListener(evtType, blockMouseHandler, true);
+            potreeContainer.addEventListener(evtType, blockMouseHandler, true);
       });
     });
   </script>

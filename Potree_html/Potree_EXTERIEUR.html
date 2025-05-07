@@ -1173,10 +1173,23 @@
       
       const potreeContainer = document.querySelector(".potree_container");
       // Désactivation des interactions sur le conteneur Potree sauf sur les annotations
-      ["mousedown", "mousemove", "mouseup", "wheel", "click"].forEach(evtType => {
-          potreeContainer.addEventListener(evtType, blockMouseHandler, true);
+      // 1) Désactive le zoom à la molette  
+      potreeContainer.addEventListener("wheel", e => {
+          e.stopImmediatePropagation();
+          e.preventDefault();
+      }, true);
+
+      // 2) Désactive le pan (clic-droit + menu contextuel)  
+      potreeContainer.addEventListener("mousedown", e => {
+      if (e.button === 2) {
+          e.stopImmediatePropagation();
+          e.preventDefault();
+      }
+      }, true);
+      potreeContainer.addEventListener("contextmenu", e => {
+      e.preventDefault();
+      }, true);
       });
-    });
   </script>
 
 

@@ -48,7 +48,6 @@
       <input type="range" id="pointBudgetSlider" min="100000" max="10000000" step="100000" value="2000000">
     </div>
     <button id="toggleLissage">Activer lissage</button>
-    <button id="toggleGuidedMode">Aller à la visite guidée</button>
   </div>
 
   <!-- Boutons de contrôle pour la caméra et les outils -->
@@ -202,9 +201,8 @@
   <div id="welcomePopup">
     <div id="welcomePopupContent">
       <h2>Bienvenue au Poste d'Aiguillage et de Régulation de la ligne Paris-Lyon !</h2>
-      <p>Choisissez votre mode d'utilisation :</p>
+      <p>Pour l'extérieur du centre, un seul mode d'utilisation est préconisé :</p>
       <button id="btnSimplified">Visite guidée</button>
-      <button id="btnExpert">Explorer librement</button>
     </div>
   </div>
   
@@ -691,14 +689,10 @@
     
     // Définition des hotspots pour la visite guidée
     const hotspots = [
-      { name: "VUE D'ENSEMBLE", position: new THREE.Vector3(8.34, 8.15, 4.92), target: new THREE.Vector3(3.31, 10.11, 1.31), audioId: null },
-      { name: "POSTE DE RELAIS À TRANSIT SOUPLE", position: new THREE.Vector3(8.19, 7.88, 2.12), target: new THREE.Vector3(1.14, 11.41, 1.73), audioId: null },
-      { name: "POSTE ÎLE-DE-FRANCE", position: new THREE.Vector3(6.65, 7.57, 2.12), target: new THREE.Vector3(6.64, 5.40, 1.65), audioId: null },
-      { name: "POSTE ÎLE-DE-FRANCE", position: new THREE.Vector3(7.3, 4, 2.2), target: new THREE.Vector3(6.5, 2, 1.5), audioId: null },
-      { name: "TABLEAU", position: new THREE.Vector3(8.31, 11.09, 2.18), target: new THREE.Vector3(9.24, 11.47, 1.90), audioId: "audioHotspot2"},
-      { name: "GESTION DU RÉSEAU ÉLECTRIQUE", position: new THREE.Vector3(7.29, 12.61, 2.00), target: new THREE.Vector3(4.28, 12.43, 1.10),audioId: null},
-      { name: "TABLEAU DE CONTRÔLE OPTIQUE", position: new THREE.Vector3(2.97, 11.25, 2.08), target: new THREE.Vector3(0.40, 9.48, 2.19),audioId: null},
-      { name: "TABLEAU DE CONTRÔLE OPTIQUE", position: new THREE.Vector3(3.87, 5.82, 2.81), target: new THREE.Vector3(1.03, 5.81, 2.23),audioId: null}
+      { name: "VUE N°1", position: new THREE.Vector3(56.46, 49.69, 7), target: new THREE.Vector3(77.83, 53.82, 9.75), audioId: null },
+      { name: "VUE N°2", position: new THREE.Vector3(61.78, 53.98, 7), target: new THREE.Vector3(77.83, 53.82, 9.75), audioId: null },
+      { name: "VUE N°3", position: new THREE.Vector3(71.72, 62.52, 7), target: new THREE.Vector3(77.83, 53.82, 9.75), audioId: null },
+      { name: "VUE N°4", position: new THREE.Vector3(81.77, 70.99, 7), target: new THREE.Vector3(77.83, 53.82, 9.75), audioId: null },
     ];
 
     // Fonction de navigation vers un hotspot donné

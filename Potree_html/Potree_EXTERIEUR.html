@@ -368,20 +368,7 @@
     viewer.setPointBudget(2000000);
     viewer.setFOV(70);
     viewer.loadSettingsFromURL();
-    viewer.setDescription("Extérieur du centre HEnri LANG");
-
-    // → PASSE EN MODE FIRST PERSON POUR NE GARDER QUE LA ROTATION
-    viewer.setNavigationMode(Potree.FirstPersonControls);
-
-    // RÉCUPÈRE LES CONTROLES ET DÉSACTIVE LES DÉPLACEMENTS LINÉAIRES
-    const fp = viewer.getControls();
-    fp.movementSpeed = 0;     // désactive avancer/reculer/strafe
-    fp.velocity = 0;          // sécurité
-    fp.autoForward = false;   // désactive tout mouvement automatique
-    fp.heightSpeed = false;   // désactive l’effet “monter en fonction de la hauteur”
-
-    // AJUSTE LA SENSIBILITÉ DE LA ROTATION (optionnel)
-    fp.lookSpeed = 0.1;       // plus le chiffre est bas, plus la rotation est douce
+    viewer.setDescription("Extérieur du centre Henri LANG");
     
     // Activation des effets EDL pour améliorer le rendu du nuage de points
     viewer.setEDLEnabled(false);

@@ -1134,14 +1134,6 @@
   
   <!-- Gestion du choix du mode d'utilisation : Expert ou Visite guidée -->
   <script>
-    document.getElementById('btnExpert').addEventListener('click', function() {
-        document.getElementById('welcomePopup').style.display = 'none';
-        
-        // Masquer la barre de visite guidée et la barre audio
-        document.querySelector('.hotspot-controls-bar').style.display = 'none';
-        document.getElementById('audioBar').style.display = 'none';
-    });
-    
     document.getElementById('btnSimplified').addEventListener('click', function() {
       document.getElementById('splat_buttons').style.display = 'flex';
       document.getElementById('pointBudgetContainer').style.display = 'none';

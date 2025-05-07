@@ -789,12 +789,37 @@
       return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
     function blockMouseHandler(e) {
-        // Si on clique/glisse sur le canvas, on laisse passer (rotation)
-        if (e.target.tagName === "CANVAS") {
-            return;
-        }
-        // Sinon, on bloque tout sauf les annotations
+    // 1) On continue d'autoriser les annotations (inchangé)
         if (!e.target.closest(".annotation") && !e.target.closest(".potree_annotation")) {
+            // 2) Sur le canvas, autoriser uniquement la rotation (drag gauche)
+            if (e.target.tagName === "CANVAS") {
+                if (
+                    (e.type === "mousedown" && e.button === 0) ||
+                    e.type === "mousemove" ||
+                    e.type === "mouseup"
+                ) {
+                    return;
+                }
+            }
+
+            // 3) Bloquer le zoom (molette)
+            if (e.type === "wheel") {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                return;
+            }
+            // 4) Bloquer le pan (clic-droit)
+            if (e.type === "mousedown" && e.button === 2) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                return;
+            }
+            // 5) Bloquer le menu contextuel
+            if (e.type === "contextmenu") {
+                e.preventDefault();
+                return;
+            }
+            // 6) Tout le reste est bloqué
             e.stopImmediatePropagation();
             e.preventDefault();
         }
@@ -1173,23 +1198,10 @@
       
       const potreeContainer = document.querySelector(".potree_container");
       // Désactivation des interactions sur le conteneur Potree sauf sur les annotations
-      // 1) Désactive le zoom à la molette  
-      potreeContainer.addEventListener("wheel", e => {
-          e.stopImmediatePropagation();
-          e.preventDefault();
-      }, true);
-
-      // 2) Désactive le pan (clic-droit + menu contextuel)  
-      potreeContainer.addEventListener("mousedown", e => {
-      if (e.button === 2) {
-          e.stopImmediatePropagation();
-          e.preventDefault();
-      }
-      }, true);
-      potreeContainer.addEventListener("contextmenu", e => {
-      e.preventDefault();
-      }, true);
+      ["mousedown", "mousemove", "mouseup", "wheel", "contextmenu"].forEach(evtType => {
+         potreeContainer.addEventListener(evtType, blockMouseHandler, true);
       });
+    });
   </script>
 
 

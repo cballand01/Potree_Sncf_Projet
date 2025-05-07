@@ -369,7 +369,6 @@
     viewer.setFOV(70);
     viewer.loadSettingsFromURL();
     viewer.setDescription("Extérieur du centre Henri LANG");
-    viewer.setNavigationMode(Potree.NavigationMode.FIRST_PERSON)
     
     
     // Activation des effets EDL pour améliorer le rendu du nuage de points
@@ -392,6 +391,7 @@
     
       // Positionnement initial de la vue
       viewer.scene.view.setView(initialPosition, initialTarget);
+      viewer.setNavigationMode(Potree.NavigationMode.FIRST_PERSON)
 
       const hotspotNameEl = document.getElementById("hotspotName");
 

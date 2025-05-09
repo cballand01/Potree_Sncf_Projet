@@ -490,30 +490,32 @@
       });
 
       //---------------- Annotations textuelles ----------------//
-      // Annotation texte 1 Zoom
+      // Annotation texte 1 Zoom (Henri LANG)
+      let iconInfo1 = $(`<span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>`);
+      let annotationTexte1 = new Potree.Annotation({
+          position: new THREE.Vector3(87.73, 66.87, 9.67),
+          title: iconInfo1, // Ici on met l'élément HTML au lieu du texte
+          description: `
+            <div style="display: flex; align-items: flex-start; gap: 15px;">
+              <img src="https://storage.googleapis.com/projet-potree-sncf/Images/Archives/Portrait_Henri_LANG.jpg" alt="Henri Lang" style="width: 40%; border-radius: 5px;" />
+              <div style="flex: 1;">
+                <h3 style="margin-top: 0;">Henri Lang (1895–1944)</h3>
+                <p style="font-size: 0.8em; color: #aaa; margin: 0 0 10px 0;"><em>Source : Mémorial de la Shoah</em></p>
+                <p>Ingénieur et dirigeant de la SNCF, Henri Lang fut arrêté et déporté en 1944 à Auschwitz, où il trouva la mort. Le centre qui porte son nom perpétue sa mémoire et son engagement.</p>
+              </div>
+            </div>
+          `
+          cameraPosition: new THREE.Vector3(89.15, 74.35, 7.49),
+          cameraTarget: new THREE.Vector3(87.73, 66.87, 9.67)
+      });
+      addTextAnnotationClickHandler(annotationTexte1);
+      annotationTexte1.visible = true;
+      viewer.scene.annotations.add(annotationTexte1);
       
       //---------------- Annotations textuelles explications ----------------//
       // Annotation texte explication 1
-      let iconExp1 = $(`<span>
-        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
-      </span>`);
-      let annotationExp1 = new Potree.Annotation({
-        position: new THREE.Vector3(87.73, 66.87, 9.67),
-        title: iconExp1,
-        description: `
-          <div style="display: flex; align-items: flex-start; gap: 15px;">
-            <img src="https://storage.googleapis.com/projet-potree-sncf/Images/Archives/Portrait_Henri_LANG.jpg" alt="Henri Lang" style="width: 40%; border-radius: 5px;" />
-            <div style="flex: 1;">
-              <h3 style="margin-top: 0;">Henri Lang (1895–1944)</h3>
-              <p style="font-size: 0.8em; color: #aaa; margin: 0 0 10px 0;"><em>Source : Mémorial de la Shoah</em></p>
-              <p>Ingénieur et dirigeant de la SNCF, Henri Lang fut arrêté et déporté en 1944 à Auschwitz, où il trouva la mort. Le centre qui porte son nom perpétue sa mémoire et son engagement.</p>
-            </div>
-          </div>
-        `
-      });
-      addTextAnnotationClickHandler(annotationExp1);
-      annotationExp1.visible = true;
-      viewer.scene.annotations.add(annotationExp1);
 
       //---------------- Annotations imagées ----------------//
       // Annotation Image 1 (Porte d'entrée)
@@ -553,7 +555,7 @@
       // Annotation 360° 1
 
       //---------------- Seuils de distance d'affichage ----------------//
-      const distanceThresholdText = 4; //textes
+      const distanceThresholdText = 10; //textes
       const distanceThresholdImage = 10; //images
       const distanceThreshold3D = 4; //liens3D
       const distanceGoto = 7; //liens html
@@ -604,7 +606,7 @@
 
           let annotations = [
           // Annotations textuelles
-          //{ position: annotationTexte1.position, maxDistance: distanceThresholdText, minGisement: 150, maxGisement: 300, annotation: annotationTexte1 },
+          { position: annotationTexte1.position, maxDistance: distanceThresholdText, minGisement: 0, maxGisement: 360, annotation: annotationTexte1 },
 
           // Annotations explicatives
           //{ position: annotationExp1.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp1 },

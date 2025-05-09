@@ -496,7 +496,30 @@
       // Annotation texte explication 1
 
       //---------------- Annotations imagées ----------------//
-      // Annotation Image 1 (PRS3)
+      // Annotation Image 1 (Porte d'entrée)
+      let iconImage1 = $(`
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      iconImage1.find("img").click((event) => {
+        event.stopPropagation();
+        viewer.scene.view.setView(annotationImage1.cameraPosition, annotationImage1.cameraTarget, 1000);
+        setTimeout(() => {
+          const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Archives/2023_02_04_PARIS_FACE_CACHEE_PAR_Sud-Est_(c)FBC%20(3).JPG";
+          const imageDescription = "Porte d'entrée du centre";
+          $("#popupImage").attr("src", imageUrl);
+          $("#popupText").text(imageDescription);
+          $("#imagePopup").css("display", "flex");
+        }, 2000);
+      });
+      let annotationImage1 = new Potree.Annotation({
+        position: new THREE.Vector3(97.42, 74.29, 8.24),
+        title: iconImage1,
+      });
+      addAnnotationClickHandler(annotationImage1);
+      annotationImage1.visible = true;
+      viewer.scene.annotations.add(annotationImage1);
       
       //---------------- Liens visualisation 3D ----------------//
       // Annotation 3D 1
@@ -509,7 +532,7 @@
 
       //---------------- Seuils de distance d'affichage ----------------//
       const distanceThresholdText = 4; //textes
-      const distanceThresholdImage = 4; //images
+      const distanceThresholdImage = 10; //images
       const distanceThreshold3D = 4; //liens3D
       const distanceGoto = 7; //liens html
       const distanceThresholdExp = 1; //textes rapprochés
@@ -565,10 +588,10 @@
           //{ position: annotationExp1.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp1 },
 
           // Annotations images
-          //{ position: annotationImage1.position, maxDistance: distanceThresholdImage, minGisement: 130, maxGisement: 320, annotation: annotationImage1 },  // PRS 3
+          { position: annotationImage1.position, maxDistance: distanceThresholdImage, minGisement: 0, maxGisement: 360, annotation: annotationImage1 },  // Porte d'entrée
 
           // Annotations 3D
-          //{ position: annotation3D1.position, maxDistance: distanceThreshold3D, minGisement: 40, maxGisement: 200, annotation: annotation3D1 },  //Tableau 1
+          //{ position: annotation3D1.position, maxDistance: distanceThreshold3D, minGisement: 40, maxGisement: 200, annotation: annotation3D1 },
 
           // Lien vers autre salle
           //{ position: lienSDR.position, maxDistance: distanceGoto, minGisement: 130, maxGisement: 165, annotation: lienSDR },

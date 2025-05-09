@@ -501,10 +501,14 @@
         position: new THREE.Vector3(87.73, 66.87, 9.67),
         title: iconExp1,
         description: `
-          <h3>Henri Lang (1895–1944)</h3>
-          <img src="https://storage.googleapis.com/projet-potree-sncf/Images/Archives/Portrait_Henri_LANG.jpg" alt="Henri Lang" style="width: 50%; border-radius: 5px; margin: 10px 0;" />
-          <p style="font-size: 0.8em; color: #aaa; margin: 0 0 10px 0;"><em>Source : Mémorial de la Shoah</em></p>
-          <p>Ingénieur et dirigeant de la SNCF, Henri Lang fut arrêté et déporté en 1944 à Auschwitz, où il trouva la mort. Le centre qui porte son nom perpétue sa mémoire et son engagement.</p>
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <img src="https://storage.googleapis.com/projet-potree-sncf/Images/Archives/Portrait_Henri_LANG.jpg" alt="Henri Lang" style="width: 40%; border-radius: 5px;" />
+            <div style="flex: 1;">
+              <h3 style="margin-top: 0;">Henri Lang (1895–1944)</h3>
+              <p style="font-size: 0.8em; color: #aaa; margin: 0 0 10px 0;"><em>Source : Mémorial de la Shoah</em></p>
+              <p>Ingénieur et dirigeant de la SNCF, Henri Lang fut arrêté et déporté en 1944 à Auschwitz, où il trouva la mort. Le centre qui porte son nom perpétue sa mémoire et son engagement.</p>
+            </div>
+          </div>
         `
       });
       addTextAnnotationClickHandler(annotationExp1);

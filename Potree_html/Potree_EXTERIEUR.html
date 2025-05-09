@@ -498,21 +498,15 @@
         <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
       </span>`);
       let annotationExp1 = new Potree.Annotation({
-          position: new THREE.Vector3(87.73, 66.87, 9.67),
-          title: iconExp1, // Ici on met l'élément HTML au lieu du texte
-          description: `
-            <div style="display: flex; align-items: flex-start; gap: 15px;">
-              <img src="https://storage.googleapis.com/projet-potree-sncf/Images/Archives/Portrait_Henri_LANG.jpg" alt="Henri Lang" style="width: 30%; border-radius: 5px;" />
-              <p style="font-size: 0.8em; color: #aaa; margin: 0 0 10px 0;"><em>Source : Mémorial de la Shoah</em></p>
-              <div style="flex: 1;">
-                <h3 style="margin-top: 0;">Henri Lang (1895–1944)</h3>
-                <p>Henri Lang est né en 1895 à Rambervillers, dans les Vosges. Ingénieur des Ponts et Chaussées, il a occupé des postes de haut niveau au sein de la SNCF, où il a participé activement à l’organisation et au développement du réseau ferroviaire national.</p>
-                <p>En 1944, il est arrêté par les autorités allemandes en raison de ses origines juives. Il est déporté à Auschwitz, où il est assassiné peu après son arrivée.</p>
-                <p>Le centre qui porte son nom rend hommage à un homme de responsabilité, engagé dans le service public, et victime de la persécution antisémite sous l’Occupation.</p>
-              </div>
-            </div>
-          `
-        });
+        position: new THREE.Vector3(87.73, 66.87, 9.67),
+        title: iconExp1,
+        description: `
+          <h3>Henri Lang (1895–1944)</h3>
+          <img src="https://storage.googleapis.com/projet-potree-sncf/Images/Archives/Portrait_Henri_LANG.jpg" alt="Henri Lang" style="width: 50%; border-radius: 5px; margin: 10px 0;" />
+          <p style="font-size: 0.8em; color: #aaa; margin: 0 0 10px 0;"><em>Source : Mémorial de la Shoah</em></p>
+          <p>Ingénieur et dirigeant de la SNCF, Henri Lang fut arrêté et déporté en 1944 à Auschwitz, où il trouva la mort. Le centre qui porte son nom perpétue sa mémoire et son engagement.</p>
+        `
+      });
       addTextAnnotationClickHandler(annotationExp1);
       annotationExp1.visible = true;
       viewer.scene.annotations.add(annotationExp1);

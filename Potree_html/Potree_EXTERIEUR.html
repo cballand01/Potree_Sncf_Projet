@@ -549,7 +549,26 @@
       // Annotation 3D 1
 
       //---------------- Liens autre salle ----------------//
-      // Annotation Goto 1
+      let icongoto1 = $(`<!-- Icône pour annotation qui ouvre SDR.html --> 
+      <span style="display: flex; align-items: center;">
+        <!-- Titre textuel à gauche -->
+        <span style="margin-right: 10px; font-size: 16px; color: white;">Entrez dans le centre</span>
+        <!-- Logo à côté du titre -->
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/goto.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+      `);
+      icongoto1.find("img").click((event) => {
+        event.stopPropagation();
+        window.open("/Potree_Sncf_Projet/Potree_html/Potree_EXTERIEUR.html", "_blank");
+      });
+      let lien1 = new Potree.Annotation({
+        position: new THREE.Vector3(97.29, 74.16, 7.50),
+        title: icongoto1,
+        description: "",
+      });
+      addAnnotationClickHandler(lien1);
+      lien1.visible = true;
+      viewer.scene.annotations.add(lien1);
     
       //---------------- Liens 360° ----------------//
       // Annotation 360° 1
@@ -558,7 +577,7 @@
       const distanceThresholdText = 10; //textes
       const distanceThresholdImage = 10; //images
       const distanceThreshold3D = 4; //liens3D
-      const distanceGoto = 7; //liens html
+      const distanceGoto = 10; //liens html
       const distanceThresholdExp = 1; //textes rapprochés
       const distanceThresholdAnimation = 4; //video
       const distanceThreshold360 = 5; //360
@@ -618,7 +637,7 @@
           //{ position: annotation3D1.position, maxDistance: distanceThreshold3D, minGisement: 40, maxGisement: 200, annotation: annotation3D1 },
 
           // Lien vers autre salle
-          //{ position: lienSDR.position, maxDistance: distanceGoto, minGisement: 130, maxGisement: 165, annotation: lienSDR },
+          { position: lien1.position, maxDistance: distanceGoto, minGisement: 0, maxGisement: 360, annotation: lien1 },
 
           // Animations
           //{ position: annotationcam1.position, maxDistance: 7, minGisement: 290, maxGisement: 40, annotation: annotationcam1 },

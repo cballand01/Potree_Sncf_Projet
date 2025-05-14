@@ -1951,7 +1951,7 @@
   <script>
     const popupImage = document.getElementById('popupImage');
     let scale = 1, panX = 0, panY = 0;
-    const zoomFactor = 1.1, maxScale = 5, minScale = 1; // minScale passe à 1 (taille originale)
+    const zoomFactor = 1.1, maxScale = 5, minScale = 1;
   
     function updateTransform() {
       constrainPan();
@@ -1968,6 +1968,10 @@
   
       panX = Math.min(maxOffsetX, Math.max(-maxOffsetX, panX));
       panY = Math.min(maxOffsetY, Math.max(-maxOffsetY, panY));
+  
+      // Si l'image ne déborde pas, recentre-la automatiquement
+      if (imageWidth <= container.width) panX = 0;
+      if (imageHeight <= container.height) panY = 0;
     }
   
     // Gestion du zoom à la molette
@@ -1981,7 +1985,7 @@
         scale = Math.max(scale / zoomFactor, minScale);
       }
   
-      // Ajustement du pan pour garder le centre au même endroit
+      // Ajuster le pan pour garder le point sous la souris centré
       const rect = popupImage.getBoundingClientRect();
       const dx = e.clientX - rect.left - rect.width / 2;
       const dy = e.clientY - rect.top - rect.height / 2;
@@ -1994,8 +1998,17 @@
   
     let isPanning = false, startX = 0, startY = 0;
   
-    // Gestion du pan en cliquant et glissant sur l'image
+    // Activer le pan **uniquement si l'image dépasse la fenêtre**
     popupImage.addEventListener('mousedown', (e) => {
+      const container = document.getElementById('popupContent').getBoundingClientRect();
+      const imageWidth = popupImage.naturalWidth * scale;
+      const imageHeight = popupImage.naturalHeight * scale;
+  
+      const canPanX = imageWidth > container.width;
+      const canPanY = imageHeight > container.height;
+  
+      if (!canPanX && !canPanY) return;
+  
       isPanning = true;
       startX = e.clientX - panX;
       startY = e.clientY - panY;
@@ -2010,13 +2023,16 @@
     });
   
     document.addEventListener('mouseup', () => {
-      isPanning = false;
-      popupImage.style.cursor = 'grab';
+      if (isPanning) {
+        isPanning = false;
+        popupImage.style.cursor = 'grab';
+      }
     });
   
     // Prévenir le comportement de glisser-déposer par défaut
     popupImage.addEventListener('dragstart', (e) => { e.preventDefault(); });
   </script>
+
   
   <!-- Gestion du choix du mode d'utilisation : Expert ou Visite guidée -->
   <script>

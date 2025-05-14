@@ -1950,6 +1950,7 @@
   <!-- Script pour gérer le zoom et le pan sur l'image de la popup -->
   <script>
     const popupImage = document.getElementById('popupImage');
+    const container = document.getElementById('popupImageContainer');
   
     let scale = 1;
     let panX = 0;
@@ -1957,36 +1958,56 @@
   
     const zoomFactor = 1.1;
     const maxScale = 5;
-    const minScale = 1; // 🚨 taille originale = zoom minimum
+    const minScale = 1;
+  
+    function clampPan() {
+      const containerRect = container.getBoundingClientRect();
+      const imgNaturalWidth = popupImage.naturalWidth;
+      const imgNaturalHeight = popupImage.naturalHeight;
+  
+      const displayWidth = imgNaturalWidth * scale;
+      const displayHeight = imgNaturalHeight * scale;
+  
+      const maxPanX = Math.max(0, (displayWidth - containerRect.width) / 2);
+      const maxPanY = Math.max(0, (displayHeight - containerRect.height) / 2);
+  
+      // Empêche l’image de sortir de la fenêtre
+      panX = Math.max(-maxPanX, Math.min(maxPanX, panX));
+      panY = Math.max(-maxPanY, Math.min(maxPanY, panY));
+  
+      // ➕ interpolation douce vers (0, 0) quand proche du dézoom complet
+      if (scale <= 1.05) {
+        const t = (scale - minScale) / 0.05; // 0 à 1
+        panX *= t;
+        panY *= t;
+      }
+    }
   
     function updateTransform() {
+      clampPan();
       popupImage.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
     }
   
-    // Zoom à la molette
     popupImage.addEventListener('wheel', function (e) {
       e.preventDefault();
   
       const previousScale = scale;
+      const rect = popupImage.getBoundingClientRect();
+      const centerX = e.clientX - rect.left;
+      const centerY = e.clientY - rect.top;
   
-      if (e.deltaY < 0) {
-        // Zoom in
-        scale = Math.min(scale * zoomFactor, maxScale);
-      } else {
-        // Zoom out
-        scale = Math.max(scale / zoomFactor, minScale);
-      }
+      const zoom = e.deltaY < 0 ? zoomFactor : 1 / zoomFactor;
+      scale = Math.max(minScale, Math.min(maxScale, scale * zoom));
   
-      // ✅ Si retour au zoom "original", on reset la position
-      if (scale === minScale && previousScale !== minScale) {
-        panX = 0;
-        panY = 0;
-      }
+      // Ajuster pan en fonction du curseur (zoom centré)
+      const dx = centerX - popupImage.clientWidth / 2;
+      const dy = centerY - popupImage.clientHeight / 2;
+      panX -= dx * (zoom - 1);
+      panY -= dy * (zoom - 1);
   
       updateTransform();
     });
   
-    // Pan (drag)
     let isPanning = false;
     let startX = 0;
     let startY = 0;
@@ -2010,10 +2031,9 @@
       popupImage.style.cursor = 'grab';
     });
   
-    popupImage.addEventListener('dragstart', (e) => {
-      e.preventDefault(); // éviter glisser-déposer natif
-    });
+    popupImage.addEventListener('dragstart', (e) => e.preventDefault());
   </script>
+
 
 
   <!-- Gestion du choix du mode d'utilisation : Expert ou Visite guidée -->

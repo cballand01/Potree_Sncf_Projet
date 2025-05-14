@@ -1951,21 +1951,49 @@
   <script>
     const popupImage = document.getElementById('popupImage');
     let scale = 1, panX = 0, panY = 0;
-    const zoomFactor = 1.1, maxScale = 5, minScale = 0.5;
-    function updateTransform(){
+    const zoomFactor = 1.1, maxScale = 5, minScale = 1; // minScale passe à 1 (taille originale)
+  
+    function updateTransform() {
+      constrainPan();
       popupImage.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
     }
+  
+    function constrainPan() {
+      const container = document.getElementById('popupContent').getBoundingClientRect();
+      const imageWidth = popupImage.naturalWidth * scale;
+      const imageHeight = popupImage.naturalHeight * scale;
+  
+      const maxOffsetX = Math.max(0, (imageWidth - container.width) / 2);
+      const maxOffsetY = Math.max(0, (imageHeight - container.height) / 2);
+  
+      panX = Math.min(maxOffsetX, Math.max(-maxOffsetX, panX));
+      panY = Math.min(maxOffsetY, Math.max(-maxOffsetY, panY));
+    }
+  
     // Gestion du zoom à la molette
     popupImage.addEventListener('wheel', function(e) {
       e.preventDefault();
+      const previousScale = scale;
+  
       if (e.deltaY < 0) {
         scale = Math.min(scale * zoomFactor, maxScale);
       } else {
         scale = Math.max(scale / zoomFactor, minScale);
       }
+  
+      // Ajustement du pan pour garder le centre au même endroit
+      const rect = popupImage.getBoundingClientRect();
+      const dx = e.clientX - rect.left - rect.width / 2;
+      const dy = e.clientY - rect.top - rect.height / 2;
+  
+      panX += dx * (1 - scale / previousScale);
+      panY += dy * (1 - scale / previousScale);
+  
       updateTransform();
     });
+  
     let isPanning = false, startX = 0, startY = 0;
+  
     // Gestion du pan en cliquant et glissant sur l'image
     popupImage.addEventListener('mousedown', (e) => {
       isPanning = true;
@@ -1973,16 +2001,19 @@
       startY = e.clientY - panY;
       popupImage.style.cursor = 'grabbing';
     });
+  
     document.addEventListener('mousemove', (e) => {
       if (!isPanning) return;
       panX = e.clientX - startX;
       panY = e.clientY - startY;
       updateTransform();
     });
+  
     document.addEventListener('mouseup', () => {
       isPanning = false;
       popupImage.style.cursor = 'grab';
     });
+  
     // Prévenir le comportement de glisser-déposer par défaut
     popupImage.addEventListener('dragstart', (e) => { e.preventDefault(); });
   </script>

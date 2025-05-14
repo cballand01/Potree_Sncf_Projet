@@ -1950,75 +1950,92 @@
   <!-- Script pour gérer le zoom et le pan sur l'image de la popup -->
   <script>
     const popupImage = document.getElementById('popupImage');
-    let scale = 1, panX = 0, panY = 0;
-    const zoomFactor = 1.1, maxScale = 5, minScale = 1;
+  
+    // 1. Création dynamique du wrapper autour de l'image
+    const wrapper = document.createElement('div');
+    const parent = popupImage.parentNode;
+    wrapper.style.width = '100%';
+    wrapper.style.height = '80vh';
+    wrapper.style.overflow = 'hidden';
+    wrapper.style.position = 'relative';
+  
+    popupImage.style.position = 'absolute';
+    popupImage.style.top = '0';
+    popupImage.style.left = '0';
+    popupImage.style.transformOrigin = 'top left';
+    popupImage.style.cursor = 'grab';
+    popupImage.style.willChange = 'transform';
+  
+    parent.replaceChild(wrapper, popupImage);
+    wrapper.appendChild(popupImage);
+  
+    // 2. Logique de zoom/pan
+    let scale = 1;
+    let panX = 0;
+    let panY = 0;
+    const zoomFactor = 1.1;
+    const maxScale = 5;
+    const minScale = 1;
   
     function updateTransform() {
-      constrainPan();
-      popupImage.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+      const imgWidth = popupImage.naturalWidth * scale;
+      const imgHeight = popupImage.naturalHeight * scale;
+      const wrapperRect = wrapper.getBoundingClientRect();
+  
+      const maxPanX = Math.max(0, imgWidth - wrapperRect.width);
+      const maxPanY = Math.max(0, imgHeight - wrapperRect.height);
+  
+      panX = Math.max(0, Math.min(panX, maxPanX));
+      panY = Math.max(0, Math.min(panY, maxPanY));
+  
+      popupImage.style.transform = `scale(${scale}) translate(${-panX / scale}px, ${-panY / scale}px)`;
     }
   
-    function constrainPan() {
-      const container = document.getElementById('popupContent').getBoundingClientRect();
-      const imageWidth = popupImage.naturalWidth * scale;
-      const imageHeight = popupImage.naturalHeight * scale;
-  
-      const maxOffsetX = Math.max(0, (imageWidth - container.width) / 2);
-      const maxOffsetY = Math.max(0, (imageHeight - container.height) / 2);
-  
-      panX = Math.min(maxOffsetX, Math.max(-maxOffsetX, panX));
-      panY = Math.min(maxOffsetY, Math.max(-maxOffsetY, panY));
-  
-      // Si l'image ne déborde pas, recentre-la automatiquement
-      if (imageWidth <= container.width) panX = 0;
-      if (imageHeight <= container.height) panY = 0;
-    }
-  
-    // Gestion du zoom à la molette
-    popupImage.addEventListener('wheel', function(e) {
+    // Zoom à la molette centré sur souris
+    wrapper.addEventListener('wheel', (e) => {
       e.preventDefault();
-      const previousScale = scale;
+      const rect = wrapper.getBoundingClientRect();
+      const offsetX = e.clientX - rect.left;
+      const offsetY = e.clientY - rect.top;
   
+      const prevScale = scale;
       if (e.deltaY < 0) {
         scale = Math.min(scale * zoomFactor, maxScale);
       } else {
         scale = Math.max(scale / zoomFactor, minScale);
       }
   
-      // Ajuster le pan pour garder le point sous la souris centré
-      const rect = popupImage.getBoundingClientRect();
-      const dx = e.clientX - rect.left - rect.width / 2;
-      const dy = e.clientY - rect.top - rect.height / 2;
-  
-      panX += dx * (1 - scale / previousScale);
-      panY += dy * (1 - scale / previousScale);
+      // Ajustement du pan
+      panX = (offsetX + panX) * (scale / prevScale) - offsetX;
+      panY = (offsetY + panY) * (scale / prevScale) - offsetY;
   
       updateTransform();
     });
   
-    let isPanning = false, startX = 0, startY = 0;
+    // Pan en cliquant-glissant
+    let isPanning = false;
+    let startX = 0;
+    let startY = 0;
   
-    // Activer le pan **uniquement si l'image dépasse la fenêtre**
-    popupImage.addEventListener('mousedown', (e) => {
-      const container = document.getElementById('popupContent').getBoundingClientRect();
-      const imageWidth = popupImage.naturalWidth * scale;
-      const imageHeight = popupImage.naturalHeight * scale;
-  
-      const canPanX = imageWidth > container.width;
-      const canPanY = imageHeight > container.height;
-  
-      if (!canPanX && !canPanY) return;
-  
+    wrapper.addEventListener('mousedown', (e) => {
       isPanning = true;
-      startX = e.clientX - panX;
-      startY = e.clientY - panY;
+      startX = e.clientX;
+      startY = e.clientY;
       popupImage.style.cursor = 'grabbing';
     });
   
     document.addEventListener('mousemove', (e) => {
       if (!isPanning) return;
-      panX = e.clientX - startX;
-      panY = e.clientY - startY;
+  
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+  
+      panX -= dx;
+      panY -= dy;
+  
+      startX = e.clientX;
+      startY = e.clientY;
+  
       updateTransform();
     });
   
@@ -2029,9 +2046,9 @@
       }
     });
   
-    // Prévenir le comportement de glisser-déposer par défaut
-    popupImage.addEventListener('dragstart', (e) => { e.preventDefault(); });
+    popupImage.addEventListener('dragstart', (e) => e.preventDefault());
   </script>
+
 
   
   <!-- Gestion du choix du mode d'utilisation : Expert ou Visite guidée -->

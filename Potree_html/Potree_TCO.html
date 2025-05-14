@@ -1950,12 +1950,9 @@
   <!-- Script pour gérer le zoom et le pan sur l'image de la popup -->
   <script>
     const popupImage = document.getElementById('popupImage');
-    const container = document.getElementById('popupImageContainer');
-  
     let scale = 1;
     let panX = 0;
     let panY = 0;
-  
     const zoomFactor = 1.1;
     const maxScale = 5;
     const minScale = 1;
@@ -1964,40 +1961,43 @@
       popupImage.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
     }
   
-    popupImage.addEventListener('wheel', function (e) {
+    popupImage.addEventListener('wheel', function(e) {
       e.preventDefault();
   
       const rect = popupImage.getBoundingClientRect();
-      const centerX = e.clientX - rect.left;
-      const centerY = e.clientY - rect.top;
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
   
-      const oldScale = scale;
+      const imageCX = rect.width / 2;
+      const imageCY = rect.height / 2;
+  
+      const offsetX = mouseX - imageCX;
+      const offsetY = mouseY - imageCY;
+  
       const zoomingIn = e.deltaY < 0;
-      const zoom = zoomingIn ? zoomFactor : 1 / zoomFactor;
+      const oldScale = scale;
+      const newScale = Math.max(minScale, Math.min(maxScale, scale * (zoomingIn ? zoomFactor : 1 / zoomFactor)));
   
-      // Appliquer zoom avec limites
-      scale = Math.max(minScale, Math.min(maxScale, scale * zoom));
+      // Si zooming IN, comportement normal centré sur curseur
+      if (zoomingIn || newScale > 1.05) {
+        const zoomRatio = newScale / oldScale;
+        panX -= offsetX * (zoomRatio - 1);
+        panY -= offsetY * (zoomRatio - 1);
+      }
   
-      // Ajuster pan pour centrer le zoom sur la souris
-      const dx = centerX - popupImage.clientWidth / 2;
-      const dy = centerY - popupImage.clientHeight / 2;
-      panX -= dx * (zoom - 1);
-      panY -= dy * (zoom - 1);
-  
-      // 👉 Si on est en train de dézoomer (et qu'on revient proche de l'échelle 1)
-      if (!zoomingIn && scale <= 1.05) {
-        const t = (scale - minScale) / 0.05; // t = 1 à 0
+      // Si on est proche du scale original (dézoom à fond), recentrage progressif
+      if (!zoomingIn && newScale <= 1.05) {
+        const t = (newScale - 1) / 0.05; // entre 1 et 0
         panX *= t;
         panY *= t;
       }
   
+      scale = newScale;
       updateTransform();
     });
   
-    let isPanning = false;
-    let startX = 0;
-    let startY = 0;
-  
+    // PAN
+    let isPanning = false, startX = 0, startY = 0;
     popupImage.addEventListener('mousedown', (e) => {
       isPanning = true;
       startX = e.clientX - panX;
@@ -2018,6 +2018,14 @@
     });
   
     popupImage.addEventListener('dragstart', (e) => e.preventDefault());
+  
+    // Reset image when closing popup (you may already have this)
+    document.querySelector('.closePopup').addEventListener('click', () => {
+      scale = 1;
+      panX = 0;
+      panY = 0;
+      updateTransform();
+    });
   </script>
 
 

@@ -1951,103 +1951,112 @@
   <script>
     const popupImage = document.getElementById('popupImage');
   
-    // 1. Création dynamique du wrapper autour de l'image
-    const wrapper = document.createElement('div');
-    const parent = popupImage.parentNode;
-    wrapper.style.width = '100%';
-    wrapper.style.height = '80vh';
-    wrapper.style.overflow = 'hidden';
-    wrapper.style.position = 'relative';
+    // Crée dynamiquement le conteneur viewport si pas encore là
+    let viewport = document.getElementById('popupViewport');
+    if (!viewport) {
+      viewport = document.createElement('div');
+      viewport.id = 'popupViewport';
+      viewport.style.width = '100%';
+      viewport.style.height = '80vh';
+      viewport.style.overflow = 'hidden';
+      viewport.style.position = 'relative';
   
-    popupImage.style.position = 'absolute';
-    popupImage.style.top = '0';
-    popupImage.style.left = '0';
-    popupImage.style.transformOrigin = 'top left';
-    popupImage.style.cursor = 'grab';
-    popupImage.style.willChange = 'transform';
+      popupImage.style.position = 'absolute';
+      popupImage.style.top = '0';
+      popupImage.style.left = '0';
   
-    parent.replaceChild(wrapper, popupImage);
-    wrapper.appendChild(popupImage);
+      popupImage.parentNode.replaceChild(viewport, popupImage);
+      viewport.appendChild(popupImage);
+    }
   
-    // 2. Logique de zoom/pan
+    // Logique de déplacement du viewport (caméra)
     let scale = 1;
-    let panX = 0;
-    let panY = 0;
+    let offsetX = 0;
+    let offsetY = 0;
     const zoomFactor = 1.1;
     const maxScale = 5;
     const minScale = 1;
   
     function updateTransform() {
-      const imgWidth = popupImage.naturalWidth * scale;
-      const imgHeight = popupImage.naturalHeight * scale;
-      const wrapperRect = wrapper.getBoundingClientRect();
+      popupImage.style.transform = `scale(${scale})`;
+      popupImage.style.transformOrigin = 'top left';
   
-      const maxPanX = Math.max(0, imgWidth - wrapperRect.width);
-      const maxPanY = Math.max(0, imgHeight - wrapperRect.height);
-  
-      panX = Math.max(0, Math.min(panX, maxPanX));
-      panY = Math.max(0, Math.min(panY, maxPanY));
-  
-      popupImage.style.transform = `scale(${scale}) translate(${-panX / scale}px, ${-panY / scale}px)`;
+      // Mise à jour du déplacement de la caméra
+      popupImage.style.left = -offsetX + 'px';
+      popupImage.style.top = -offsetY + 'px';
     }
   
-    // Zoom à la molette centré sur souris
-    wrapper.addEventListener('wheel', (e) => {
+    // Zoom avec recentrage
+    viewport.addEventListener('wheel', (e) => {
       e.preventDefault();
-      const rect = wrapper.getBoundingClientRect();
-      const offsetX = e.clientX - rect.left;
-      const offsetY = e.clientY - rect.top;
+      const rect = viewport.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
   
       const prevScale = scale;
+  
       if (e.deltaY < 0) {
         scale = Math.min(scale * zoomFactor, maxScale);
       } else {
         scale = Math.max(scale / zoomFactor, minScale);
       }
   
-      // Ajustement du pan
-      panX = (offsetX + panX) * (scale / prevScale) - offsetX;
-      panY = (offsetY + panY) * (scale / prevScale) - offsetY;
+      const ratio = scale / prevScale;
   
+      offsetX = (offsetX + mouseX) * ratio - mouseX;
+      offsetY = (offsetY + mouseY) * ratio - mouseY;
+  
+      limitPan();
       updateTransform();
     });
   
-    // Pan en cliquant-glissant
-    let isPanning = false;
+    function limitPan() {
+      const rect = viewport.getBoundingClientRect();
+      const maxX = popupImage.naturalWidth * scale - rect.width;
+      const maxY = popupImage.naturalHeight * scale - rect.height;
+  
+      offsetX = Math.max(0, Math.min(offsetX, maxX));
+      offsetY = Math.max(0, Math.min(offsetY, maxY));
+    }
+  
+    // Pan en maintenant le clic
+    let isDragging = false;
     let startX = 0;
     let startY = 0;
   
-    wrapper.addEventListener('mousedown', (e) => {
-      isPanning = true;
+    viewport.addEventListener('mousedown', (e) => {
+      isDragging = true;
       startX = e.clientX;
       startY = e.clientY;
       popupImage.style.cursor = 'grabbing';
     });
   
     document.addEventListener('mousemove', (e) => {
-      if (!isPanning) return;
-  
+      if (!isDragging) return;
       const dx = e.clientX - startX;
       const dy = e.clientY - startY;
   
-      panX -= dx;
-      panY -= dy;
+      offsetX -= dx;
+      offsetY -= dy;
   
       startX = e.clientX;
       startY = e.clientY;
   
+      limitPan();
       updateTransform();
     });
   
     document.addEventListener('mouseup', () => {
-      if (isPanning) {
-        isPanning = false;
-        popupImage.style.cursor = 'grab';
-      }
+      isDragging = false;
+      popupImage.style.cursor = 'grab';
     });
   
     popupImage.addEventListener('dragstart', (e) => e.preventDefault());
+  
+    // Initialisation
+    updateTransform();
   </script>
+
 
 
   

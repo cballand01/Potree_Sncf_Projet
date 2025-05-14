@@ -1946,6 +1946,21 @@
       }
     });
   </script>
+
+  <script>
+    // S'assure que le script est exécuté uniquement après qu'une image est bien chargée dans la popup
+    const observer = new MutationObserver(() => {
+      const img = document.getElementById('popupImage');
+      if (img && img.complete && img.naturalWidth > 0) {
+        img.onload?.(); // Force l’appel au onload si déjà chargé
+      }
+    });
+  
+    observer.observe(document.getElementById('popupImageContainer'), {
+      childList: true,
+      subtree: true,
+    });
+  </script>
   
   <!-- Script pour gérer le zoom et le pan sur l'image de la popup -->
   <script>

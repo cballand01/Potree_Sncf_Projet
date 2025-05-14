@@ -1950,26 +1950,33 @@
   <!-- Script pour gérer le zoom et le pan sur l'image de la popup -->
   <script>
     const popupImage = document.getElementById('popupImage');
+    const popupContent = document.getElementById('popupContent');
   
-    // Crée dynamiquement le conteneur viewport si pas encore là
-    let viewport = document.getElementById('popupViewport');
-    if (!viewport) {
-      viewport = document.createElement('div');
-      viewport.id = 'popupViewport';
-      viewport.style.width = '100%';
-      viewport.style.height = '80vh';
-      viewport.style.overflow = 'hidden';
-      viewport.style.position = 'relative';
+    // Crée un conteneur "viewport" si pas déjà présent
+    let viewport = document.createElement('div');
+    viewport.style.overflow = 'hidden';
+    viewport.style.position = 'relative';
   
-      popupImage.style.position = 'absolute';
-      popupImage.style.top = '0';
-      popupImage.style.left = '0';
+    // Prépare l'image
+    popupImage.style.position = 'absolute';
+    popupImage.style.top = '0';
+    popupImage.style.left = '0';
+    popupImage.style.transformOrigin = 'top left';
+    popupImage.style.cursor = 'grab';
+    popupImage.style.willChange = 'transform';
   
-      popupImage.parentNode.replaceChild(viewport, popupImage);
-      viewport.appendChild(popupImage);
-    }
+    // Remplace l'image dans popupContent par viewport > image
+    popupContent.innerHTML = ''; // Vider le contenu
+    popupContent.appendChild(viewport);
+    viewport.appendChild(popupImage);
   
-    // Logique de déplacement du viewport (caméra)
+    // Adapter la popupContent à l’image réelle (taille naturelle)
+    popupImage.onload = () => {
+      popupContent.style.width = popupImage.naturalWidth + 'px';
+      popupContent.style.height = popupImage.naturalHeight + 'px';
+      updateTransform();
+    };
+  
     let scale = 1;
     let offsetX = 0;
     let offsetY = 0;
@@ -1979,14 +1986,19 @@
   
     function updateTransform() {
       popupImage.style.transform = `scale(${scale})`;
-      popupImage.style.transformOrigin = 'top left';
-  
-      // Mise à jour du déplacement de la caméra
       popupImage.style.left = -offsetX + 'px';
       popupImage.style.top = -offsetY + 'px';
     }
   
-    // Zoom avec recentrage
+    function limitPan() {
+      const maxX = popupImage.naturalWidth * scale - popupContent.clientWidth;
+      const maxY = popupImage.naturalHeight * scale - popupContent.clientHeight;
+  
+      offsetX = Math.max(0, Math.min(offsetX, maxX));
+      offsetY = Math.max(0, Math.min(offsetY, maxY));
+    }
+  
+    // Zoom
     viewport.addEventListener('wheel', (e) => {
       e.preventDefault();
       const rect = viewport.getBoundingClientRect();
@@ -1994,7 +2006,6 @@
       const mouseY = e.clientY - rect.top;
   
       const prevScale = scale;
-  
       if (e.deltaY < 0) {
         scale = Math.min(scale * zoomFactor, maxScale);
       } else {
@@ -2002,7 +2013,6 @@
       }
   
       const ratio = scale / prevScale;
-  
       offsetX = (offsetX + mouseX) * ratio - mouseX;
       offsetY = (offsetY + mouseY) * ratio - mouseY;
   
@@ -2010,16 +2020,7 @@
       updateTransform();
     });
   
-    function limitPan() {
-      const rect = viewport.getBoundingClientRect();
-      const maxX = popupImage.naturalWidth * scale - rect.width;
-      const maxY = popupImage.naturalHeight * scale - rect.height;
-  
-      offsetX = Math.max(0, Math.min(offsetX, maxX));
-      offsetY = Math.max(0, Math.min(offsetY, maxY));
-    }
-  
-    // Pan en maintenant le clic
+    // Pan
     let isDragging = false;
     let startX = 0;
     let startY = 0;
@@ -2033,6 +2034,7 @@
   
     document.addEventListener('mousemove', (e) => {
       if (!isDragging) return;
+  
       const dx = e.clientX - startX;
       const dy = e.clientY - startY;
   
@@ -2052,10 +2054,8 @@
     });
   
     popupImage.addEventListener('dragstart', (e) => e.preventDefault());
-  
-    // Initialisation
-    updateTransform();
   </script>
+
 
 
 

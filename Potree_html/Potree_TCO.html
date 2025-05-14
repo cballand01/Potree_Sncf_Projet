@@ -1951,13 +1951,16 @@
   <script>
     const popupImage = document.getElementById('popupImage');
     const popupContent = document.getElementById('popupContent');
+    const popupImageContainer = document.getElementById('popupImageContainer');
   
-    // Crée un conteneur "viewport" si pas déjà présent
-    let viewport = document.createElement('div');
+    // Crée un conteneur "viewport" (camera)
+    const viewport = document.createElement('div');
     viewport.style.overflow = 'hidden';
     viewport.style.position = 'relative';
+    viewport.style.width = '100%';
+    viewport.style.height = '100%';
   
-    // Prépare l'image
+    // Prépare l'image à être manipulée
     popupImage.style.position = 'absolute';
     popupImage.style.top = '0';
     popupImage.style.left = '0';
@@ -1965,18 +1968,12 @@
     popupImage.style.cursor = 'grab';
     popupImage.style.willChange = 'transform';
   
-    // Remplace l'image dans popupContent par viewport > image
-    popupContent.innerHTML = ''; // Vider le contenu
-    popupContent.appendChild(viewport);
+    // Remplace le contenu image uniquement
+    popupImageContainer.innerHTML = '';
+    popupImageContainer.appendChild(viewport);
     viewport.appendChild(popupImage);
   
-    // Adapter la popupContent à l’image réelle (taille naturelle)
-    popupImage.onload = () => {
-      popupContent.style.width = popupImage.naturalWidth + 'px';
-      popupContent.style.height = popupImage.naturalHeight + 'px';
-      updateTransform();
-    };
-  
+    // Variables de zoom/pan
     let scale = 1;
     let offsetX = 0;
     let offsetY = 0;
@@ -1984,21 +1981,22 @@
     const maxScale = 5;
     const minScale = 1;
   
+    // Met à jour le rendu
     function updateTransform() {
       popupImage.style.transform = `scale(${scale})`;
       popupImage.style.left = -offsetX + 'px';
       popupImage.style.top = -offsetY + 'px';
     }
   
+    // Limite les déplacements dans les bords de l'image
     function limitPan() {
       const maxX = popupImage.naturalWidth * scale - popupContent.clientWidth;
       const maxY = popupImage.naturalHeight * scale - popupContent.clientHeight;
-  
       offsetX = Math.max(0, Math.min(offsetX, maxX));
       offsetY = Math.max(0, Math.min(offsetY, maxY));
     }
   
-    // Zoom
+    // Zoom à la molette
     viewport.addEventListener('wheel', (e) => {
       e.preventDefault();
       const rect = viewport.getBoundingClientRect();
@@ -2020,7 +2018,7 @@
       updateTransform();
     });
   
-    // Pan
+    // Pan à la souris
     let isDragging = false;
     let startX = 0;
     let startY = 0;
@@ -2034,13 +2032,10 @@
   
     document.addEventListener('mousemove', (e) => {
       if (!isDragging) return;
-  
       const dx = e.clientX - startX;
       const dy = e.clientY - startY;
-  
       offsetX -= dx;
       offsetY -= dy;
-  
       startX = e.clientX;
       startY = e.clientY;
   
@@ -2054,7 +2049,20 @@
     });
   
     popupImage.addEventListener('dragstart', (e) => e.preventDefault());
+  
+    // Quand l'image est chargée, on ajuste la taille de la popup
+    popupImage.onload = () => {
+      popupContent.style.width = popupImage.naturalWidth + 'px';
+      popupContent.style.height = popupImage.naturalHeight + 'px';
+  
+      // Réinitialise tout
+      scale = 1;
+      offsetX = 0;
+      offsetY = 0;
+      updateTransform();
+    };
   </script>
+
 
 
 

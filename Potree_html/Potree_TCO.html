@@ -1036,7 +1036,7 @@
         open360Viewer("https://storage.googleapis.com/projet-potree-sncf/Images/Images_360/DJI_20250306140048_0775_D_ETN.JPG");
       });
       let annotation3604 = new Potree.Annotation({
-        position: new THREE.Vector3(7.00, 8.00, 2.50),
+        position: new THREE.Vector3(7.00, 8.00, 3.50),
         title: icon3604
       });
       annotation3604.visible = true;
@@ -1134,7 +1134,8 @@
           // Panoramiques 360
           { position: annotation3601.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3601 },
           { position: annotation3602.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3602 },
-          { position: annotation3603.position, maxDistance: 7, minGisement: 130, maxGisement: 165, annotation: annotation3603 }
+          { position: annotation3603.position, maxDistance: 7, minGisement: 130, maxGisement: 165, annotation: annotation3603 },
+          { position: annotation3604.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3604 }
           ];
 
           // Vérification de la visibilité de chaque annotation

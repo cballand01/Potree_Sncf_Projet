@@ -1024,6 +1024,23 @@
       });
       annotation3603.visible = true;
       viewer.scene.annotations.add(annotation3603);
+
+      // Annotation 360° 4 (hauteur)
+      let icon3604 = $(`
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/360.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      icon3604.find("img").click((event) => {
+        event.stopPropagation();
+        open360Viewer("https://storage.googleapis.com/projet-potree-sncf/Images/Images_360/DJI_20250306140048_0775_D_ETN.JPG");
+      });
+      let annotation3604 = new Potree.Annotation({
+        position: new THREE.Vector3(7.00, 8.00, 2.50),
+        title: icon3604
+      });
+      annotation3604.visible = true;
+      viewer.scene.annotations.add(annotation3604);
     
 
 

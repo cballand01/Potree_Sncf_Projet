@@ -785,7 +785,7 @@
       `);
       iconImage8.find("img").click((event) => {
         event.stopPropagation();
-        viewer.scene.view.setView(annotationImage7.cameraPosition, annotationImage7.cameraTarget, 1000);
+        viewer.scene.view.setView(annotationImage8.cameraPosition, annotationImage8.cameraTarget, 1000);
         setTimeout(() => {
           const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/IMG_2190.jpg";
           const imageDescription = "Afficheur 20mm LED TCO mural";
@@ -803,6 +803,33 @@
       addAnnotationClickHandler(annotationImage8);
       annotationImage8.visible = true;
       viewer.scene.annotations.add(annotationImage8);
+
+      // Annotation avec image 9 (Porte entrée)
+      let iconImage9 = $(` 
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      iconImage9.find("img").click((event) => {
+        event.stopPropagation();
+        viewer.scene.view.setView(annotationImage9.cameraPosition, annotationImage9.cameraTarget, 1000);
+        setTimeout(() => {
+          const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/20250306_140201.jpg";
+          const imageDescription = "Porte d'entrée de la salle du TCO";
+          $("#popupImage").attr("src", imageUrl);
+          $("#popupText").text(imageDescription);
+          $("#imagePopup").css("display", "flex");
+        }, 2000);
+      });
+      let annotationImage9 = new Potree.Annotation({
+        position: new THREE.Vector3(2.35, 2.43, 1.66),
+        title: iconImage9,
+        cameraPosition: new THREE.Vector3(4.03, 5.95, 1.72),
+        cameraTarget: new THREE.Vector3(2.35, 2.43, 1.66)
+      });
+      addAnnotationClickHandler(annotationImage9);
+      annotationImage9.visible = true;
+      viewer.scene.annotations.add(annotationImage9);
     
 
 
@@ -1136,6 +1163,7 @@
           { position: annotationImage6.position, maxDistance: distanceThresholdImage, minGisement: 160, maxGisement: 350, annotation: annotationImage6 },  //PRS 2
           { position: annotationImage7.position, maxDistance: distanceThresholdImage, minGisement: 100, maxGisement: 290, annotation: annotationImage7 },  // PRS 4
           { position: annotationImage8.position, maxDistance: distanceThresholdImage, minGisement: 220, maxGisement: 15, annotation: annotationImage8 },  // Afficheur LED
+          { position: annotationImage9.position, maxDistance: distanceThresholdImage, minGisement: 320, maxGisement: 355, annotation: annotationImage9 },  // Porte d'entrée
 
           // Annotations 3D
           { position: annotation3D1.position, maxDistance: distanceThreshold3D, minGisement: 40, maxGisement: 200, annotation: annotation3D1 },  //Tableau 1

@@ -1007,6 +1007,23 @@
       });
       annotation3602.visible = true;
       viewer.scene.annotations.add(annotation3602);
+
+      // Annotation 360° 3 (salle des relais)
+      let icon3603 = $(`
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/360.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      icon3603.find("img").click((event) => {
+        event.stopPropagation();
+        open360Viewer("https://storage.googleapis.com/projet-potree-sncf/Images/Images_360/DJI_20250306104823_0673_D_ETN.JPG");
+      });
+      let annotation3603 = new Potree.Annotation({
+        position: new THREE.Vector3(8.96, 15.89, 1.35),
+        title: icon3603
+      });
+      annotation3603.visible = true;
+      viewer.scene.annotations.add(annotation3603);
     
 
 
@@ -1099,7 +1116,8 @@
 
           // Panoramiques 360
           { position: annotation3601.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3601 },
-          { position: annotation3602.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3602 }
+          { position: annotation3602.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3602 },
+          { position: annotation3603.position, maxDistance: 7, minGisement: 130, maxGisement: 165, annotation: annotation3603 }
           ];
 
           // Vérification de la visibilité de chaque annotation

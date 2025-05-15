@@ -972,6 +972,28 @@
       lienSDR.visible = true;
       viewer.scene.annotations.add(lienSDR);
 
+      // Annotation Goto 2
+      let icongoto2 = $(`<!-- Icône pour annotation qui ouvre EXTERIEUR.html --> 
+      <span style="display: flex; align-items: center;">
+        <!-- Titre textuel à gauche -->
+        <span style="margin-right: 10px; font-size: 16px; color: white;">Extérieur du centre</span>
+        <!-- Logo à côté du titre -->
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/goto.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    icongoto2.find("img").click((event) => {
+        event.stopPropagation();
+        window.open("/Potree_Sncf_Projet/Potree_html/Potree_EXTERIEUR.html", "_blank");
+      });
+      let lienEXT = new Potree.Annotation({
+        position: new THREE.Vector3(8.96, 15.89, 1.75),
+        title: icongoto2,
+        description: "",
+      });
+      addAnnotationClickHandler(lienEXT);
+      lienEXT.visible = true;
+      viewer.scene.annotations.add(lienEXT);
+
 
       //---------------- Liens 360° ----------------//
       // Annotation 360° 1
@@ -1126,6 +1148,7 @@
 
           // Lien vers autre salle
           { position: lienSDR.position, maxDistance: distanceGoto, minGisement: 130, maxGisement: 165, annotation: lienSDR },
+          { position: lienEXT.position, maxDistance: distanceGoto, minGisement: 320, maxGisement: 355, annotation: lienEXT },
 
           // Animations
           { position: annotationcam1.position, maxDistance: 7, minGisement: 290, maxGisement: 40, annotation: annotationcam1 },

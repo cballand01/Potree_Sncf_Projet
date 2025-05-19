@@ -1099,3 +1099,29 @@ html, body {
         background-color: #ddd;
 }
 
+.popupArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 30px;
+  color: #dadada;
+  cursor: pointer;
+  user-select: none;
+  z-index: 10001;
+  transition: transform 0.3s ease;
+  display: none; /* cachées par défaut */
+}
+
+.popupArrow.left {
+  left: 20px;
+}
+
+.popupArrow.right {
+  right: 20px;
+}
+
+.popupArrow:active {
+  animation: clickPulse 0.3s ease-out;
+  transform: scale(0.6) translateY(-50%);
+}
+

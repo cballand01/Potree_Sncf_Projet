@@ -344,6 +344,15 @@
     <div id="panorama" style=" width: 100vw; height: 100vh;"></div>
   </div>
 
+  <!-- Flèches pour navigation dans la popup de la galerie -->
+  <div id="popupLeftArrow" class="popup-arrow"
+       style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+              font-size: 40px; color: white; cursor: pointer; display: none;">&#10094;</div>
+  
+  <div id="popupRightArrow" class="popup-arrow"
+       style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+              font-size: 40px; color: white; cursor: pointer; display: none;">&#10095;</div>
+
   <!-- Éléments audio pour les hotspots -->
   <audio id="audioHotspot0" src="https://storage.googleapis.com/projet-potree-sncf/Audios/01.mp3" preload="auto"></audio>
   <audio id="audioHotspot1" src="https://storage.googleapis.com/projet-potree-sncf/Audios/02.mp3" preload="auto"></audio>
@@ -1920,40 +1929,52 @@
       { src: "https://storage.googleapis.com/projet-potree-sncf/Images/Archives/19131.jpg", info: "Salle du TCO en activité" }
     ];
     let currentIndex = 0;
-    // Mise à jour de l'image affichée dans la galerie
+  
     function updateGallery() {
       const galleryItem = document.querySelector('.galleryItem');
       galleryItem.querySelector('img').src = images[currentIndex].src;
       galleryItem.setAttribute('data-info', images[currentIndex].info);
       galleryItem.setAttribute('data-full', images[currentIndex].src);
     }
+  
     document.addEventListener('DOMContentLoaded', function () {
-      // Navigation dans la galerie (image précédente)
       document.getElementById('scrollUp').addEventListener('click', function () {
         currentIndex = (currentIndex === 0) ? images.length - 1 : currentIndex - 1;
         updateGallery();
       });
-      // Navigation dans la galerie (image suivante)
+  
       document.getElementById('scrollDown').addEventListener('click', function () {
         currentIndex = (currentIndex === images.length - 1) ? 0 : currentIndex + 1;
         updateGallery();
       });
-      // Gestion de l'affichage de la popup lors du clic sur un élément de la galerie
+  
       const galleryItems = document.querySelectorAll('.galleryItem');
       const popup = document.getElementById('imagePopup');
       const popupImage = document.getElementById('popupImage');
       const popupText = document.getElementById('popupText');
       const closeBtn = document.querySelector('.closePopup');
       const globalTitleBubble = document.getElementById('globalTitleBubble');
-      galleryItems.forEach(function (item) {
+  
+      galleryItems.forEach(function (item, index) {
         item.addEventListener('click', function () {
           const fullSrc = item.getAttribute('data-full');
           const infoText = item.getAttribute('data-info');
           popupImage.src = fullSrc;
           popupText.textContent = infoText;
           popup.style.display = 'flex';
+  
+          // 💡 Important : indique qu'on vient de la galerie
+          popup.dataset.fromGallery = "true";
+  
+          // 💡 Trouve l'index de cette image dans le tableau
+          const foundIndex = images.findIndex(img => img.src === fullSrc);
+          if (foundIndex !== -1) currentIndex = foundIndex;
+  
+          // Affiche les flèches si on est bien sur une image de la galerie
+          document.getElementById('popupLeftArrow').style.display = "block";
+          document.getElementById('popupRightArrow').style.display = "block";
         });
-        // Affichage de la bulle d'information lors du survol
+  
         item.addEventListener('mouseenter', function () {
           const info = item.getAttribute('data-info');
           globalTitleBubble.textContent = info;
@@ -1965,11 +1986,12 @@
           globalTitleBubble.style.left = left + 'px';
           globalTitleBubble.style.top = top + 'px';
         });
+  
         item.addEventListener('mouseleave', function () {
           globalTitleBubble.style.display = 'none';
         });
       });
-      // Fermeture de la popup d'image
+  
       closeBtn.addEventListener('click', function () {
         popup.style.display = 'none';
         popupImage.src = '';
@@ -1978,14 +2000,40 @@
         panX = 0;
         panY = 0;
         updateTransform();
+  
+        // Masquer les flèches
+        popup.dataset.fromGallery = "false";
+        document.getElementById('popupLeftArrow').style.display = "none";
+        document.getElementById('popupRightArrow').style.display = "none";
       });
+  
       popup.addEventListener('click', function (e) {
         if (e.target === popup) {
           closeBtn.click();
         }
       });
+  
+      // 🎯 Navigation avec les flèches dans la popup
+      document.getElementById('popupLeftArrow').addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (popup.dataset.fromGallery === "true") {
+          currentIndex = (currentIndex === 0) ? images.length - 1 : currentIndex - 1;
+          popupImage.src = images[currentIndex].src;
+          popupText.textContent = images[currentIndex].info;
+        }
+      });
+  
+      document.getElementById('popupRightArrow').addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (popup.dataset.fromGallery === "true") {
+          currentIndex = (currentIndex + 1) % images.length;
+          popupImage.src = images[currentIndex].src;
+          popupText.textContent = images[currentIndex].info;
+        }
+      });
     });
   </script>
+
   
   <!-- Script pour gérer la popup vidéo -->
   <script>

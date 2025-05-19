@@ -1103,15 +1103,14 @@ html, body {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 30px;
+  font-size: 50px;
   color: #dadada;
   cursor: pointer;
   user-select: none;
   z-index: 10001;
+  display: none;
   transition: transform 0.3s ease;
-  display: none; /* cachées par défaut */
 }
-
 .popupArrow.left {
   left: 20px;
 }

@@ -2013,7 +2013,7 @@
         }
       });
   
-      // 🎯 Navigation avec les flèches dans la popup
+      // Navigation avec les flèches dans la popup
       document.getElementById('popupLeftArrow').addEventListener('click', function (e) {
         e.stopPropagation();
         if (popup.dataset.fromGallery === "true") {
@@ -2029,6 +2029,22 @@
           currentIndex = (currentIndex + 1) % images.length;
           popupImage.src = images[currentIndex].src;
           popupText.textContent = images[currentIndex].info;
+        }
+      });
+
+      // Navigation avec les touches du clavier
+      document.addEventListener('keydown', function (e) {
+        const popup = document.getElementById('imagePopup');
+        if (popup.style.display === 'flex' && popup.dataset.fromGallery === "true") {
+          if (e.key === 'ArrowLeft') {
+            currentIndex = (currentIndex === 0) ? images.length - 1 : currentIndex - 1;
+            document.getElementById('popupImage').src = images[currentIndex].src;
+            document.getElementById('popupText').textContent = images[currentIndex].info;
+          } else if (e.key === 'ArrowRight') {
+            currentIndex = (currentIndex + 1) % images.length;
+            document.getElementById('popupImage').src = images[currentIndex].src;
+            document.getElementById('popupText').textContent = images[currentIndex].info;
+          }
         }
       });
     });

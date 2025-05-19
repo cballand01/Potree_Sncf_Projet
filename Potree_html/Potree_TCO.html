@@ -202,10 +202,18 @@
   <div id="imagePopup" style="display: none;">
     <div id="popupContent">
       <span class="closePopup">&times;</span>
+  
+      <!-- IMAGE -->
       <div id="popupImageContainer">
         <img id="popupImage" src="" alt="Image agrandie">
       </div>
+  
+      <!-- TEXTE -->
       <div id="popupText"></div>
+  
+      <!-- FLECHES GAUCHE / DROITE POUR NAVIGATION -->
+      <span id="popupLeftArrow" class="arrow popupArrow" style="left: 20px;">‹</span>
+      <span id="popupRightArrow" class="arrow popupArrow" style="right: 20px;">›</span>
     </div>
   </div>
 
@@ -343,15 +351,6 @@
     <span id="close360" style="position: absolute; top: 20px; right: 30px; font-size: 30px; color: white; cursor: pointer; z-index: 1000;">&times;</span>
     <div id="panorama" style=" width: 100vw; height: 100vh;"></div>
   </div>
-
-  <!-- Flèches pour navigation dans la popup de la galerie -->
-  <div id="popupLeftArrow" class="popup-arrow"
-       style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
-              font-size: 40px; color: white; cursor: pointer; display: none;">&#10094;</div>
-  
-  <div id="popupRightArrow" class="popup-arrow"
-       style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
-              font-size: 40px; color: white; cursor: pointer; display: none;">&#10095;</div>
 
   <!-- Éléments audio pour les hotspots -->
   <audio id="audioHotspot0" src="https://storage.googleapis.com/projet-potree-sncf/Audios/01.mp3" preload="auto"></audio>

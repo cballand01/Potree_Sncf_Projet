@@ -648,7 +648,7 @@
       let annotationExp2 = new Potree.Annotation({
           position: new THREE.Vector3(0.86, 9.93, 3.10),
           title: iconExp2, // Ici on met l'élément HTML au lieu du texte
-          description: "Il y a en moyenne un poste tous les 20 km de voies, pouvant être contrôlé soit depuis le PAR, soit en local.  ",
+          description: " Postes et villes traversés par la LGV, avec leurs points kilométriques associés. Les postes peuvent être contrôlés localement en cas de problème au PAR. ",
       });
       addTextAnnotationClickHandler(annotationExp2);
       annotationExp2.visible = true;
@@ -679,6 +679,19 @@
       addTextAnnotationClickHandler(annotationExp4);
       annotationExp4.visible = true;
       viewer.scene.annotations.add(annotationExp4);
+
+      // Annotation texte explication 5
+      let iconExp5 = $(`<span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>`);
+      let annotationExp5 = new Potree.Annotation({
+          position: new THREE.Vector3(1.10, 10.61, 2.65),
+          title: iconExp5, // Ici on met l'élément HTML au lieu du texte
+          description: "Chaque section de 20 km de voie, représentée par une colonne d’affichage, peut contenir plusieurs trains. Un voyant de débordement peut même indiquer un nombre de trains supérieur à la capacité d’affichage.",
+      });
+      addTextAnnotationClickHandler(annotationExp5);
+      annotationExp5.visible = true;
+      viewer.scene.annotations.add(annotationExp5);
       
       //---------------- Annotations imagées ----------------//
       // Annotation Image 1 (PRS3)
@@ -1307,6 +1320,7 @@
           { position: annotationExp2.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp2 },
           { position: annotationExp3.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp3 },
           { position: annotationExp4.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp4 },
+          { position: annotationExp5.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp5 },
 
           // Annotations images
           { position: annotationImage1.position, maxDistance: distanceThresholdImage, minGisement: 130, maxGisement: 320, annotation: annotationImage1 },  // PRS 3

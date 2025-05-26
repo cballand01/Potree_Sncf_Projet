@@ -592,6 +592,19 @@
         );
       });
 
+      /**
+      * Met en pause et remet à zéro toutes les annotations audio
+      */
+      function pauseAllAnnotationAudio() {
+        document.querySelectorAll('audio[id^="audioAnnotation"]').forEach(a => {
+          a.pause();
+          a.currentTime = 0;
+        });
+      }
+
+
+      //---------------- Annotations audios ----------------//
+
       //---------------- Annotations textuelles ----------------//
     
       //---------------- Annotations textuelles explications ----------------//
@@ -1205,6 +1218,7 @@
       viewer.scene.annotations.add(annotation3606);
 
       //---------------- Seuils de distance d'affichage ----------------//
+      const distanceThresholdAudio = 4; //audios
       const distanceThresholdText = 0; //textes
       const distanceThresholdImage = 2; //images
       const distanceThreshold3D = 2.5; //liens3D

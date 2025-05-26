@@ -661,7 +661,14 @@
       let annotationExp3 = new Potree.Annotation({
           position: new THREE.Vector3(0.96, 10.22, 2.56),
           title: iconExp3, // Ici on met l'élément HTML au lieu du texte
-          description: "<span style='font-weight: bold;'>&larr; Direction Paris</span> <span style='color: gray;'>(haut)</span><br><span style='font-weight: bold;'>&rarr; Direction Lyon</span> <span style='color: gray;'>(bas)</span>",
+          description: `
+          <div style="text-align: center;">
+            <span style="font-weight: bold;">&larr; Direction Paris</span>
+            <span style="color: gray;">(haut)</span><br>
+            <span style="font-weight: bold;">&rarr; Direction Lyon</span>
+            <span style="color: gray;">(bas)</span>
+          </div>
+        `,
       });
       addTextAnnotationClickHandler(annotationExp3);
       annotationExp3.visible = true;

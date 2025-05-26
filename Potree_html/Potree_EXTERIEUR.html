@@ -497,6 +497,19 @@
         );
       });
 
+      /**
+      * Met en pause et remet à zéro toutes les annotations audio
+      */
+      function pauseAllAnnotationAudio() {
+        document.querySelectorAll('audio[id^="audioAnnotation"]').forEach(a => {
+          a.pause();
+          a.currentTime = 0;
+        });
+      }
+
+
+      //---------------- Annotations audios ----------------//
+
       //---------------- Annotations textuelles ----------------//
       // Annotation texte 1 Zoom (Henri LANG)
       let iconInfo1 = $(`<span>

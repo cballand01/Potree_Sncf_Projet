@@ -500,6 +500,17 @@
         );
       });
 
+      /**
+      * Met en pause et remet à zéro toutes les annotations audio
+      */
+      function pauseAllAnnotationAudio() {
+        document.querySelectorAll('audio[id^="audioAnnotation"]').forEach(a => {
+          a.pause();
+          a.currentTime = 0;
+        });
+      }
+
+
        //---------------- Annotations audios ----------------//
       // Icône pour l’annotation sonore 1 (télephone)
       let iconSound1 = $(`<span>
@@ -510,6 +521,7 @@
       </span>`);
       iconSound1.find("img").click(event => {
         event.stopPropagation();
+        pauseAllAnnotationAudio();
         const audio = document.getElementById("audioAnnotation1");
         audio.currentTime = 0;    // si on veut pouvoir relancer immédiatement
         audio.play();
@@ -535,6 +547,7 @@
       </span>`);
       iconSound2.find("img").click(event => {
         event.stopPropagation();
+        pauseAllAnnotationAudio();
         const audio = document.getElementById("audioAnnotation2");
         audio.currentTime = 0;    // si on veut pouvoir relancer immédiatement
         audio.play();

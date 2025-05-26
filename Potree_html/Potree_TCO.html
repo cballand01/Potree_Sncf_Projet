@@ -538,7 +538,7 @@
       let annotationTexte3 = new Potree.Annotation({
           position: new THREE.Vector3(4.20, 12.36, 1.21),
           title: iconInfo3, // Ici on met l'élément HTML au lieu du texte
-          description: "Le régulateur de sous-station gère les caténaires primaires de la LGV depuis le tableau optique (partie inférieure bleue). Sa présence au PAR améliore grandement la gestion de la circulation des trains, puisqu’un problème peut être signalé immédiatement par un signal clignotant.",
+          description: "L’alimentation électrique de la LGV est assurée par le régulateur de sous-station, qui supervise les caténaires primaires via le tableau optique (zone inférieure à fond bleu). Sa présence au PAR optimise considérablement la gestion du trafic, puisque toute anomalie est immédiatement signalée par un voyant clignotant.",
           cameraPosition: new THREE.Vector3(5.89, 11.81, 1.72),
           cameraTarget: new THREE.Vector3(4.20, 12.36, 1.21)
       });
@@ -853,6 +853,35 @@
       addAnnotationClickHandler(annotationImage9);
       annotationImage9.visible = true;
       viewer.scene.annotations.add(annotationImage9);
+
+      // Annotation avec image 10 (Téléphone)
+      let iconImage10 = $(` 
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      iconImage10.find("img").click((event) => {
+        event.stopPropagation();
+        viewer.scene.view.setView(annotationImage9.cameraPosition, annotationImage9.cameraTarget, 1000);
+        setTimeout(() => {
+          const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/T%C3%A9l%C3%A9phone.png";
+          const imageDescription = 
+          "Téléphones de communication avec les conducteurs<br/>" +
+          "Source : Vidéo « Remarquables postes – PAR LGV Sud-Est Paris – Gare de Lyon » (8 sur 9), chaîne Youtube « Rails et Histoire ».";
+          $("#popupImage").attr("src", imageUrl);
+          $("#popupText").text(imageDescription);
+          $("#imagePopup").css("display", "flex");
+        }, 2000);
+      });
+      let annotationImage10 = new Potree.Annotation({
+        position: new THREE.Vector3(6.29, 10.57, 1.40),
+        title: iconImage9,
+        cameraPosition: new THREE.Vector3(6.60, 10.05, 1.82),
+        cameraTarget: new THREE.Vector3(6.29, 10.57, 1.40)
+      });
+      addAnnotationClickHandler(annotationImage10);
+      annotationImage10.visible = true;
+      viewer.scene.annotations.add(annotationImage10);
     
 
 
@@ -1188,6 +1217,7 @@
           { position: annotationImage7.position, maxDistance: distanceThresholdImage, minGisement: 100, maxGisement: 290, annotation: annotationImage7 },  // PRS 4
           { position: annotationImage8.position, maxDistance: distanceThresholdImage, minGisement: 220, maxGisement: 15, annotation: annotationImage8 },  // Afficheur LED
           { position: annotationImage9.position, maxDistance: distanceThresholdImage, minGisement: 320, maxGisement: 355, annotation: annotationImage9 },  // Porte d'entrée
+          { position: annotationImage10.position, maxDistance: distanceThresholdImage, minGisement: 150, maxGisement: 300, annotation: annotationImage10 },  // Téléphone
 
           // Annotations 3D
           { position: annotation3D1.position, maxDistance: distanceThreshold3D, minGisement: 40, maxGisement: 200, annotation: annotation3D1 },  //Tableau 1

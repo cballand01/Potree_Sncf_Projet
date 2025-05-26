@@ -595,6 +595,7 @@
       // Annotation 360° 1
 
       //---------------- Seuils de distance d'affichage ----------------//
+      const distanceThresholdAudio = 4; //audios
       const distanceThresholdText = 10; //textes
       const distanceThresholdImage = 10; //images
       const distanceThreshold3D = 4; //liens3D
@@ -645,6 +646,8 @@
           let cameraPos = viewer.scene.getActiveCamera().position;
 
           let annotations = [
+          // Annotations audios
+  
           // Annotations textuelles
           { position: annotationTexte1.position, maxDistance: distanceThresholdText, minGisement: 0, maxGisement: 360, annotation: annotationTexte1 },
 

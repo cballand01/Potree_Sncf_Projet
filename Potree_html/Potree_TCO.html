@@ -530,6 +530,21 @@
       addTextAnnotationClickHandler(annotationTexte2);
       annotationTexte2.visible = true;
       viewer.scene.annotations.add(annotationTexte2);
+
+      // Annotation texte 3 Zoom
+      let iconInfo3 = $(`<span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>`);
+      let annotationTexte3 = new Potree.Annotation({
+          position: new THREE.Vector3(4.20, 12.36, 1.21),
+          title: iconInfo3, // Ici on met l'élément HTML au lieu du texte
+          description: "Le régulateur de sous-station gère les caténaires primaires de la LGV depuis le tableau optique (partie inférieure bleue). Sa présence au PAR améliore grandement la gestion de la circulation des trains, puisqu’un problème peut être signalé immédiatement par un signal clignotant.",
+          cameraPosition: new THREE.Vector3(5.89, 11.81, 1.72),
+          cameraTarget: new THREE.Vector3(4.20, 12.36, 1.21)
+      });
+      addTextAnnotationClickHandler(annotationTexte3);
+      annotationTexte3.visible = true;
+      viewer.scene.annotations.add(annotationTexte3);
       
 
       //---------------- Annotations textuelles explications ----------------//
@@ -1155,6 +1170,7 @@
           // Annotations textuelles
           { position: annotationTexte1.position, maxDistance: distanceThresholdText, minGisement: 150, maxGisement: 300, annotation: annotationTexte1 },
           { position: annotationTexte2.position, maxDistance: 5, minGisement: 170, maxGisement: 330, annotation: annotationTexte2 },
+          { position: annotationTexte3.position, maxDistance: distanceThresholdText, minGisement: 130, maxGisement: 300, annotation: annotationTexte3 },
 
           // Annotations explicatives
           { position: annotationExp1.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp1 },

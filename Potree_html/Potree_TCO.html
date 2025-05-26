@@ -872,10 +872,9 @@
         viewer.scene.view.setView(annotationImage10.cameraPosition, annotationImage10.cameraTarget, 1000);
         setTimeout(() => {
           const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/T%C3%A9l%C3%A9phone.png";
-          const imageDescription = `
-            Téléphones de communication avec les conducteurs<br>
-            Source : Vidéo « Remarquables postes – PAR LGV Sud-Est Paris – Gare de Lyon » (8 sur 9), chaîne Rails et Histoire.
-          `;
+          const imageDescription = 
+            "<span style='font-weight: bold;'>Téléphones de communication avec les conducteurs</span><br>" +
+            "<span style='color: gray;'>Source : Vidéo « Remarquables postes – PAR LGV Sud-Est Paris – Gare de Lyon » (8 sur 9), chaîne Rails et Histoire.</span>";
           $("#popupImage").attr("src", imageUrl);
           $("#popupText").text(imageDescription);
           $("#imagePopup").css("display", "flex");

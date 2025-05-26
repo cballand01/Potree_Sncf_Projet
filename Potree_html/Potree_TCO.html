@@ -499,6 +499,27 @@
         );
       });
 
+       //---------------- Annotations audios ----------------//
+      // Icône pour l’annotation sonore
+      let iconSound1 = $(`<span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/music.svg"
+             class="annotation-action-icon"
+             style="filter: invert(1); cursor: pointer;"
+             alt="Son" />
+      </span>`);
+      iconSound1.find("img").click(event => {
+        event.stopPropagation();
+        const audio = document.getElementById("audioAnnotation1");
+        audio.currentTime = 0;    // si on veut pouvoir relancer immédiatement
+        audio.play();
+      });
+      let annotationSound1 = new Potree.Annotation({
+        position: new THREE.Vector3(6.45, 10.30, 1.27),
+        title: iconSound1
+      });
+      annotationSound1.visible = true;
+      viewer.scene.annotations.add(annotationSound1);
+
       //---------------- Annotations textuelles ----------------//
       // Annotation texte 1 Zoom
       let iconInfo1 = $(`<span>
@@ -1154,6 +1175,7 @@
 
 
       //---------------- Seuils de distance d'affichage ----------------//
+      const distanceThresholdAudio = 4; //audios
       const distanceThresholdText = 4; //textes
       const distanceThresholdImage = 4; //images
       const distanceThreshold3D = 4; //liens3D
@@ -1198,6 +1220,10 @@
           let cameraPos = viewer.scene.getActiveCamera().position;
 
           let annotations = [
+          // Annotations audios
+          { position: annotationSound1.position, maxDistance: distanceThresholdAudio, minGisement: 150, maxGisement: 300, annotation: annotationSound1 },
+
+            
           // Annotations textuelles
           { position: annotationTexte1.position, maxDistance: distanceThresholdText, minGisement: 150, maxGisement: 300, annotation: annotationTexte1 },
           { position: annotationTexte2.position, maxDistance: 5, minGisement: 170, maxGisement: 330, annotation: annotationTexte2 },

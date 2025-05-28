@@ -100,17 +100,6 @@
       .potree-card:hover .text { transform:translateY(0); }
     }
 
-    /* Version 3DHOP-like sur mobile ≤480px */
-    @media (max-width:480px) {
-      .potree-card { display: none !important; }
-      .cards.mobile-only {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        margin: 1rem;
-      }
-    }
-
     /* Bandeau bas (initialement masqué) */
     .bottom-banner {
       position: fixed; bottom:0; left:0; width:100%;
@@ -149,16 +138,25 @@
       z-index: 3;
     }
 
-    /* Adaptation du header sur mobile */
-    @media (max-width: 480px) {
+    /* Adaptation du header sur mobile (coarse pointer) */
+    @media (pointer: coarse) and (hover: none) {
+      /* Masquer Potree-cards et afficher version 3DHOP-like */
+      .potree-card { display: none !important; }
+      .cards.mobile-only {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin: 1rem;
+      }
+      /* Header compact */
       header {
-        padding: 1.5rem 1rem;    /* moins d’espace vertical */
+        padding: 1.5rem 1rem;
       }
       header h1 {
-        font-size: 1.5rem;      /* titre plus petit */
+        font-size: 1.5rem;
       }
       header p {
-        font-size: 1rem;        /* sous-titre plus petit */
+        font-size: 1rem;
       }
     }
 
@@ -168,7 +166,6 @@
     .img-prs3 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS3.png'); }
     .img-prs4 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS4.png'); }
     .img-idf { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_IDF.png'); }
-    .img-tableau1 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau1.png'); }
     .img-tab-haut { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_Haut.png'); }
     .img-tab-central { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_Central.png'); }
     .img-tab-bas { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_Bas.png'); }
@@ -231,7 +228,7 @@
         </a>
       </div>
 
-      <!-- cartes 3DHOP pour mobile -->
+      <!-- Cartes 3DHOP pour mobile -->
       <div class="cards mobile-only">
         <div class="card img-ext">
           <a href="#" id="ext-link-mobile">Extérieur du centre Henri Lang</a>

@@ -52,6 +52,10 @@
       background:rgba(0,0,0,0.5); color:#fff;
     }
     .hide-mobile { display:block; }
+
+    /* Pour masquer/afficher nos blocs mobile-only */
+    .mobile-only { display: none; }
+
     @media (max-width:480px) {
       .hide-mobile { display:none; }
       .cards { grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); }
@@ -84,15 +88,31 @@
     .potree-card:hover .bg { transform:scale(1.1); }
     .potree-card:hover .overlay { background:rgba(0,0,0,0.4); }
     .potree-card:hover .text { transform:translateX(0); }
+
+    /* Hauteur minimale pour mobile/tablette */
     @media (max-width:768px) {
-      .potree-card { height:  min-height: 280px;; }
+      .potree-card {
+        min-height: 280px;
+      }
       .potree-card .overlay { flex-direction:column; padding:1rem; }
-      .potree-card .text { transform:translateY(100%); max-width:100%; }
+      .potree-card .text {
+        transform:translateY(100%);
+        max-width:100%;
+      }
       .potree-card:hover .text { transform:translateY(0); }
     }
+
+    /* Version 3DHOP-like sur mobile ≤480px */
     @media (max-width:480px) {
-      .potree-card .text { transform:translateX(0) !important; }
-      .potree-card .overlay { background:rgba(0,0,0,0.4); }
+      /* on masque les potree-cards originales */
+      .potree-card { display: none !important; }
+      /* on affiche les cards mobile-only en grille */
+      .cards.mobile-only {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin: 1rem;
+      }
     }
 
     /* Bandeau bas (initialement masqué) */
@@ -161,9 +181,9 @@
     <!-- Section POTREE -->
     <section class="section">
       <h2>Nuages de points & Visite guidée - POTREE</h2>
+
       <!-- Visite Extérieur -->
       <div class="potree-card">
-        <!-- Bandeau nouveau -->
         <div class="new-banner">Nouveauté</div>
         <a href="#" id="ext-link">
           <div class="bg img-ext"></div>
@@ -175,6 +195,7 @@
           </div>
         </a>
       </div>
+
       <!-- Salle du Tableau de Contrôle Optique -->
       <div class="potree-card">
         <a href="#" id="tco-link">
@@ -187,6 +208,7 @@
           </div>
         </a>
       </div>
+
       <!-- Salle des Relais -->
       <div class="potree-card">
         <a href="/Potree_Sncf_Projet/Potree_html/Potree_SDR.html" id="sdr-link">
@@ -198,6 +220,25 @@
             </div>
           </div>
         </a>
+      </div>
+
+      <!-- cartes 3DHOP pour mobile -->
+      <div class="cards mobile-only">
+        <div class="card img-ext">
+          <a href="/Potree_Sncf_Projet/Potree_html/Potree_EXTERIEUR.html">
+            Extérieur du centre Henri Lang
+          </a>
+        </div>
+        <div class="card img-tco">
+          <a href="/Potree_Sncf_Projet/Potree_html/Potree_TCO.html">
+            Salle du Tableau de Contrôle Optique
+          </a>
+        </div>
+        <div class="card img-sdr">
+          <a href="/Potree_Sncf_Projet/Potree_html/Potree_SDR.html">
+            Salle des Relais
+          </a>
+        </div>
       </div>
     </section>
 

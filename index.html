@@ -153,6 +153,19 @@
       z-index: 3;
     }
 
+    /* Adaptation du header sur mobile */
+    @media (max-width: 480px) {
+      header {
+        padding: 1.5rem 1rem;    /* moins d’espace vertical */
+      }
+      header h1 {
+        font-size: 1.5rem;      /* titre plus petit */
+      }
+      header p {
+        font-size: 1rem;        /* sous-titre plus petit */
+      }
+    }
+
     /* Images de fond */
     .img-prs1 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS1.png'); }
     .img-prs2 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS2.png'); }

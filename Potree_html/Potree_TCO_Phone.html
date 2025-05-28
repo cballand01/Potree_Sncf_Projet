@@ -609,19 +609,9 @@
   <script>
   document.addEventListener("DOMContentLoaded", () => {
     const fullscreenPopup = document.getElementById("fullscreen-popup");
-    const rotateWarning   = document.getElementById("rotate-warning");
     const fullscreenBtn   = document.getElementById("enter-fullscreen");
 
-    // Fonction pour vérifier orientation
-    function checkOrientation() {
-      if (window.innerHeight > window.innerWidth) {
-        rotateWarning.style.display = "block";
-      } else {
-        rotateWarning.style.display = "none";
-      }
-    }
-
-    // Quand l'utilisateur clique pour passer en plein écran
+    // 1) Clic sur le bouton “Passer en grand écran”
     fullscreenBtn.addEventListener("click", () => {
       const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
       if (!isiOS) {
@@ -639,43 +629,31 @@
             })
             .finally(() => {
               fullscreenPopup.style.display = "none";
-              setTimeout(checkOrientation, 300);
             });
         } else {
           fullscreenPopup.style.display = "none";
-          setTimeout(checkOrientation, 300);
         }
       } else {
-        // Pour iOS, on simule le plein écran
+        // iOS : simuler hauteur full-screen
         document.documentElement.style.height = "100vh";
         document.body.style.height            = "100vh";
         fullscreenPopup.style.display         = "none";
-        setTimeout(checkOrientation, 300);
       }
     });
 
-    // Réagit à l’orientation
-    window.addEventListener("orientationchange", checkOrientation);
-    window.addEventListener("resize",          checkOrientation);
-
-    // ←— AJOUT : Gestion de la sortie du plein-écran
+    // 2) À la sortie du plein-écran, si on est encore en paysage,
+    //    on réaffiche la popup “Passer en grand écran”
     function onFullscreenChange() {
       if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-        // si on est en paysage, on repropose le bouton plein-écran
         if (window.innerWidth > window.innerHeight) {
           fullscreenPopup.style.display = "flex";
-          rotateWarning.style.display   = "none";
-        } else {
-          // sinon on affiche le warning de rotation
-          rotateWarning.style.display = "block";
         }
       }
     }
     document.addEventListener("fullscreenchange",       onFullscreenChange);
     document.addEventListener("webkitfullscreenchange", onFullscreenChange);
-    // —→ FIN DE L'AJOUT
 
-    // Remplace ta fonction checkAllLoaded pour lancer la suite proprement
+    // 3) Remplace ta fonction checkAllLoaded pour afficher la popup à la fin du chargement
     window.checkAllLoaded = function() {
       itemsLoaded++;
       if (itemsLoaded === totalToLoad) {

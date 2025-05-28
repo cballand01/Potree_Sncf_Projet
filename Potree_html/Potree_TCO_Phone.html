@@ -458,7 +458,7 @@
 
       // Déplacement caméra avec directions calculées via Three.js
       const distanceRatio = distance / maxDistanceMove; // entre 0 (centre) et 1 (bord)
-      const moveSpeed = 0.005 * distanceRatio; // vitesse progressive
+      const moveSpeed = 0.001 * distanceRatio; // vitesse progressive
 
       const potreeCamera = viewer.scene.getActiveCamera();
       const directions = getCameraDirections(potreeCamera);

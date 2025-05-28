@@ -52,8 +52,6 @@
       background:rgba(0,0,0,0.5); color:#fff;
     }
     .hide-mobile { display:block; }
-
-    /* Pour masquer/afficher nos blocs mobile-only */
     .mobile-only { display: none; }
 
     @media (max-width:480px) {
@@ -104,9 +102,7 @@
 
     /* Version 3DHOP-like sur mobile ≤480px */
     @media (max-width:480px) {
-      /* on masque les potree-cards originales */
       .potree-card { display: none !important; }
-      /* on affiche les cards mobile-only en grille */
       .cards.mobile-only {
         display: grid;
         grid-template-columns: 1fr;
@@ -151,19 +147,6 @@
       font-weight: bold;
       padding: 0.5rem 0;
       z-index: 3;
-    }
-
-    /* Adaptation du header sur mobile */
-    @media (max-width: 480px) {
-      header {
-        padding: 1.5rem 1rem;    /* moins d’espace vertical */
-      }
-      header h1 {
-        font-size: 1.5rem;      /* titre plus petit */
-      }
-      header p {
-        font-size: 1rem;        /* sous-titre plus petit */
-      }
     }
 
     /* Images de fond */
@@ -224,7 +207,7 @@
 
       <!-- Salle des Relais -->
       <div class="potree-card">
-        <a href="/Potree_Sncf_Projet/Potree_html/Potree_SDR.html" id="sdr-link">
+        <a href="#" id="sdr-link">
           <div class="bg img-sdr"></div>
           <div class="overlay">
             <div class="text">
@@ -238,19 +221,13 @@
       <!-- cartes 3DHOP pour mobile -->
       <div class="cards mobile-only">
         <div class="card img-ext">
-          <a href="/Potree_Sncf_Projet/Potree_html/Potree_EXTERIEUR.html">
-            Extérieur du centre Henri Lang
-          </a>
+          <a href="#" id="ext-link-mobile">Extérieur du centre Henri Lang</a>
         </div>
         <div class="card img-tco">
-          <a href="/Potree_Sncf_Projet/Potree_html/Potree_TCO.html">
-            Salle du Tableau de Contrôle Optique
-          </a>
+          <a href="#" id="tco-link-mobile">Salle du Tableau de Contrôle Optique</a>
         </div>
         <div class="card img-sdr">
-          <a href="/Potree_Sncf_Projet/Potree_html/Potree_SDR.html">
-            Salle des Relais
-          </a>
+          <a href="#" id="sdr-link-mobile">Salle des Relais</a>
         </div>
       </div>
     </section>
@@ -285,40 +262,75 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
+
       // Extérieur link
       document.getElementById("ext-link").addEventListener("click", e => {
         e.preventDefault();
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
         window.location.href = isMobile
-          ? "/Potree_Sncf_Projet/Potree_html/Potree_EXTERIEUR.html"
+          ? "/Potree_Sncf_Projet/Potree_html/Potree_Ext_Phone.html"
           : "/Potree_Sncf_Projet/Potree_html/Potree_EXTERIEUR.html";
       });
-      // TCO link
+
+      // TCO link (desktop Potree)
       document.getElementById("tco-link").addEventListener("click", e => {
         e.preventDefault();
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
         window.location.href = isMobile
           ? "/Potree_Sncf_Projet/Potree_html/Potree_TCO_Phone.html"
           : "/Potree_Sncf_Projet/Potree_html/Potree_TCO.html";
       });
-      // SDR link
+
+      // SDR link (desktop Potree)
       document.getElementById("sdr-link").addEventListener("click", e => {
         e.preventDefault();
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
         window.location.href = isMobile
-          ? "/Potree_Sncf_Projet/Potree_html/Potree_SDR.html"
+          ? "/Potree_Sncf_Projet/Potree_html/Potree_SDR_Phone.html"
           : "/Potree_Sncf_Projet/Potree_html/Potree_SDR.html";
       });
-      // Header shrink
+
+      // Extérieur link mobile-only
+      const extMobile = document.getElementById("ext-link-mobile");
+      if (extMobile) {
+        extMobile.addEventListener("click", e => {
+          e.preventDefault();
+          window.location.href = isMobile
+            ? "/Potree_Sncf_Projet/Potree_html/Potree_Ext_Phone.html"
+            : "/Potree_Sncf_Projet/Potree_html/Potree_EXTERIEUR.html";
+        });
+      }
+
+      // TCO link mobile-only
+      const tcoMobile = document.getElementById("tco-link-mobile");
+      if (tcoMobile) {
+        tcoMobile.addEventListener("click", e => {
+          e.preventDefault();
+          window.location.href = isMobile
+            ? "/Potree_Sncf_Projet/Potree_html/Potree_TCO_Phone.html"
+            : "/Potree_Sncf_Projet/Potree_html/Potree_TCO.html";
+        });
+      }
+
+      // SDR link mobile-only
+      const sdrMobile = document.getElementById("sdr-link-mobile");
+      if (sdrMobile) {
+        sdrMobile.addEventListener("click", e => {
+          e.preventDefault();
+          window.location.href = isMobile
+            ? "/Potree_Sncf_Projet/Potree_html/Potree_SDR_Phone.html"
+            : "/Potree_Sncf_Projet/Potree_html/Potree_SDR.html";
+        });
+      }
+
+      // Header shrink & bottom banner
       let lastScrollTop = 0;
       const header = document.querySelector("header");
       const banner = document.getElementById("bottom-banner");
       window.addEventListener("scroll", () => {
         const st = window.pageYOffset || document.documentElement.scrollTop;
-        // header
-        if (st > lastScrollTop && st > 100) header.classList.add("shrink"); else header.classList.remove("shrink");
+        if (st > lastScrollTop && st > 100) header.classList.add("shrink");
+        else header.classList.remove("shrink");
         lastScrollTop = st <= 0 ? 0 : st;
-        // bottom banner
+
         const atBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight;
         banner.classList.toggle("show", atBottom);
       });

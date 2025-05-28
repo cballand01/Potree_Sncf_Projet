@@ -582,6 +582,26 @@
 
   </script>
 
+  <!-- Scripts pour la gestion de la slidebar -->
+  <script>
+  // Ouvre/ferme la slidebar
+  $('#slidebarToggle').on('click', function() {
+    $('#slidebar').toggleClass('open');
+  });
+  
+  // Effet accordéon
+  $('.accordion-header').on('click', function() {
+    const $content = $(this).next('.accordion-content');
+    // si fermé, on ouvre ; sinon on ferme
+    if ($content.css('max-height') === '0px') {
+      $content.css('max-height', $content.prop('scrollHeight') + 'px');
+    } else {
+      $content.css('max-height', '0px');
+    }
+    $(this).toggleClass('active');
+  });
+  </script>
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const fullscreenPopup = document.getElementById("fullscreen-popup");

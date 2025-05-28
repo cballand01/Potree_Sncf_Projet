@@ -655,6 +655,32 @@
       window.addEventListener("orientationchange", checkOrientation);
       window.addEventListener("resize", checkOrientation);
 
+      // fonction générique pour (re)demander le plein-écran
+      function requestAppFullscreen() {
+        const el = document.documentElement;
+        const fn = el.requestFullscreen 
+                || el.webkitRequestFullscreen 
+                || el.mozRequestFullScreen 
+                || el.msRequestFullscreen;
+        if (fn) {
+          fn.call(el).catch(() => {/* l’utilisateur peut bloquer, on ignore */});
+        }
+      }
+      
+      // Quand l’utilisateur sort du plein-écran, on y retourne
+      document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement) {
+          requestAppFullscreen();
+        }
+      });
+      // (Pour WebKit)
+      document.addEventListener('webkitfullscreenchange', () => {
+        if (!document.webkitFullscreenElement) {
+          requestAppFullscreen();
+        }
+      });
+
+
       // Remplace ta fonction checkAllLoaded pour lancer la suite proprement
       window.checkAllLoaded = function() {
         itemsLoaded++;

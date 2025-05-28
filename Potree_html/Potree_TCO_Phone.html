@@ -607,94 +607,86 @@
   </script>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const fullscreenPopup = document.getElementById("fullscreen-popup");
-      const rotateWarning = document.getElementById("rotate-warning");
-      const fullscreenBtn = document.getElementById("enter-fullscreen");
+  document.addEventListener("DOMContentLoaded", () => {
+    const fullscreenPopup = document.getElementById("fullscreen-popup");
+    const rotateWarning   = document.getElementById("rotate-warning");
+    const fullscreenBtn   = document.getElementById("enter-fullscreen");
 
-      // Fonction pour vérifier orientation
-      function checkOrientation() {
-        if (window.innerHeight > window.innerWidth) {
-          rotateWarning.style.display = "block";
-        } else {
-          rotateWarning.style.display = "none";
-        }
+    // Fonction pour vérifier orientation
+    function checkOrientation() {
+      if (window.innerHeight > window.innerWidth) {
+        rotateWarning.style.display = "block";
+      } else {
+        rotateWarning.style.display = "none";
       }
+    }
 
-      // Quand l'utilisateur clique pour passer en plein écran
-      fullscreenBtn.addEventListener("click", () => {
-        const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if (!isiOS) {
-            const el = document.documentElement;
-            const request = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
-            if (request) {
-                request.call(el)
-                  .then(() => {
-                    if (screen.orientation && screen.orientation.lock) {
-                      screen.orientation.lock("landscape").catch(() => {});
-                    }
-                  })
-                  .finally(() => {
-                    fullscreenPopup.style.display = "none";
-                    setTimeout(checkOrientation, 300);
-                  });
-            } else {
-                fullscreenPopup.style.display = "none";
-                setTimeout(checkOrientation, 300);
-            }
+    // Quand l'utilisateur clique pour passer en plein écran
+    fullscreenBtn.addEventListener("click", () => {
+      const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      if (!isiOS) {
+        const el      = document.documentElement;
+        const request = el.requestFullscreen
+                      || el.webkitRequestFullscreen
+                      || el.mozRequestFullScreen
+                      || el.msRequestFullscreen;
+        if (request) {
+          request.call(el)
+            .then(() => {
+              if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock("landscape").catch(() => {});
+              }
+            })
+            .finally(() => {
+              fullscreenPopup.style.display = "none";
+              setTimeout(checkOrientation, 300);
+            });
         } else {
-            // Pour iOS, on ajuste le style pour simuler un plein écran sans utiliser l'API Fullscreen
-            document.documentElement.style.height = "100vh";
-            document.body.style.height = "100vh";
-            fullscreenPopup.style.display = "none";
-            setTimeout(checkOrientation, 300);
+          fullscreenPopup.style.display = "none";
+          setTimeout(checkOrientation, 300);
         }
-      });
-
-      // Réagit à l’orientation ensuite aussi
-      window.addEventListener("orientationchange", checkOrientation);
-      window.addEventListener("resize", checkOrientation);
-
-      // fonction générique pour (re)demander le plein-écran
-      function requestAppFullscreen() {
-        const el = document.documentElement;
-        const fn = el.requestFullscreen 
-                || el.webkitRequestFullscreen 
-                || el.mozRequestFullScreen 
-                || el.msRequestFullscreen;
-        if (fn) {
-          fn.call(el).catch(() => {/* l’utilisateur peut bloquer, on ignore */});
-        }
+      } else {
+        // Pour iOS, on simule le plein écran
+        document.documentElement.style.height = "100vh";
+        document.body.style.height            = "100vh";
+        fullscreenPopup.style.display         = "none";
+        setTimeout(checkOrientation, 300);
       }
-      
-      // Quand l’utilisateur sort du plein-écran, on y retourne
-      document.addEventListener('fullscreenchange', () => {
-        if (!document.fullscreenElement) {
-          requestAppFullscreen();
-        }
-      });
-      // (Pour WebKit)
-      document.addEventListener('webkitfullscreenchange', () => {
-        if (!document.webkitFullscreenElement) {
-          requestAppFullscreen();
-        }
-      });
-
-
-      // Remplace ta fonction checkAllLoaded pour lancer la suite proprement
-      window.checkAllLoaded = function() {
-        itemsLoaded++;
-        if (itemsLoaded === totalToLoad) {
-          // 👇 On cache le splash
-          document.getElementById("splash").style.display = "none";
-
-          // 👇 Et on affiche seulement maintenant la popup de plein écran
-          document.getElementById("fullscreen-popup").style.display = "flex";
-        }
-      };
-
     });
-  </script>
+
+    // Réagit à l’orientation
+    window.addEventListener("orientationchange", checkOrientation);
+    window.addEventListener("resize",          checkOrientation);
+
+    // ←— AJOUT : Gestion de la sortie du plein-écran
+    function onFullscreenChange() {
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        // si on est en paysage, on repropose le bouton plein-écran
+        if (window.innerWidth > window.innerHeight) {
+          fullscreenPopup.style.display = "flex";
+          rotateWarning.style.display   = "none";
+        } else {
+          // sinon on affiche le warning de rotation
+          rotateWarning.style.display = "block";
+        }
+      }
+    }
+    document.addEventListener("fullscreenchange",       onFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", onFullscreenChange);
+    // —→ FIN DE L'AJOUT
+
+    // Remplace ta fonction checkAllLoaded pour lancer la suite proprement
+    window.checkAllLoaded = function() {
+      itemsLoaded++;
+      if (itemsLoaded === totalToLoad) {
+        document.getElementById("splash").style.display = "none";
+        fullscreenPopup.style.display                  = "flex";
+      }
+    };
+  });
+</script>
+
+
 
 </body>
 </html>

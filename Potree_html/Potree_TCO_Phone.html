@@ -345,7 +345,7 @@
       }
     }
   
-    Potree.loadPointCloud("https://storage.googleapis.com/projet-potree-sncf/NuageTCO/Nuage_Sans_Tableaux/metadata.json", "Salle_TCO", function(e){
+    Potree.loadPointCloud("https://storage.googleapis.com/projet-potree-sncf/NuageTCO/Nuage_Sans_Sol_et_Tableaux/metadata.json", "Salle_TCO", function(e){
       viewer.scene.addPointCloud(e.pointcloud);
       let material = e.pointcloud.material;
       material.size = 1.3;
@@ -579,6 +579,38 @@
           object.scale.set(1, 1, 1);
           object.rotation.set(0, 0, 0);
           window.objMesh5 = object;
+          viewer.scene.scene.add(object);
+        }, onProgress, onError);
+      });
+
+      // Chargement du modèle 6 (Sol_bas)
+      let MTLLoader6 = new MTLLoader(manager);
+      MTLLoader6.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/TCO_Sol_Bas/Sol_TCO_bas.mtl', function(materials) {
+        materials.preload();
+        
+        let OBJLoader6 = new OBJLoader(manager);
+        OBJLoader6.setMaterials(materials);
+        OBJLoader6.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/TCO_Sol_Bas/TCO_Sol_Bas.obj', function (object) {
+          object.position.set(5.21, 13.55, 40.755);
+          object.scale.set(1, 1, 1);
+          object.rotation.set(0, 0, 0);
+          window.objMesh6 = object;
+          viewer.scene.scene.add(object);
+        }, onProgress, onError);
+      });
+
+      // Chargement du modèle 7 (Sol_haut)
+      let MTLLoader7 = new MTLLoader(manager);
+      MTLLoader7.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/TCO_Sol_Haut/Sol_TCO_haut.mtl', function(materials) {
+        materials.preload();
+        
+        let OBJLoader7 = new OBJLoader(manager);
+        OBJLoader7.setMaterials(materials);
+        OBJLoader7.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/TCO_Sol_Haut/TCO_Sol_Haut.obj', function (object) {
+          object.position.set(5.21, 13.55, 40.755);
+          object.scale.set(1, 1, 1);
+          object.rotation.set(0, 0, 0);
+          window.objMesh7 = object;
           viewer.scene.scene.add(object);
         }, onProgress, onError);
       });

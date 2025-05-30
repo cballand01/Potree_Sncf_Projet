@@ -689,12 +689,13 @@
         event.stopPropagation();
         event.preventDefault();
 
-      showTextAnnotationCustom(`
-        <b>But du Tableau de Contrôle Optique (TCO)</b><br>
-        Le TCO fournit une vue d'ensemble du trafic ferroviaire en temps réel, 
-        permettant aux régulateurs de prendre des décisions éclairées 
-        pour assurer la sécurité, la fluidité et l'efficacité des trajets.
-      `);
+        showTextAnnotationCustom(`
+          <b>But du Tableau de Contrôle Optique (TCO)</b><br>
+          Le TCO fournit une vue d'ensemble du trafic ferroviaire en temps réel, 
+          permettant aux régulateurs de prendre des décisions éclairées 
+          pour assurer la sécurité, la fluidité et l'efficacité des trajets.
+        `);
+      });
 
       addTextAnnotationClickHandler(annotationTexte2);
       annotationTexte2.visible = true;

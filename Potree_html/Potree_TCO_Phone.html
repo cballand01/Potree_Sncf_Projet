@@ -280,6 +280,39 @@
     </div>
   </div>
 
+  <!-- Popup Textes -->
+  <div id="textAnnotationPopupCustom">
+    <button id="closeTextAnnotationPopupCustom" onclick="hideTextAnnotationCustom()">×</button>
+    <div id="textAnnotationContentCustom"></div>
+  </div>
+
+  <!-- Popup pour l'affichage des images agrandies -->
+  <div id="imagePopup" style="display: none;">
+    <div id="popupContent">
+      <span class="closePopup">&times;</span>
+      <!-- IMAGE -->
+      <div id="popupImageContainer">
+        <img id="popupImage" src="" alt="Image agrandie">
+      </div>
+      <!-- TEXTE -->
+      <div id="popupText"></div>
+      <!-- FLECHES GAUCHE / DROITE POUR NAVIGATION -->
+      <span id="popupLeftArrow" class="arrow popupArrow" style="left: 20px;">‹</span>
+      <span id="popupRightArrow" class="arrow popupArrow" style="right: 20px;">›</span>
+    </div>
+  </div>
+
+  <!-- Éléments audio pour les annotations -->
+  <audio id="audioAnnotation1" src="https://storage.googleapis.com/projet-potree-sncf/Audios/Extrait2.mp3" preload="auto"></audio>
+  <audio id="audioAnnotation2" src="https://storage.googleapis.com/projet-potree-sncf/Audios/Extrait1.mp3" preload="auto"></audio>
+
+  <!-- Popup Image 360° -->
+  <div id="popup360" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 9999;">
+    <span id="close360" style="position: absolute; top: 20px; right: 30px; font-size: 30px; color: white; cursor: pointer; z-index: 1000;">&times;</span>
+    <div id="panorama" style=" width: 100vw; height: 100vh;"></div>
+  </div>
+
+
   <!-- Chargement des bibliothèques JavaScript -->
   <script src="/Potree_Sncf_Projet/libs/jquery/jquery-3.1.1.min.js"></script>
   <script src="/Potree_Sncf_Projet/libs/jquery-ui/jquery-ui.min.js"></script>

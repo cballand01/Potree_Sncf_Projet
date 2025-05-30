@@ -1493,6 +1493,136 @@
   });
 </script>
 
+<!-- Script pour gérer la popup vidéo -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const videoThumbnail = document.getElementById('videoThumbnail');
+    const videoPopup = document.getElementById('videoPopup');
+    const popupVideo = document.getElementById('popupVideo');
+    const closeVideoPopup = document.querySelector('.closeVideoPopup');
+    
+    // Sauvegarde des paramètres actuels du viewer
+    let savedPointBudget = viewer ? viewer.pointBudget : 2000000;
+    let savedUseHQ = viewer ? viewer.useHQ : false;
+    
+    // Affichage de la popup vidéo lors du clic sur la miniature
+    if(videoThumbnail){
+      videoThumbnail.addEventListener('click', function () {
+        savedPointBudget = viewer.pointBudget;
+        savedUseHQ = viewer.useHQ;
+        viewer.setPointBudget(100000);
+        viewer.useHQ = false;
+        videoPopup.style.display = 'flex';
+        popupVideo.querySelector('source').src = "https://storage.googleapis.com/projet-potree-sncf/Vid%C3%A9os/Version%20Courte%20PAR.mp4";
+        popupVideo.load();
+        popupVideo.play();
+      });
+    }
+    
+    // Fermeture de la popup vidéo et restauration des paramètres
+    if(closeVideoPopup){
+      closeVideoPopup.addEventListener('click', function () {
+        videoPopup.style.display = 'none';
+        popupVideo.pause();
+        popupVideo.currentTime = 0;
+        popupVideo.querySelector('source').src = '';
+        viewer.setPointBudget(savedPointBudget);
+        viewer.useHQ = savedUseHQ;
+      });
+    }
+    
+    if(videoPopup){
+      videoPopup.addEventListener('click', function (e) {
+        if (e.target === videoPopup) {
+          closeVideoPopup.click();
+        }
+      });
+    }
+  });
+</script>
+
+<!-- Script pour gérer le zoom et le pan sur l'image de la popup -->
+<script>
+  const popupImage = document.getElementById('popupImage');
+  let scale = 1;
+  let panX = 0;
+  let panY = 0;
+  const zoomFactor = 1.1;
+  const maxScale = 5;
+  const minScale = 1;
+
+  function updateTransform() {
+    popupImage.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+    popupImage.style.cursor = (scale > 1) ? 'grab' : 'default';
+  }
+
+  popupImage.addEventListener('wheel', function (e) {
+    e.preventDefault();
+
+    const rect = popupImage.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    const imageCX = rect.width / 2;
+    const imageCY = rect.height / 2;
+
+    const offsetX = mouseX - imageCX;
+    const offsetY = mouseY - imageCY;
+
+    const zoomingIn = e.deltaY < 0;
+    const oldScale = scale;
+    const newScale = Math.max(minScale, Math.min(maxScale, scale * (zoomingIn ? zoomFactor : 1 / zoomFactor)));
+
+    if (zoomingIn || newScale > 1.05) {
+      const zoomRatio = newScale / oldScale;
+      panX -= offsetX * (zoomRatio - 1);
+      panY -= offsetY * (zoomRatio - 1);
+    }
+
+    if (!zoomingIn && newScale <= 1.05) {
+      const t = (newScale - 1) / 0.05; // entre 1 et 0
+      panX *= t;
+      panY *= t;
+    }
+
+    scale = newScale;
+    updateTransform();
+  });
+
+  // PAN uniquement si zoomé
+  let isPanning = false, startX = 0, startY = 0;
+
+  popupImage.addEventListener('mousedown', (e) => {
+    if (scale <= 1) return; // Pas de pan si taille originale
+    isPanning = true;
+    startX = e.clientX - panX;
+    startY = e.clientY - panY;
+    popupImage.style.cursor = 'grabbing';
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isPanning) return;
+    panX = e.clientX - startX;
+    panY = e.clientY - startY;
+    updateTransform();
+  });
+
+  document.addEventListener('mouseup', () => {
+    isPanning = false;
+    popupImage.style.cursor = (scale > 1) ? 'grab' : 'default';
+  });
+
+  popupImage.addEventListener('dragstart', (e) => e.preventDefault());
+
+  // Réinitialisation à la fermeture
+  document.querySelector('.closePopup').addEventListener('click', () => {
+    scale = 1;
+    panX = 0;
+    panY = 0;
+    updateTransform();
+  });
+</script>
+
 <!-- Gestion de la fenetre popup des textes -->
 <script>
   function showTextAnnotationCustom(description) {

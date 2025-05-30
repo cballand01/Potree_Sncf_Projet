@@ -662,6 +662,22 @@
           cameraPosition: new THREE.Vector3(6.19, 6.30, 1.99),
           cameraTarget: new THREE.Vector3(5.31, 8.20, 1.25)
       });
+
+      iconInfo1.find("img").on("click", event => {
+        event.stopPropagation();
+        event.preventDefault();
+      
+        // recentre la caméra
+        if(typeof TWEEN !== "undefined") TWEEN.removeAll();
+        viewer.scene.view.setView(
+          annotationTexte1.cameraPosition,
+          annotationTexte1.cameraTarget,
+          1000
+        );
+        showTextAnnotationCustom(`
+          Un Poste de Relais à Transit Souple (PRS) est un dispositif de commande ferroviaire qui permet de gérer la circulation des trains dans des zones où plusieurs itinéraires se croisent ou se séparent. Contrairement aux systèmes traditionnels qui utilisent des relais mécaniques ou électromagnétiques rigides, le PRS repose sur des mécanismes à transit souple, offrant ainsi une plus grande souplesse et une adaptation plus facile aux besoins spécifiques du réseau. 
+        `);
+      });
       annotationTexte1.visible = true;
       viewer.scene.annotations.add(annotationTexte1);
       
@@ -705,11 +721,25 @@
       let annotationTexte3 = new Potree.Annotation({
           position: new THREE.Vector3(4.20, 12.36, 1.21),
           title: iconInfo3, // Ici on met l'élément HTML au lieu du texte
-          description: "L’alimentation électrique de la LGV est assurée par le régulateur de sous-station, qui supervise les caténaires primaires via le tableau optique (zone inférieure à fond bleu). Sa présence au PAR optimise considérablement la gestion du trafic, puisque toute anomalie est immédiatement signalée par un voyant clignotant.",
+          description: "",
           cameraPosition: new THREE.Vector3(5.89, 11.81, 1.72),
           cameraTarget: new THREE.Vector3(4.20, 12.36, 1.21)
       });
-      addTextAnnotationClickHandler(annotationTexte3);
+      iconInfo3.find("img").on("click", event => {
+        event.stopPropagation();
+        event.preventDefault();
+      
+        // recentre la caméra
+        if(typeof TWEEN !== "undefined") TWEEN.removeAll();
+        viewer.scene.view.setView(
+          annotationTexte3.cameraPosition,
+          annotationTexte3.cameraTarget,
+          1000
+        );
+        showTextAnnotationCustom(`
+          L’alimentation électrique de la LGV est assurée par le régulateur de sous-station, qui supervise les caténaires primaires via le tableau optique (zone inférieure à fond bleu). Sa présence au PAR optimise considérablement la gestion du trafic, puisque toute anomalie est immédiatement signalée par un voyant clignotant.
+        `);
+      });
       annotationTexte3.visible = true;
       viewer.scene.annotations.add(annotationTexte3);
 
@@ -720,11 +750,25 @@
       let annotationTexte4 = new Potree.Annotation({
           position: new THREE.Vector3(4.99, 7.81, 1.40),
           title: iconInfo4, // Ici on met l'élément HTML au lieu du texte
-          description: "Au PAR, des postes téléphoniques opérant sur le réseau GSM-R assurent une communication bidirectionnelle permanente avec les conducteurs. À chaque appel entrant, le numéro du train s’affiche automatiquement, ce qui permet au régulateur d’identifier immédiatement l’origine de la demande. Inversement, il peut composer directement le numéro d’un train précis, lancer un appel vers tous les trains d’une zone donnée, ou même diffuser une communication simultanée à l’ensemble des circulations présentes sur la LGV. Grâce à ce système, la coordination entre le centre de commandement et les équipes mobiles gagne en réactivité et en fiabilité.",
+          description: "",
           cameraPosition: new THREE.Vector3(5.83, 7.84, 1.84),
           cameraTarget: new THREE.Vector3(4.99, 7.81, 1.40)
       });
-      addTextAnnotationClickHandler(annotationTexte4);
+      iconInfo4.find("img").on("click", event => {
+        event.stopPropagation();
+        event.preventDefault();
+      
+        // recentre la caméra
+        if(typeof TWEEN !== "undefined") TWEEN.removeAll();
+        viewer.scene.view.setView(
+          annotationTexte4.cameraPosition,
+          annotationTexte4.cameraTarget,
+          1000
+        );
+        showTextAnnotationCustom(`
+          Au PAR, des postes téléphoniques opérant sur le réseau GSM-R assurent une communication bidirectionnelle permanente avec les conducteurs. À chaque appel entrant, le numéro du train s’affiche automatiquement, ce qui permet au régulateur d’identifier immédiatement l’origine de la demande. Inversement, il peut composer directement le numéro d’un train précis, lancer un appel vers tous les trains d’une zone donnée, ou même diffuser une communication simultanée à l’ensemble des circulations présentes sur la LGV. Grâce à ce système, la coordination entre le centre de commandement et les équipes mobiles gagne en réactivité et en fiabilité.
+        `);
+      });
       annotationTexte4.visible = true;
       viewer.scene.annotations.add(annotationTexte4);
     
@@ -737,9 +781,23 @@
       let annotationExp1 = new Potree.Annotation({
           position: new THREE.Vector3(1.12, 10.66, 2.53),
           title: iconExp1, // Ici on met l'élément HTML au lieu du texte
-          description: "<b>Numérotation des TGV :</b><br><br>Les TGV sont représentés par des numéros à <b>quatre chiffres</b> :<br>- <b>Pairs</b> en direction de Paris<br>- <b>Impairs</b> en direction de Lyon<br><br>Les TGV <i>sans voyageurs</i> portent des numéros à <b>six chiffres</b>.<br>Les trains <i>exceptionnels</i> sont identifiés par des numéros à <b>cinq chiffres</b>.",
+          description: "",
         });
-      addTextAnnotationClickHandler(annotationExp1);
+      iconExp1.find("img").on("click", event => {
+        event.stopPropagation();
+        event.preventDefault();
+      
+        // recentre la caméra
+        if(typeof TWEEN !== "undefined") TWEEN.removeAll();
+        viewer.scene.view.setView(
+          annotationExp1.cameraPosition,
+          annotationExp1.cameraTarget,
+          1000
+        );
+        showTextAnnotationCustom(`
+          <b>Numérotation des TGV :</b><br><br>Les TGV sont représentés par des numéros à <b>quatre chiffres</b> :<br>- <b>Pairs</b> en direction de Paris<br>- <b>Impairs</b> en direction de Lyon<br><br>Les TGV <i>sans voyageurs</i> portent des numéros à <b>six chiffres</b>.<br>Les trains <i>exceptionnels</i> sont identifiés par des numéros à <b>cinq chiffres</b>.
+        `);
+      });
       annotationExp1.visible = true;
       viewer.scene.annotations.add(annotationExp1);
       
@@ -750,9 +808,23 @@
       let annotationExp2 = new Potree.Annotation({
           position: new THREE.Vector3(0.86, 9.93, 3.10),
           title: iconExp2, // Ici on met l'élément HTML au lieu du texte
-          description: " Postes et villes traversés par la LGV, avec leurs points kilométriques associés. Les postes peuvent être contrôlés localement en cas de problème au PAR. ",
+          description: "",
       });
-      addTextAnnotationClickHandler(annotationExp2);
+      iconExp2.find("img").on("click", event => {
+        event.stopPropagation();
+        event.preventDefault();
+      
+        // recentre la caméra
+        if(typeof TWEEN !== "undefined") TWEEN.removeAll();
+        viewer.scene.view.setView(
+          annotationExp2.cameraPosition,
+          annotationExp2.cameraTarget,
+          1000
+        );
+        showTextAnnotationCustom(`
+          Postes et villes traversés par la LGV, avec leurs points kilométriques associés. Les postes peuvent être contrôlés localement en cas de problème au PAR.
+        `);
+      });
       annotationExp2.visible = true;
       viewer.scene.annotations.add(annotationExp2);
       
@@ -763,16 +835,27 @@
       let annotationExp3 = new Potree.Annotation({
           position: new THREE.Vector3(0.96, 10.22, 2.56),
           title: iconExp3, // Ici on met l'élément HTML au lieu du texte
-          description: `
+          description: "",
+      });
+      iconExp3.find("img").on("click", event => {
+        event.stopPropagation();
+        event.preventDefault();
+      
+        // recentre la caméra
+        if(typeof TWEEN !== "undefined") TWEEN.removeAll();
+        viewer.scene.view.setView(
+          annotationExp3.cameraPosition,
+          annotationExp3.cameraTarget,
+          1000
+        );
+        showTextAnnotationCustom(`
           <div style="text-align: center;">
             <span style="font-weight: bold;">&larr; Direction Paris</span>
             <span style="color: gray;">(haut)</span><br>
             <span style="font-weight: bold;">&rarr; Direction Lyon</span>
             <span style="color: gray;">(bas)</span>
           </div>
-        `,
-      });
-      addTextAnnotationClickHandler(annotationExp3);
+        `);
       annotationExp3.visible = true;
       viewer.scene.annotations.add(annotationExp3);
       
@@ -784,13 +867,26 @@
           position: new THREE.Vector3(0.84, 9.84, 2.60),
           title: iconExp4, // Ici on met l'élément HTML au lieu du texte
           description: `
-            <div style="text-align: center;">
-              <span style="color: green;">Lumière verte</span> = Section libre<br>
-              <span style="color: red;">Lumière rouge</span> = TGV en ligne
-            </div>
           `,
       });
-      addTextAnnotationClickHandler(annotationExp4);
+
+      iconExp4.find("img").on("click", event => {
+        event.stopPropagation();
+        event.preventDefault();
+      
+        // recentre la caméra
+        if(typeof TWEEN !== "undefined") TWEEN.removeAll();
+        viewer.scene.view.setView(
+          annotationExp4.cameraPosition,
+          annotationExp4.cameraTarget,
+          1000
+        );
+        showTextAnnotationCustom(`
+          <div style="text-align: center;">
+              <span style="color: green;">Lumière verte</span> = Section libre<br>
+              <span style="color: red;">Lumière rouge</span> = TGV en ligne
+          </div>
+        `);
       annotationExp4.visible = true;
       viewer.scene.annotations.add(annotationExp4);
 
@@ -801,9 +897,22 @@
       let annotationExp5 = new Potree.Annotation({
           position: new THREE.Vector3(1.10, 10.61, 2.65),
           title: iconExp5, // Ici on met l'élément HTML au lieu du texte
-          description: "Chaque section de 20 km de voie, représentée par une colonne d’affichage, peut contenir plusieurs trains. Un voyant de débordement peut même indiquer un nombre de trains supérieur à la capacité d’affichage.",
+          description: "",
       });
-      addTextAnnotationClickHandler(annotationExp5);
+      iconExp5.find("img").on("click", event => {
+        event.stopPropagation();
+        event.preventDefault();
+      
+        // recentre la caméra
+        if(typeof TWEEN !== "undefined") TWEEN.removeAll();
+        viewer.scene.view.setView(
+          annotationExp5.cameraPosition,
+          annotationExp5.cameraTarget,
+          1000
+        );
+        showTextAnnotationCustom(`
+          Chaque section de 20 km de voie, représentée par une colonne d’affichage, peut contenir plusieurs trains. Un voyant de débordement peut même indiquer un nombre de trains supérieur à la capacité d’affichage.
+        `);
       annotationExp5.visible = true;
       viewer.scene.annotations.add(annotationExp5);
       

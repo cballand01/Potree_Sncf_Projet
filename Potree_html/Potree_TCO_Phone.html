@@ -604,120 +604,84 @@
     annotationSound2.visible = true;
     viewer.scene.annotations.add(annotationSound2);
 
-//---------------- Seuils de distance d'affichage ----------------//
-      const distanceThresholdAudio = 4; //audios
-      const distanceThresholdText = 4; //textes
-      const distanceThresholdImage = 4; //images
-      const distanceThreshold3D = 4; //liens3D
-      const distanceGoto = 7; //liens html
-      const distanceThresholdExp = 1; //textes rapprochés
-      const distanceThresholdAnimation = 4; //video
-      const distanceThreshold360 = 5; //360
+    //---------------- Seuils de distance d'affichage ----------------//
+    const distanceThresholdAudio = 4; //audios
+    const distanceThresholdText = 4; //textes
+    const distanceThresholdImage = 4; //images
+    const distanceThreshold3D = 4; //liens3D
+    const distanceGoto = 7; //liens html
+    const distanceThresholdExp = 1; //textes rapprochés
+    const distanceThresholdAnimation = 4; //video
+    const distanceThreshold360 = 5; //360
 
-      // Fonction pour vérifier si la caméra est dans la plage de gisement et dans la distance de l'annotation
-      function isCameraInVisibilityCone(cameraPos, annotationPos, maxDistance, minGisement, maxGisement) {
-          let camera = viewer.scene.getActiveCamera();
-          if (!camera || !camera.position) {
-              console.error("La caméra ou sa position sont indéfinis.");
-              return false;
-          }
-          // 1. Calculer la distance entre la caméra et l'annotation
-          let distance = cameraPos.distanceTo(annotationPos);
-          if (distance > maxDistance) {
-              return false;
-          }
-          // 2. Calculer la direction de l'annotation VERS la caméra (INVERSION ici)
-          let directionToCamera = new THREE.Vector3().subVectors(cameraPos, annotationPos);
-          directionToCamera.z = 0;
-          directionToCamera.normalize();
-          // 3. Calculer l'angle en degrés avec alignement à 0°=Nord
-          let angleRad = Math.atan2(directionToCamera.y, directionToCamera.x);
-          let angleDeg = THREE.MathUtils.radToDeg(angleRad);
-          angleDeg = (angleDeg - 90 + 360) % 360; // corriger pour mettre Nord à 0°
-          // 4. Normaliser minGisement et maxGisement entre 0° et 360°
-          if (minGisement < 0) minGisement += 360;
-          if (maxGisement < 0) maxGisement += 360;
-          // 5. Vérifier si l'angle est dans l'intervalle
-          if (minGisement <= maxGisement) {
-              return angleDeg >= minGisement && angleDeg <= maxGisement;
-          } else {
-              return angleDeg >= minGisement || angleDeg <= maxGisement;
-          }
-      }
+    // Fonction pour vérifier si la caméra est dans la plage de gisement et dans la distance de l'annotation
+    function isCameraInVisibilityCone(cameraPos, annotationPos, maxDistance, minGisement, maxGisement) {
+        let camera = viewer.scene.getActiveCamera();
+        if (!camera || !camera.position) {
+            console.error("La caméra ou sa position sont indéfinis.");
+            return false;
+        }
+        // 1. Calculer la distance entre la caméra et l'annotation
+        let distance = cameraPos.distanceTo(annotationPos);
+        if (distance > maxDistance) {
+            return false;
+        }
+        // 2. Calculer la direction de l'annotation VERS la caméra (INVERSION ici)
+        let directionToCamera = new THREE.Vector3().subVectors(cameraPos, annotationPos);
+        directionToCamera.z = 0;
+        directionToCamera.normalize();
+        // 3. Calculer l'angle en degrés avec alignement à 0°=Nord
+        let angleRad = Math.atan2(directionToCamera.y, directionToCamera.x);
+        let angleDeg = THREE.MathUtils.radToDeg(angleRad);
+        angleDeg = (angleDeg - 90 + 360) % 360; // corriger pour mettre Nord à 0°
+        // 4. Normaliser minGisement et maxGisement entre 0° et 360°
+        if (minGisement < 0) minGisement += 360;
+        if (maxGisement < 0) maxGisement += 360;
+        // 5. Vérifier si l'angle est dans l'intervalle
+        if (minGisement <= maxGisement) {
+            return angleDeg >= minGisement && angleDeg <= maxGisement;
+        } else {
+            return angleDeg >= minGisement || angleDeg <= maxGisement;
+        }
+    }
 
-      // Mise à jour de la visibilité des annotations en fonction de la distance et du gisement
-      viewer.addEventListener("update", () => {
-          let cameraPos = viewer.scene.getActiveCamera().position;
+    // Mise à jour de la visibilité des annotations en fonction de la distance et du gisement
+    viewer.addEventListener("update", () => {
+        let cameraPos = viewer.scene.getActiveCamera().position;
 
-          let annotations = [
-          // Annotations audios
-          { position: annotationSound1.position, maxDistance: distanceThresholdAudio, minGisement: 150, maxGisement: 300, annotation: annotationSound1 },
-          { position: annotationSound2.position, maxDistance: distanceThresholdAudio, minGisement: 0, maxGisement: 360, annotation: annotationSound2 },
+        let annotations = [
+        // Annotations audios
+        { position: annotationSound1.position, maxDistance: distanceThresholdAudio, minGisement: 150, maxGisement: 300, annotation: annotationSound1 },
+        { position: annotationSound2.position, maxDistance: distanceThresholdAudio, minGisement: 0, maxGisement: 360, annotation: annotationSound2 },
 
             
-          // Annotations textuelles
-          { position: annotationTexte1.position, maxDistance: distanceThresholdText, minGisement: 150, maxGisement: 300, annotation: annotationTexte1 },
-          { position: annotationTexte2.position, maxDistance: 5, minGisement: 170, maxGisement: 330, annotation: annotationTexte2 },
-          { position: annotationTexte3.position, maxDistance: distanceThresholdText, minGisement: 130, maxGisement: 300, annotation: annotationTexte3 },
-          { position: annotationTexte4.position, maxDistance: distanceThresholdText, minGisement: 180, maxGisement: 330, annotation: annotationTexte4 },
+        // Annotations textuelles
+        { position: annotationTexte1.position, maxDistance: distanceThresholdText, minGisement: 150, maxGisement: 300, annotation: annotationTexte1 },
+        { position: annotationTexte2.position, maxDistance: 5, minGisement: 170, maxGisement: 330, annotation: annotationTexte2 },
+        { position: annotationTexte3.position, maxDistance: distanceThresholdText, minGisement: 130, maxGisement: 300, annotation: annotationTexte3 },
+        { position: annotationTexte4.position, maxDistance: distanceThresholdText, minGisement: 180, maxGisement: 330, annotation: annotationTexte4 },
 
-          // Annotations explicatives
-          { position: annotationExp1.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp1 },
-          { position: annotationExp2.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp2 },
-          { position: annotationExp3.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp3 },
-          { position: annotationExp4.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp4 },
-          { position: annotationExp5.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp5 },
+        // Annotations explicatives
+        { position: annotationExp1.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp1 },
+        { position: annotationExp2.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp2 },
+        { position: annotationExp3.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp3 },
+        { position: annotationExp4.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp4 },
+        { position: annotationExp5.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp5 },
+        ];
 
-          // Annotations images
-          { position: annotationImage1.position, maxDistance: distanceThresholdImage, minGisement: 130, maxGisement: 320, annotation: annotationImage1 },  // PRS 3
-          { position: annotationImage2.position, maxDistance: 3, minGisement: 240, maxGisement: 50, annotation: annotationImage2 }, //IDF 1
-          { position: annotationImage3.position, maxDistance:3, minGisement: 240, maxGisement: 50, annotation: annotationImage3 },  //IDF 2
-          { position: annotationImage4.position, maxDistance: 3, minGisement: 240, maxGisement: 50, annotation: annotationImage4 },  //IDF 3
-          { position: annotationImage5.position, maxDistance: distanceThresholdImage, minGisement: 180, maxGisement: 20, annotation: annotationImage5 }, //PRS 1
-          { position: annotationImage6.position, maxDistance: distanceThresholdImage, minGisement: 160, maxGisement: 350, annotation: annotationImage6 },  //PRS 2
-          { position: annotationImage7.position, maxDistance: distanceThresholdImage, minGisement: 100, maxGisement: 290, annotation: annotationImage7 },  // PRS 4
-          { position: annotationImage8.position, maxDistance: distanceThresholdImage, minGisement: 220, maxGisement: 15, annotation: annotationImage8 },  // Afficheur LED
-          { position: annotationImage9.position, maxDistance: distanceThresholdImage, minGisement: 320, maxGisement: 355, annotation: annotationImage9 },  // Porte d'entrée
-          { position: annotationImage10.position, maxDistance: distanceThresholdImage, minGisement: 150, maxGisement: 300, annotation: annotationImage10 },  // Téléphone
-          { position: annotationImage11.position, maxDistance: distanceThresholdImage, minGisement: 50, maxGisement: 220, annotation: annotationImage11 },  // GALITE
+        // Vérification de la visibilité de chaque annotation
+        annotations.forEach(item => {
+            let {position, maxDistance, minGisement, maxGisement, annotation} = item;
 
-          // Annotations 3D
-          { position: annotation3D1.position, maxDistance: distanceThreshold3D, minGisement: 40, maxGisement: 200, annotation: annotation3D1 },  //Tableau 1
-          { position: annotation3D2.position, maxDistance: distanceThreshold3D, minGisement: 120, maxGisement: 270, annotation: annotation3D2 },  //PRS 4
-          { position: annotation3D3.position, maxDistance: distanceThreshold3D, minGisement: 200, maxGisement: 0, annotation: annotation3D3 },  //PRS 1
-          { position: annotation3D4.position, maxDistance: distanceThreshold3D, minGisement: 180, maxGisement: 330, annotation: annotation3D4 },  //PRS 2
-          { position: annotation3D5.position, maxDistance: distanceThreshold3D, minGisement: 150, maxGisement: 300, annotation: annotation3D5 },  //PRS 3
-          { position: annotation3D6.position, maxDistance: 3.5, minGisement: 300, maxGisement: 50, annotation: annotation3D6 },  //Tableau IDF
-          { position: annotation3D7.position, maxDistance: 5, minGisement: 170, maxGisement: 330, annotation: annotation3D7 },  //Tableau Total
-
-          // Lien vers autre salle
-          { position: lienSDR.position, maxDistance: distanceGoto, minGisement: 130, maxGisement: 165, annotation: lienSDR },
-          { position: lienEXT.position, maxDistance: distanceGoto, minGisement: 320, maxGisement: 355, annotation: lienEXT },
-
-          // Animations
-          { position: annotationcam1.position, maxDistance: 7, minGisement: 290, maxGisement: 40, annotation: annotationcam1 },
-          { position: annotationcam2.position, maxDistance: distanceThresholdAnimation, minGisement: 0, maxGisement: 360, annotation: annotationcam2 },
-
-          // Panoramiques 360
-          { position: annotation3601.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3601 },
-          { position: annotation3602.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3602 },
-          { position: annotation3603.position, maxDistance: 7, minGisement: 130, maxGisement: 165, annotation: annotation3603 },
-          { position: annotation3604.position, maxDistance: distanceThreshold360, minGisement: 330, maxGisement: 140, annotation: annotation3604 }
-          ];
-
-          // Vérification de la visibilité de chaque annotation
-          annotations.forEach(item => {
-              let {position, maxDistance, minGisement, maxGisement, annotation} = item;
-
-              // Vérifie si l'annotation doit être visible en fonction de la distance et du gisement
-              if (isCameraInVisibilityCone(cameraPos, position, maxDistance, minGisement, maxGisement)) {
-                  annotation.visible = true;
-              } else {
-                  annotation.visible = false;
-              }
-          });
-      });
+            // Vérifie si l'annotation doit être visible en fonction de la distance et du gisement
+            if (isCameraInVisibilityCone(cameraPos, position, maxDistance, minGisement, maxGisement)) {
+                annotation.visible = true;
+            } else {
+                annotation.visible = false;
+            }
+        });
     });
+    
     
 
     //---------------- Début du chargement des modèles 3D (OBJ)----------------//

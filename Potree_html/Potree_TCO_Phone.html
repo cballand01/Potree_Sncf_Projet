@@ -769,6 +769,20 @@
   });
 </script>
 
+<!-- Gestion de la fenetre popup des textes -->
+<script>
+  function showTextAnnotationCustom(description) {
+      const popup = document.getElementById('textAnnotationPopupCustom');
+      const content = document.getElementById('textAnnotationContentCustom');
+      content.innerHTML = description;
+      popup.style.display = 'block';
+  }
+    
+  function hideTextAnnotationCustom() {
+      const popup = document.getElementById('textAnnotationPopupCustom');
+      popup.style.display = 'none';
+  }
+</script>
 
 
 </body>

@@ -355,14 +355,6 @@
     viewer.controls.enabled = false;
     viewer.inputHandler.enabled = false;
 
-    // Bloque aussi explicitement les interactions souris (au cas où)
-    ['mousedown', 'mousemove', 'mouseup', 'wheel'].forEach(eventType => {
-      renderArea.addEventListener(eventType, (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-      }, { passive: false });
-    });
-
     let totalToLoad = 1; // 1 nuage + 5 modèles
     let itemsLoaded = 0;
 

@@ -676,9 +676,17 @@
           cameraPosition: new THREE.Vector3(1.58, 9.79, 2.70),
           cameraTarget: new THREE.Vector3(0.93, 10.07, 2.70)
       });
-      iconInfo2.find("img").on("click", event => {
+     iconInfo2.find("img").on("click", event => {
         event.stopPropagation();
         event.preventDefault();
+      
+        // recentre la caméra
+        if(typeof TWEEN !== "undefined") TWEEN.removeAll();
+        viewer.scene.view.setView(
+          annotationTexte2.cameraPosition,
+          annotationTexte2.cameraTarget,
+          1000
+        );
 
         showTextAnnotationCustom(`
           <b>But du Tableau de Contrôle Optique (TCO)</b><br>

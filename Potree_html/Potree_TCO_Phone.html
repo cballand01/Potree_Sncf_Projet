@@ -601,6 +601,710 @@
     annotationSound2.visible = true;
     viewer.scene.annotations.add(annotationSound2);
 
+    //---------------- Annotations textuelles ----------------//
+    // Annotation texte 1 Zoom
+    let iconInfo1 = $(`<span>
+      <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+    </span>`);
+    let annotationTexte1 = new Potree.Annotation({
+        position: new THREE.Vector3(5.46, 9.28, 1.24),
+        title: iconInfo1, // Ici on met l'élément HTML au lieu du texte
+        description: "Un Poste de Relais à Transit Souple (PRS) est un dispositif de commande ferroviaire qui permet de gérer la circulation des trains dans des zones où plusieurs itinéraires se croisent ou se séparent. Contrairement aux systèmes traditionnels qui utilisent des relais mécaniques ou électromagnétiques rigides, le PRS repose sur des mécanismes à transit souple, offrant ainsi une plus grande souplesse et une adaptation plus facile aux besoins spécifiques du réseau.",
+        cameraPosition: new THREE.Vector3(6.19, 6.30, 1.99),
+        cameraTarget: new THREE.Vector3(5.31, 8.20, 1.25)
+    });
+    addTextAnnotationClickHandler(annotationTexte1);
+    annotationTexte1.visible = true;
+    viewer.scene.annotations.add(annotationTexte1);
+    
+    // Annotation texte 2 Zoom
+    let iconInfo2 = $(`<span>
+      <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+    </span>`);
+    let annotationTexte2 = new Potree.Annotation({
+        position: new THREE.Vector3(0.98, 10.26, 3.00),
+        title: iconInfo2, // Ici on met l'élément HTML au lieu du texte
+        description: "Le but du Tableau de Contrôle Optique (TCO) est de fournir une vue d'ensemble du trafic ferroviaire en temps réel, permettant aux régulateurs de prendre des décisions éclairées pour assurer la sécurité, la fluidité et l'efficacité des trajets des trains.",
+        cameraPosition: new THREE.Vector3(1.58, 9.79, 2.70),
+        cameraTarget: new THREE.Vector3(0.93, 10.07, 2.70)
+    });
+    addTextAnnotationClickHandler(annotationTexte2);
+    annotationTexte2.visible = true;
+    viewer.scene.annotations.add(annotationTexte2);
+
+    // Annotation texte 3 Zoom
+    let iconInfo3 = $(`<span>
+      <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+    </span>`);
+    let annotationTexte3 = new Potree.Annotation({
+        position: new THREE.Vector3(4.20, 12.36, 1.21),
+        title: iconInfo3, // Ici on met l'élément HTML au lieu du texte
+        description: "L’alimentation électrique de la LGV est assurée par le régulateur de sous-station, qui supervise les caténaires primaires via le tableau optique (zone inférieure à fond bleu). Sa présence au PAR optimise considérablement la gestion du trafic, puisque toute anomalie est immédiatement signalée par un voyant clignotant.",
+        cameraPosition: new THREE.Vector3(5.89, 11.81, 1.72),
+        cameraTarget: new THREE.Vector3(4.20, 12.36, 1.21)
+    });
+    addTextAnnotationClickHandler(annotationTexte3);
+    annotationTexte3.visible = true;
+    viewer.scene.annotations.add(annotationTexte3);
+
+    // Annotation texte 4 Zoom
+    let iconInfo4 = $(`<span>
+      <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+    </span>`);
+    let annotationTexte4 = new Potree.Annotation({
+        position: new THREE.Vector3(4.99, 7.81, 1.40),
+        title: iconInfo4, // Ici on met l'élément HTML au lieu du texte
+        description: "Au PAR, des postes téléphoniques opérant sur le réseau GSM-R assurent une communication bidirectionnelle permanente avec les conducteurs. À chaque appel entrant, le numéro du train s’affiche automatiquement, ce qui permet au régulateur d’identifier immédiatement l’origine de la demande. Inversement, il peut composer directement le numéro d’un train précis, lancer un appel vers tous les trains d’une zone donnée, ou même diffuser une communication simultanée à l’ensemble des circulations présentes sur la LGV. Grâce à ce système, la coordination entre le centre de commandement et les équipes mobiles gagne en réactivité et en fiabilité.",
+        cameraPosition: new THREE.Vector3(5.83, 7.84, 1.84),
+        cameraTarget: new THREE.Vector3(4.99, 7.81, 1.40)
+    });
+    addTextAnnotationClickHandler(annotationTexte4);
+    annotationTexte4.visible = true;
+    viewer.scene.annotations.add(annotationTexte4);
+    
+
+    //---------------- Annotations textuelles explications ----------------//
+    // Annotation texte explication 1
+    let iconExp1 = $(`<span>
+      <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+    </span>`);
+    let annotationExp1 = new Potree.Annotation({
+        position: new THREE.Vector3(1.12, 10.66, 2.53),
+        title: iconExp1, // Ici on met l'élément HTML au lieu du texte
+        description: "<b>Numérotation des TGV :</b><br><br>Les TGV sont représentés par des numéros à <b>quatre chiffres</b> :<br>- <b>Pairs</b> en direction de Paris<br>- <b>Impairs</b> en direction de Lyon<br><br>Les TGV <i>sans voyageurs</i> portent des numéros à <b>six chiffres</b>.<br>Les trains <i>exceptionnels</i> sont identifiés par des numéros à <b>cinq chiffres</b>.",
+      });
+    addTextAnnotationClickHandler(annotationExp1);
+    annotationExp1.visible = true;
+    viewer.scene.annotations.add(annotationExp1);
+    
+    // Annotation texte explication 2
+    let iconExp2 = $(`<span>
+      <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+    </span>`);
+    let annotationExp2 = new Potree.Annotation({
+        position: new THREE.Vector3(0.86, 9.93, 3.10),
+        title: iconExp2, // Ici on met l'élément HTML au lieu du texte
+        description: " Postes et villes traversés par la LGV, avec leurs points kilométriques associés. Les postes peuvent être contrôlés localement en cas de problème au PAR. ",
+    });
+    addTextAnnotationClickHandler(annotationExp2);
+    annotationExp2.visible = true;
+    viewer.scene.annotations.add(annotationExp2);
+    
+    // Annotation texte explication 3
+    let iconExp3 = $(`<span>
+      <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+    </span>`);
+    let annotationExp3 = new Potree.Annotation({
+        position: new THREE.Vector3(0.96, 10.22, 2.56),
+        title: iconExp3, // Ici on met l'élément HTML au lieu du texte
+        description: `
+        <div style="text-align: center;">
+          <span style="font-weight: bold;">&larr; Direction Paris</span>
+          <span style="color: gray;">(haut)</span><br>
+          <span style="font-weight: bold;">&rarr; Direction Lyon</span>
+          <span style="color: gray;">(bas)</span>
+        </div>
+      `,
+    });
+    addTextAnnotationClickHandler(annotationExp3);
+    annotationExp3.visible = true;
+    viewer.scene.annotations.add(annotationExp3);
+    
+    // Annotation texte explication 4
+    let iconExp4 = $(`<span>
+      <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+    </span>`);
+    let annotationExp4 = new Potree.Annotation({
+        position: new THREE.Vector3(0.84, 9.84, 2.60),
+        title: iconExp4, // Ici on met l'élément HTML au lieu du texte
+        description: `
+          <div style="text-align: center;">
+            <span style="color: green;">Lumière verte</span> = Section libre<br>
+            <span style="color: red;">Lumière rouge</span> = TGV en ligne
+          </div>
+        `,
+    });
+    addTextAnnotationClickHandler(annotationExp4);
+    annotationExp4.visible = true;
+    viewer.scene.annotations.add(annotationExp4);
+
+    // Annotation texte explication 5
+    let iconExp5 = $(`<span>
+      <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+    </span>`);
+    let annotationExp5 = new Potree.Annotation({
+        position: new THREE.Vector3(1.10, 10.61, 2.65),
+        title: iconExp5, // Ici on met l'élément HTML au lieu du texte
+        description: "Chaque section de 20 km de voie, représentée par une colonne d’affichage, peut contenir plusieurs trains. Un voyant de débordement peut même indiquer un nombre de trains supérieur à la capacité d’affichage.",
+    });
+    addTextAnnotationClickHandler(annotationExp5);
+    annotationExp5.visible = true;
+    viewer.scene.annotations.add(annotationExp5);
+    
+    //---------------- Annotations imagées ----------------//
+    // Annotation Image 1 (PRS3)
+    let iconImage1 = $(`<!-- Icône image pour la première annotation --> 
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    iconImage1.find("img").click((event) => {
+      event.stopPropagation();
+      viewer.scene.view.setView(annotationImage1.cameraPosition, annotationImage1.cameraTarget, 1000);
+      setTimeout(() => {
+        const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/175A0701.JPG";
+        const imageDescription = "Poste tout relais à transit souple 19 - 22";
+        $("#popupImage").attr("src", imageUrl);
+        $("#popupText").text(imageDescription);
+        $("#imagePopup").css("display", "flex");
+      }, 2000);
+    });
+    let annotationImage1 = new Potree.Annotation({
+      position: new THREE.Vector3(5.88, 9.87, 1.25),
+      title: iconImage1,
+      cameraPosition: new THREE.Vector3(6.34, 9.56, 2.02),
+      cameraTarget: new THREE.Vector3(5.53, 10.15, 1.40)
+    });
+    addAnnotationClickHandler(annotationImage1);
+    annotationImage1.visible = true;
+    viewer.scene.annotations.add(annotationImage1);
+    
+  
+    // Annotation avec image 2 (Ile de France 1)
+    let iconImage2 = $(`<!-- Icône image pour la deuxième annotation --> 
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    iconImage2.find("img").click((event) => {
+      event.stopPropagation();
+      viewer.scene.view.setView(annotationImage2.cameraPosition, annotationImage2.cameraTarget, 1000);
+      setTimeout(() => {
+        const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/175A0763.JPG";
+        const imageDescription = "Poste de gestion Île-de-France n°1";
+        $("#popupImage").attr("src", imageUrl);
+        $("#popupText").text(imageDescription);
+        $("#imagePopup").css("display", "flex");
+      }, 2000);
+    });
+    let annotationImage2 = new Potree.Annotation({
+      position: new THREE.Vector3(7.48, 2, 1.98),
+      title: iconImage2,
+      cameraPosition: new THREE.Vector3(7.78, 3.33, 2.03),
+      cameraTarget: new THREE.Vector3(7.47, 1.99, 1.66)
+    });
+    addAnnotationClickHandler(annotationImage2);
+    annotationImage2.visible = true;
+    viewer.scene.annotations.add(annotationImage2);
+    
+
+    // Annotation avec image 3 (Ile de France 2)
+    let iconImage3 = $(`<!-- Icône image pour la troisième annotation --> 
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    iconImage3.find("img").click((event) => {
+      event.stopPropagation();
+      viewer.scene.view.setView(annotationImage3.cameraPosition, annotationImage3.cameraTarget, 1000);
+      setTimeout(() => {
+        const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/175A0764.JPG";
+        const imageDescription = "Poste de gestion Île-de-France n°2";
+        $("#popupImage").attr("src", imageUrl);
+        $("#popupText").text(imageDescription);
+        $("#imagePopup").css("display", "flex");
+      }, 2000);
+    });
+    let annotationImage3 = new Potree.Annotation({
+      position: new THREE.Vector3(6.49, 2.10, 1.61),
+      title: iconImage3,
+      cameraPosition: new THREE.Vector3(6.96, 3.09, 1.75),
+      cameraTarget: new THREE.Vector3(6.49, 2.10, 1.61)
+    });
+    addAnnotationClickHandler(annotationImage3);
+    annotationImage3.visible = true;
+    viewer.scene.annotations.add(annotationImage3);
+    
+
+    // Annotation avec image 4 (Ile de France 3)
+    let iconImage4 = $(`<!-- Icône image pour la quatrième annotation --> 
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    iconImage4.find("img").click((event) => {
+      event.stopPropagation();
+      viewer.scene.view.setView(annotationImage4.cameraPosition, annotationImage4.cameraTarget, 1000);
+      setTimeout(() => {
+        const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/175A0762.JPG";
+        const imageDescription = "Poste de gestion Île-de-France n°3";
+        $("#popupImage").attr("src", imageUrl);
+        $("#popupText").text(imageDescription);
+        $("#imagePopup").css("display", "flex");
+      }, 2000);
+    });
+    let annotationImage4 = new Potree.Annotation({
+      position: new THREE.Vector3(5.78, 2.88, 1.96),
+      title: iconImage4,
+      cameraPosition: new THREE.Vector3(6.16, 3.92, 1.91),
+      cameraTarget: new THREE.Vector3(5.70, 2.97, 1.58)
+    });
+    addAnnotationClickHandler(annotationImage4);
+    annotationImage4.visible = true;
+    viewer.scene.annotations.add(annotationImage4);
+    
+
+    // Annotation avec image 5 (PRS1)
+    let iconImage5 = $(`<!-- Icône image pour la quatrième annotation --> 
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    iconImage5.find("img").click((event) => {
+      event.stopPropagation();
+      viewer.scene.view.setView(annotationImage5.cameraPosition, annotationImage5.cameraTarget, 1000);
+      setTimeout(() => {
+        const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/175A0718.JPG";
+        const imageDescription = "Poste tout relais à transit souple 10 - 14";
+        $("#popupImage").attr("src", imageUrl);
+        $("#popupText").text(imageDescription);
+        $("#imagePopup").css("display", "flex");
+      }, 2000);
+    });
+    let annotationImage5 = new Potree.Annotation({
+      position: new THREE.Vector3(5.40, 7.12, 1.24),
+      title: iconImage5,
+      cameraPosition: new THREE.Vector3(6.05, 6.65, 1.79),
+      cameraTarget: new THREE.Vector3(5.08, 7.05, 1.33)
+    });
+    addAnnotationClickHandler(annotationImage5);
+    annotationImage5.visible = true;
+    viewer.scene.annotations.add(annotationImage5);
+    
+
+    // Annotation avec image 6 (PRS2)
+    let iconImage6 = $(`<!-- Icône image pour la quatrième annotation --> 
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    iconImage6.find("img").click((event) => {
+      event.stopPropagation();
+      viewer.scene.view.setView(annotationImage6.cameraPosition, annotationImage6.cameraTarget, 1000);
+      setTimeout(() => {
+        const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/175A0710.JPG";
+        const imageDescription = "Poste tout relais à transit souple 15 - 16, 30, 18";
+        $("#popupImage").attr("src", imageUrl);
+        $("#popupText").text(imageDescription);
+        $("#imagePopup").css("display", "flex");
+      }, 2000);
+    });
+    let annotationImage6 = new Potree.Annotation({
+      position: new THREE.Vector3(5.26, 8.59, 1.24),
+      title: iconImage6,
+      cameraPosition: new THREE.Vector3(5.89, 8.49, 1.96),
+      cameraTarget: new THREE.Vector3(4.92, 8.60, 1.34)
+    });
+    addAnnotationClickHandler(annotationImage6);
+    annotationImage6.visible = true;
+    viewer.scene.annotations.add(annotationImage6);
+    
+
+    // Annotation avec image 7 (PRS 4)
+    let iconImage7 = $(`<!-- Icône image pour la quatrième annotation --> 
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    iconImage7.find("img").click((event) => {
+      event.stopPropagation();
+      viewer.scene.view.setView(annotationImage7.cameraPosition, annotationImage7.cameraTarget, 1000);
+      setTimeout(() => {
+        const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/175A0699.JPG";
+        const imageDescription = "Poste tout relais à transit souple 23 - 27";
+        $("#popupImage").attr("src", imageUrl);
+        $("#popupText").text(imageDescription);
+        $("#imagePopup").css("display", "flex");
+      }, 2000);
+    });
+    let annotationImage7 = new Potree.Annotation({
+      position: new THREE.Vector3(7.08, 10.64, 1.24),
+      title: iconImage7,
+      cameraPosition: new THREE.Vector3(6.95, 10.24, 1.88),
+      cameraTarget: new THREE.Vector3(6.99, 10.96, 1.34)
+    });
+    addAnnotationClickHandler(annotationImage7);
+    annotationImage7.visible = true;
+    viewer.scene.annotations.add(annotationImage7);
+
+    // Annotation avec image 8 (afficheur LED)
+    let iconImage8 = $(` 
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    iconImage8.find("img").click((event) => {
+      event.stopPropagation();
+      viewer.scene.view.setView(annotationImage8.cameraPosition, annotationImage8.cameraTarget, 1000);
+      setTimeout(() => {
+        const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/IMG_2190.jpg";
+        const imageDescription = "Afficheur 20mm LED TCO mural";
+        $("#popupImage").attr("src", imageUrl);
+        $("#popupText").text(imageDescription);
+        $("#imagePopup").css("display", "flex");
+      }, 2000);
+    });
+    let annotationImage8 = new Potree.Annotation({
+      position: new THREE.Vector3(0.72, 6.65, 2.48),
+      title: iconImage8,
+      cameraPosition: new THREE.Vector3(1.29, 6.68, 2.40),
+      cameraTarget: new THREE.Vector3(0.72, 6.65, 2.40)
+    });
+    addAnnotationClickHandler(annotationImage8);
+    annotationImage8.visible = true;
+    viewer.scene.annotations.add(annotationImage8);
+
+    // Annotation avec image 9 (Porte entrée)
+    let iconImage9 = $(` 
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    iconImage9.find("img").click((event) => {
+      event.stopPropagation();
+      viewer.scene.view.setView(annotationImage9.cameraPosition, annotationImage9.cameraTarget, 1000);
+      setTimeout(() => {
+        const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/20250306_140201.jpg";
+        const imageDescription = "Porte d'entrée de la salle du TCO";
+        $("#popupImage").attr("src", imageUrl);
+        $("#popupText").text(imageDescription);
+        $("#imagePopup").css("display", "flex");
+      }, 2000);
+    });
+    let annotationImage9 = new Potree.Annotation({
+      position: new THREE.Vector3(2.35, 2.43, 1.66),
+      title: iconImage9,
+      cameraPosition: new THREE.Vector3(4.03, 5.95, 1.72),
+      cameraTarget: new THREE.Vector3(2.35, 2.43, 1.66)
+    });
+    addAnnotationClickHandler(annotationImage9);
+    annotationImage9.visible = true;
+    viewer.scene.annotations.add(annotationImage9);
+
+    // Annotation avec image 10 (Téléphone)
+    let iconImage10 = $(` 
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    iconImage10.find("img").click((event) => {
+      event.stopPropagation();
+      viewer.scene.view.setView(annotationImage10.cameraPosition, annotationImage10.cameraTarget, 1000);
+      setTimeout(() => {
+        const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/T%C3%A9l%C3%A9phone.png";
+        const imageDescription = 
+          "Téléphones de communication avec les conducteurs (Source : Rails et Histoire).";
+        $("#popupImage").attr("src", imageUrl);
+        $("#popupText").text(imageDescription);
+        $("#imagePopup").css("display", "flex");
+      }, 2000);
+    });
+    let annotationImage10 = new Potree.Annotation({
+      position: new THREE.Vector3(6.29, 10.57, 1.40),
+      title: iconImage10,
+      cameraPosition: new THREE.Vector3(6.60, 10.05, 1.82),
+      cameraTarget: new THREE.Vector3(6.29, 10.57, 1.40)
+    });
+    addAnnotationClickHandler(annotationImage10);
+    annotationImage10.visible = true;
+    viewer.scene.annotations.add(annotationImage10);
+  
+    // Annotation avec image 11 (Téléphone)
+    let iconImage11 = $(` 
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    iconImage11.find("img").click((event) => {
+      event.stopPropagation();
+      viewer.scene.view.setView(annotationImage11.cameraPosition, annotationImage11.cameraTarget, 1000);
+      setTimeout(() => {
+        const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/Poste_informatique.png";
+        const imageDescription = 
+          "Système GALITE : gestion en temps réel de la circulation des TGV sur la LGV Sud-Est. (Source : Rails et Histoire).";
+        $("#popupImage").attr("src", imageUrl);
+        $("#popupText").text(imageDescription);
+        $("#imagePopup").css("display", "flex");
+      }, 2000);
+    });
+    let annotationImage11 = new Potree.Annotation({
+      position: new THREE.Vector3(8.09, 11.07, 1.73),
+      title: iconImage11,
+      cameraPosition: new THREE.Vector3(7.64, 10.38, 1.82),
+      cameraTarget: new THREE.Vector3(8.09, 11.07, 1.73)
+    });
+    addAnnotationClickHandler(annotationImage11);
+    annotationImage11.visible = true;
+    viewer.scene.annotations.add(annotationImage11);
+
+    //---------------- Liens visualisation 3D ----------------//
+    // Annotation 3D 1
+    let icon3D1 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_Tableau.html --> 
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    icon3D1.find("img").click((event) => {
+      event.stopPropagation();
+      window.open("/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_1.html", "_blank");
+    });
+    let annotation3D1 = new Potree.Annotation({
+      position: new THREE.Vector3(9.38, 11.03, 2.30),
+      title: icon3D1,
+      description: "",
+    });
+    addAnnotationClickHandler(annotation3D1);
+    annotation3D1.visible = true;
+    viewer.scene.annotations.add(annotation3D1);
+    
+
+    // Annotation 3D 2
+    let icon3D2 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_PRS4.html --> 
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    icon3D2.find("img").click((event) => {
+      event.stopPropagation();
+      window.open("/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_PRS4.html", "_blank");
+    });
+    let annotation3D2 = new Potree.Annotation({
+      position: new THREE.Vector3(6.91, 11.06, 1.39),
+      title: icon3D2,
+      description: "",
+    });
+    addAnnotationClickHandler(annotation3D2);
+    annotation3D2.visible = true;
+    viewer.scene.annotations.add(annotation3D2);
+    
+
+    // Annotation 3D 3
+    let icon3D3 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_PRS1.html --> 
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    icon3D3.find("img").click((event) => {
+      event.stopPropagation();
+      window.open("/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_PRS1.html", "_blank");
+    });
+    let annotation3D3 = new Potree.Annotation({
+      position: new THREE.Vector3(4.96, 7.01, 1.39),
+      title: icon3D3,
+      description: "",
+    });
+    addAnnotationClickHandler(annotation3D3);
+    annotation3D3.visible = true;
+    viewer.scene.annotations.add(annotation3D3);
+    
+
+    // Annotation 3D 4
+    let icon3D4 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_PRS2.html --> 
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    icon3D4.find("img").click((event) => {
+      event.stopPropagation();
+      window.open("/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_PRS2.html", "_blank");
+    });
+    let annotation3D4 = new Potree.Annotation({
+      position: new THREE.Vector3(4.82, 8.71, 1.39),
+      title: icon3D4,
+      description: "",
+    });
+    addAnnotationClickHandler(annotation3D4);
+    annotation3D4.visible = true;
+    viewer.scene.annotations.add(annotation3D4);
+    
+
+    // Annotation 3D 5
+    let icon3D5 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_PRS3.html --> 
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    icon3D5.find("img").click((event) => {
+      event.stopPropagation();
+      window.open("/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_PRS3.html", "_blank");
+    });
+    let annotation3D5 = new Potree.Annotation({
+      position: new THREE.Vector3(5.55, 10.17, 1.39),
+      title: icon3D5,
+      description: "",
+    });
+    addAnnotationClickHandler(annotation3D5);
+    annotation3D5.visible = true;
+    viewer.scene.annotations.add(annotation3D5);
+    
+
+
+    // Annotation 3D 6
+    let icon3D6 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_idf.html --> 
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    icon3D6.find("img").click((event) => {
+      event.stopPropagation();
+      window.open("/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_IDF.html", "_blank");
+    });
+    let annotation3D6 = new Potree.Annotation({
+      position: new THREE.Vector3(6.59, 1.02, 2.35),
+      title: icon3D6,
+      description: "",
+    });
+    addAnnotationClickHandler(annotation3D6);
+    annotation3D6.visible = true;
+    viewer.scene.annotations.add(annotation3D6);
+    
+
+    // Annotation 3D 7
+    let icon3D7 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_tab_total.html --> 
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    icon3D7.find("img").click((event) => {
+      event.stopPropagation();
+      window.open("/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_Complet.html", "_blank");
+    });
+    let annotation3D7 = new Potree.Annotation({
+      position: new THREE.Vector3(0.95, 10.98, 1.43),
+      title: icon3D7,
+      description: "",
+    });
+    addAnnotationClickHandler(annotation3D7);
+    annotation3D7.visible = true;
+    viewer.scene.annotations.add(annotation3D7);
+    
+
+
+    //---------------- Liens autre salle ----------------//
+    // Annotation Goto 1
+    let icongoto1 = $(`<!-- Icône pour annotation qui ouvre SDR.html --> 
+    <span style="display: flex; align-items: center;">
+      <!-- Titre textuel à gauche -->
+      <span style="margin-right: 10px; font-size: 16px; color: white;">Salle des relais</span>
+      <!-- Logo à côté du titre -->
+      <img src="/Potree_Sncf_Projet/build/potree/resources/icons/goto.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+    </span>
+    `);
+    icongoto1.find("img").click((event) => {
+      event.stopPropagation();
+      window.open("/Potree_Sncf_Projet/Potree_html/Potree_SDR.html", "_blank");
+    });
+    let lienSDR = new Potree.Annotation({
+      position: new THREE.Vector3(8.96, 15.89, 1.75),
+      title: icongoto1,
+      description: "",
+    });
+    addAnnotationClickHandler(lienSDR);
+    lienSDR.visible = true;
+    viewer.scene.annotations.add(lienSDR);
+
+    // Annotation Goto 2
+    let icongoto2 = $(`<!-- Icône pour annotation qui ouvre EXTERIEUR.html --> 
+    <span style="display: flex; align-items: center;">
+      <!-- Titre textuel à gauche -->
+      <span style="margin-right: 10px; font-size: 16px; color: white;">Extérieur du centre</span>
+      <!-- Logo à côté du titre -->
+      <img src="/Potree_Sncf_Projet/build/potree/resources/icons/goto.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+    </span>
+    `);
+    icongoto2.find("img").click((event) => {
+      event.stopPropagation();
+      window.open("/Potree_Sncf_Projet/Potree_html/Potree_EXTERIEUR.html", "_blank");
+    });
+    let lienEXT = new Potree.Annotation({
+      position: new THREE.Vector3(2.35, 2.43, 1.36),
+      title: icongoto2,
+      description: "",
+    });
+    addAnnotationClickHandler(lienEXT);
+    lienEXT.visible = true;
+    viewer.scene.annotations.add(lienEXT);
+
+
+    //---------------- Liens 360° ----------------//
+    // Annotation 360° 1
+    let icon3601 = $(`
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/360.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    icon3601.find("img").click((event) => {
+      event.stopPropagation();
+      open360Viewer("https://storage.googleapis.com/projet-potree-sncf/Images/Images_360/R0010641_20250306162238.JPG");
+    });
+    let annotation3601 = new Potree.Annotation({
+      position: new THREE.Vector3(7.00, 8.00, 1.70),
+      title: icon3601
+    });
+    annotation3601.visible = true;
+    viewer.scene.annotations.add(annotation3601);
+
+    // Annotation 360° 2
+    let icon3602 = $(`
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/360.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    icon3602.find("img").click((event) => {
+      event.stopPropagation();
+      open360Viewer("https://storage.googleapis.com/projet-potree-sncf/Images/Images_360/R0010642_20250306162347.JPG");
+    });
+    let annotation3602 = new Potree.Annotation({
+      position: new THREE.Vector3(4.06, 9.95, 1.50),
+      title: icon3602
+    });
+    annotation3602.visible = true;
+    viewer.scene.annotations.add(annotation3602);
+
+    // Annotation 360° 3 (salle des relais)
+    let icon3603 = $(`
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/360.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    icon3603.find("img").click((event) => {
+      event.stopPropagation();
+      open360Viewer("https://storage.googleapis.com/projet-potree-sncf/Images/Images_360/DJI_20250306104823_0673_D_ETN.JPG");
+    });
+    let annotation3603 = new Potree.Annotation({
+      position: new THREE.Vector3(8.96, 15.89, 1.35),
+      title: icon3603
+    });
+    annotation3603.visible = true;
+    viewer.scene.annotations.add(annotation3603);
+
+    // Annotation 360° 4 (hauteur)
+    let icon3604 = $(`
+      <span>
+        <img src="/Potree_Sncf_Projet/build/potree/resources/icons/360.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+      </span>
+    `);
+    icon3604.find("img").click((event) => {
+      event.stopPropagation();
+      open360Viewer("https://storage.googleapis.com/projet-potree-sncf/Images/Images_360/DJI_20250306140048_0775_D_ETN.JPG");
+    });
+    let annotation3604 = new Potree.Annotation({
+      position: new THREE.Vector3(7.00, 8.00, 3.50),
+      title: icon3604
+    });
+    annotation3604.visible = true;
+    viewer.scene.annotations.add(annotation3604);
+
     //---------------- Seuils de distance d'affichage ----------------//
     const distanceThresholdAudio = 4; //audios
     const distanceThresholdText = 4; //textes
@@ -650,6 +1354,52 @@
         // Annotations audios
         { position: annotationSound1.position, maxDistance: distanceThresholdAudio, minGisement: 150, maxGisement: 300, annotation: annotationSound1 },
         { position: annotationSound2.position, maxDistance: distanceThresholdAudio, minGisement: 0, maxGisement: 360, annotation: annotationSound2 },
+
+            
+        // Annotations textuelles
+        { position: annotationTexte1.position, maxDistance: distanceThresholdText, minGisement: 150, maxGisement: 300, annotation: annotationTexte1 },
+        { position: annotationTexte2.position, maxDistance: 5, minGisement: 170, maxGisement: 330, annotation: annotationTexte2 },
+        { position: annotationTexte3.position, maxDistance: distanceThresholdText, minGisement: 130, maxGisement: 300, annotation: annotationTexte3 },
+        { position: annotationTexte4.position, maxDistance: distanceThresholdText, minGisement: 180, maxGisement: 330, annotation: annotationTexte4 },
+
+        // Annotations explicatives
+        { position: annotationExp1.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp1 },
+        { position: annotationExp2.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp2 },
+        { position: annotationExp3.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp3 },
+        { position: annotationExp4.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp4 },
+        { position: annotationExp5.position, maxDistance: distanceThresholdExp, minGisement: 170, maxGisement: 330, annotation: annotationExp5 },
+
+        // Annotations images
+        { position: annotationImage1.position, maxDistance: distanceThresholdImage, minGisement: 130, maxGisement: 320, annotation: annotationImage1 },  // PRS 3
+        { position: annotationImage2.position, maxDistance: 3, minGisement: 240, maxGisement: 50, annotation: annotationImage2 }, //IDF 1
+        { position: annotationImage3.position, maxDistance:3, minGisement: 240, maxGisement: 50, annotation: annotationImage3 },  //IDF 2
+        { position: annotationImage4.position, maxDistance: 3, minGisement: 240, maxGisement: 50, annotation: annotationImage4 },  //IDF 3
+        { position: annotationImage5.position, maxDistance: distanceThresholdImage, minGisement: 180, maxGisement: 20, annotation: annotationImage5 }, //PRS 1
+        { position: annotationImage6.position, maxDistance: distanceThresholdImage, minGisement: 160, maxGisement: 350, annotation: annotationImage6 },  //PRS 2
+        { position: annotationImage7.position, maxDistance: distanceThresholdImage, minGisement: 100, maxGisement: 290, annotation: annotationImage7 },  // PRS 4
+        { position: annotationImage8.position, maxDistance: distanceThresholdImage, minGisement: 220, maxGisement: 15, annotation: annotationImage8 },  // Afficheur LED
+        { position: annotationImage9.position, maxDistance: distanceThresholdImage, minGisement: 320, maxGisement: 355, annotation: annotationImage9 },  // Porte d'entrée
+        { position: annotationImage10.position, maxDistance: distanceThresholdImage, minGisement: 150, maxGisement: 300, annotation: annotationImage10 },  // Téléphone
+        { position: annotationImage11.position, maxDistance: distanceThresholdImage, minGisement: 50, maxGisement: 220, annotation: annotationImage11 },  // GALITE
+
+        // Annotations 3D
+        { position: annotation3D1.position, maxDistance: distanceThreshold3D, minGisement: 40, maxGisement: 200, annotation: annotation3D1 },  //Tableau 1
+        { position: annotation3D2.position, maxDistance: distanceThreshold3D, minGisement: 120, maxGisement: 270, annotation: annotation3D2 },  //PRS 4
+        { position: annotation3D3.position, maxDistance: distanceThreshold3D, minGisement: 200, maxGisement: 0, annotation: annotation3D3 },  //PRS 1
+        { position: annotation3D4.position, maxDistance: distanceThreshold3D, minGisement: 180, maxGisement: 330, annotation: annotation3D4 },  //PRS 2
+        { position: annotation3D5.position, maxDistance: distanceThreshold3D, minGisement: 150, maxGisement: 300, annotation: annotation3D5 },  //PRS 3
+        { position: annotation3D6.position, maxDistance: 3.5, minGisement: 300, maxGisement: 50, annotation: annotation3D6 },  //Tableau IDF
+        { position: annotation3D7.position, maxDistance: 5, minGisement: 170, maxGisement: 330, annotation: annotation3D7 },  //Tableau Total
+
+        // Lien vers autre salle
+        { position: lienSDR.position, maxDistance: distanceGoto, minGisement: 130, maxGisement: 165, annotation: lienSDR },
+        { position: lienEXT.position, maxDistance: distanceGoto, minGisement: 320, maxGisement: 355, annotation: lienEXT },
+
+        // Panoramiques 360
+        { position: annotation3601.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3601 },
+        { position: annotation3602.position, maxDistance: distanceThreshold360, minGisement: 0, maxGisement: 360, annotation: annotation3602 },
+        { position: annotation3603.position, maxDistance: 7, minGisement: 130, maxGisement: 165, annotation: annotation3603 },
+        { position: annotation3604.position, maxDistance: distanceThreshold360, minGisement: 330, maxGisement: 140, annotation: annotation3604 }
         ];
 
         // Vérification de la visibilité de chaque annotation
@@ -664,135 +1414,6 @@
             }
         });
     });
-    
-    
-
-    //---------------- Début du chargement des modèles 3D (OBJ)----------------//
-    {
-      let manager = new THREE.LoadingManager();
-      manager.onProgress = function ( item, loaded, total ) {
-        console.log( item, loaded, total );
-      };
-      let onProgress = function ( xhr ) {
-        if ( xhr.lengthComputable ) {
-          let percentComplete = xhr.loaded / xhr.total * 100;
-          console.log( Math.round(percentComplete, 2) + '% downloaded' );
-        }
-      };
-      let onError = function ( xhr ) {};
-    
-      // Chargement du modèle 1 (tab central)
-      let mtlLoader1 = new MTLLoader(manager);
-      mtlLoader1.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/TCO_3DModel_Tableau_Central/TCO_3DModel_Tableau_Central.mtl', function(materials) {
-        materials.preload();
-    
-        let objLoader1 = new OBJLoader(manager);
-        objLoader1.setMaterials(materials);
-        objLoader1.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/TCO_3DModel_Tableau_Central/TCO_3DModel_Tableau_Central.obj', function ( object ) {
-          object.position.set(0.02, 0.02, 0);
-          object.scale.set(1, 1, 1);
-          object.rotation.set(0, 0, 0);
-          viewer.scene.scene.add( object );
-          window.objMesh1 = object;
-        }, onProgress, onError );
-      });
-
-      // Chargement du modèle 2 (tab bas)
-      let MTLLoader2 = new MTLLoader(manager);
-      MTLLoader2.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/TCO_3DModel_Tableau_Bas/Model_bas.mtl', function(materials) {
-        materials.preload();
-        
-        let OBJLoader2 = new OBJLoader(manager);
-        OBJLoader2.setMaterials(materials);
-        OBJLoader2.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/TCO_3DModel_Tableau_Bas/TCO_3DModel_Tableau_Bas.obj', function (object) {
-          object.position.set(0, 0, 0);
-          object.scale.set(1, 1, 1);
-          object.rotation.set(0, 0, 0);
-          window.objMesh2 = object;
-          viewer.scene.scene.add(object);
-        }, onProgress, onError);
-      });
-
-      // Chargement du modèle 3 (tab haut)
-      let MTLLoader3 = new MTLLoader(manager);
-      MTLLoader3.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/TCO_3DModel_Tableau_Haut/Model_haut.mtl', function(materials) {
-        materials.preload();
-        
-        let OBJLoader3 = new OBJLoader(manager);
-        OBJLoader3.setMaterials(materials);
-        OBJLoader3.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/TCO_3DModel_Tableau_Haut/TCO_3DModel_Tableau_Haut.obj', function (object) {
-          object.position.set(0, 0, 0);
-          object.scale.set(1, 1, 1);
-          object.rotation.set(0, 0, 0);
-          window.objMesh3 = object;
-          viewer.scene.scene.add(object);
-        }, onProgress, onError);
-      });
-
-      // Chargement du modèle 4 (IDF modèle faible)
-      let MTLLoader4 = new MTLLoader(manager);
-      MTLLoader4.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/TCO_3DModel_Tableau_IDF/IDF_Model_faible.mtl', function(materials) {
-        materials.preload();
-        
-        let OBJLoader4 = new OBJLoader(manager);
-        OBJLoader4.setMaterials(materials);
-        OBJLoader4.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/TCO_3DModel_Tableau_IDF/TCO_3DModel_Tableau_IDF.obj', function (object) {
-          object.position.set(0, 0, 0);
-          object.scale.set(1, 1, 1);
-          object.rotation.set(0, 0, 0);
-          window.objMesh4 = object;
-          viewer.scene.scene.add(object);
-        }, onProgress, onError);
-      });
-
-      // Chargement du modèle 5 (tableau 1)
-      let MTLLoader5 = new MTLLoader(manager);
-      MTLLoader5.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/TCO_3DModel_Tableau_1/Tableau_inc.mtl', function(materials) {
-        materials.preload();
-        
-        let OBJLoader5 = new OBJLoader(manager);
-        OBJLoader5.setMaterials(materials);
-        OBJLoader5.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/TCO_3DModel_Tableau_1/TCO_3DModel_Tableau_1.obj', function (object) {
-          object.position.set(0, 0, 0);
-          object.scale.set(1, 1, 1);
-          object.rotation.set(0, 0, 0);
-          window.objMesh5 = object;
-          viewer.scene.scene.add(object);
-        }, onProgress, onError);
-      });
-
-      // Chargement du modèle 6 (Sol_bas)
-      let MTLLoader6 = new MTLLoader(manager);
-      MTLLoader6.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/TCO_Sol_Bas/Sol_TCO_bas.mtl', function(materials) {
-        materials.preload();
-        
-        let OBJLoader6 = new OBJLoader(manager);
-        OBJLoader6.setMaterials(materials);
-        OBJLoader6.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/TCO_Sol_Bas/TCO_Sol_Bas.obj', function (object) {
-          object.position.set(5.21, 13.55, 40.755);
-          object.scale.set(1, 1, 1);
-          object.rotation.set(0, 0, 0);
-          window.objMesh6 = object;
-          viewer.scene.scene.add(object);
-        }, onProgress, onError);
-      });
-
-      // Chargement du modèle 7 (Sol_haut)
-      let MTLLoader7 = new MTLLoader(manager);
-      MTLLoader7.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/TCO_Sol_Haut/Sol_TCO_haut.mtl', function(materials) {
-        materials.preload();
-        
-        let OBJLoader7 = new OBJLoader(manager);
-        OBJLoader7.setMaterials(materials);
-        OBJLoader7.load('https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_OBJ/TCO_Sol_Haut/TCO_Sol_Haut.obj', function (object) {
-          object.position.set(5.21, 13.55, 40.755);
-          object.scale.set(1, 1, 1);
-          object.rotation.set(0, 0, 0);
-          window.objMesh7 = object;
-          viewer.scene.scene.add(object);
-        }, onProgress, onError);
-      });
-    }
   </script>
 
   <!-- Scripts pour la gestion de la slidebar -->

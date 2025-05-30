@@ -401,10 +401,6 @@
           if (typeof TWEEN !== 'undefined') {
             TWEEN.removeAll();
           }
-          // Utilise les coordonnées déjà stockées dans l'annotation
-          viewer.scene.view.setView(annotation.cameraPosition, annotation.cameraTarget, duration);
-          hotspotNameEl.textContent = "RECENTRER LA VUE";
-        });
       }
 
       checkAllLoaded();

@@ -787,13 +787,6 @@
         event.stopPropagation();
         event.preventDefault();
       
-        // recentre la caméra
-        if(typeof TWEEN !== "undefined") TWEEN.removeAll();
-        viewer.scene.view.setView(
-          annotationExp1.cameraPosition,
-          annotationExp1.cameraTarget,
-          1000
-        );
         showTextAnnotationCustom(`
           <b>Numérotation des TGV :</b><br><br>Les TGV sont représentés par des numéros à <b>quatre chiffres</b> :<br>- <b>Pairs</b> en direction de Paris<br>- <b>Impairs</b> en direction de Lyon<br><br>Les TGV <i>sans voyageurs</i> portent des numéros à <b>six chiffres</b>.<br>Les trains <i>exceptionnels</i> sont identifiés par des numéros à <b>cinq chiffres</b>.
         `);
@@ -814,13 +807,6 @@
         event.stopPropagation();
         event.preventDefault();
       
-        // recentre la caméra
-        if(typeof TWEEN !== "undefined") TWEEN.removeAll();
-        viewer.scene.view.setView(
-          annotationExp2.cameraPosition,
-          annotationExp2.cameraTarget,
-          1000
-        );
         showTextAnnotationCustom(`
           Postes et villes traversés par la LGV, avec leurs points kilométriques associés. Les postes peuvent être contrôlés localement en cas de problème au PAR.
         `);
@@ -840,14 +826,7 @@
       iconExp3.find("img").on("click", event => {
         event.stopPropagation();
         event.preventDefault();
-      
-        // recentre la caméra
-        if(typeof TWEEN !== "undefined") TWEEN.removeAll();
-        viewer.scene.view.setView(
-          annotationExp3.cameraPosition,
-          annotationExp3.cameraTarget,
-          1000
-        );
+
         showTextAnnotationCustom(`
           <div style="text-align: center;">
             <span style="font-weight: bold;">&larr; Direction Paris</span>
@@ -867,21 +846,13 @@
       let annotationExp4 = new Potree.Annotation({
           position: new THREE.Vector3(0.84, 9.84, 2.60),
           title: iconExp4, // Ici on met l'élément HTML au lieu du texte
-          description: `
-          `,
+          description: "",
       });
 
       iconExp4.find("img").on("click", event => {
         event.stopPropagation();
         event.preventDefault();
-      
-        // recentre la caméra
-        if(typeof TWEEN !== "undefined") TWEEN.removeAll();
-        viewer.scene.view.setView(
-          annotationExp4.cameraPosition,
-          annotationExp4.cameraTarget,
-          1000
-        );
+    
         showTextAnnotationCustom(`
           <div style="text-align: center;">
               <span style="color: green;">Lumière verte</span> = Section libre<br>
@@ -904,14 +875,7 @@
       iconExp5.find("img").on("click", event => {
         event.stopPropagation();
         event.preventDefault();
-      
-        // recentre la caméra
-        if(typeof TWEEN !== "undefined") TWEEN.removeAll();
-        viewer.scene.view.setView(
-          annotationExp5.cameraPosition,
-          annotationExp5.cameraTarget,
-          1000
-        );
+  
         showTextAnnotationCustom(`
           Chaque section de 20 km de voie, représentée par une colonne d’affichage, peut contenir plusieurs trains. Un voyant de débordement peut même indiquer un nombre de trains supérieur à la capacité d’affichage.
         `);

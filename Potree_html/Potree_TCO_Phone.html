@@ -1768,6 +1768,28 @@
   });
 </script>
 
+<script>
+  function open360Viewer(imagePath) {
+    document.getElementById("popup360").style.display = "block";
+    pannellum.viewer('panorama', {
+      type: 'equirectangular',
+      panorama: imagePath,
+      autoLoad: true,
+      showControls: false,     // Supprime tous les boutons (haut-gauche)
+      compass: false,          // Supprime l’icône d’orientation
+      showZoomCtrl: false,     // Supprime le zoom
+      showFullscreenCtrl: false,
+      showControlsOnHover: false,
+      mouseZoom: true          // Optionnel : garde le zoom molette si tu veux
+    });
+  }
+
+  document.getElementById("close360").addEventListener("click", function() {
+    document.getElementById("popup360").style.display = "none";
+    document.getElementById("panorama").innerHTML = ""; // Réinitialise le viewer
+  });
+</script>
+
 <!-- Gestion de la fenetre popup des textes -->
 <script>
   function showTextAnnotationCustom(description) {

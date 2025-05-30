@@ -355,16 +355,6 @@
     viewer.controls.enabled = false;
     viewer.inputHandler.enabled = false;
 
-    // Bloque explicitement les interactions tactiles sur mobile
-    const renderArea = document.getElementById("potree_render_area");
-
-    ['touchstart', 'touchmove', 'touchend', 'pointerdown', 'pointermove', 'pointerup'].forEach(eventType => {
-      renderArea.addEventListener(eventType, (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-      }, { passive: false });
-    });
-
     // Bloque aussi explicitement les interactions souris (au cas où)
     ['mousedown', 'mousemove', 'mouseup', 'wheel'].forEach(eventType => {
       renderArea.addEventListener(eventType, (event) => {

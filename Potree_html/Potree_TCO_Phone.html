@@ -361,6 +361,19 @@
       viewer.scene.view.setView(initialPosition, initialTarget);
       viewer.useHQ = true;
 
+      // fonction qui permet de cliquer sur une annotation même si l'animation du hotpsot n'est pas terminée
+      function addAnnotationClickHandler(annotation, duration = 1000) {
+        annotation.title.find("img").click((event) => {
+          event.stopPropagation();
+          if (typeof TWEEN !== 'undefined') {
+            TWEEN.removeAll();
+          }
+          // Utilise les coordonnées déjà stockées dans l'annotation
+          viewer.scene.view.setView(annotation.cameraPosition, annotation.cameraTarget, duration);
+          hotspotNameEl.textContent = "RECENTRER LA VUE";
+        });
+      }
+
       checkAllLoaded();
   
       // Joystick ajouté ici pour être sûr que viewer soit initialisé
@@ -494,6 +507,60 @@
       draggingMove = false;
       joystickMove.style.transform = 'translate(-50%, -50%)';
     });
+
+    //---------------- Annotations audios ----------------//
+    // Icône pour l’annotation sonore 1 (télephone)
+    let iconSound1 = $(`<span>
+      <img src="/Potree_Sncf_Projet/build/potree/resources/icons/music.svg"
+            class="annotation-action-icon"
+            style="filter: invert(1); cursor: pointer;"
+            alt="Son" />
+    </span>`);
+    iconSound1.find("img").click(event => {
+      event.stopPropagation();
+      pauseAllAnnotationAudio();
+      const audio = document.getElementById("audioAnnotation1");
+      audio.currentTime = 0;    // si on veut pouvoir relancer immédiatement
+      audio.play();
+      // Ouverture du popup texte (utilise votre fonction existante)
+      showTextAnnotationCustom(`
+        <b>Appel téléphonique à un conducteur TGV</b><br>
+        <em>Source :  Vidéo « PAR LGV Sud-Est Paris Gare de Lyon (8 sur 9) » disponible sur la chaîne YouTube « Rails et Histoire » </em>
+      `);
+    });
+    let annotationSound1 = new Potree.Annotation({
+      position: new THREE.Vector3(6.45, 10.30, 1.27),
+      title: iconSound1
+    });
+    annotationSound1.visible = true;
+    viewer.scene.annotations.add(annotationSound1);
+
+    // Icône pour l’annotation sonore (ambiance)
+    let iconSound2 = $(`<span>
+      <img src="/Potree_Sncf_Projet/build/potree/resources/icons/music.svg"
+            class="annotation-action-icon"
+            style="filter: invert(1); cursor: pointer;"
+            alt="Son" />
+    </span>`);
+    iconSound2.find("img").click(event => {
+      event.stopPropagation();
+      pauseAllAnnotationAudio();
+      const audio = document.getElementById("audioAnnotation2");
+      audio.currentTime = 0;    // si on veut pouvoir relancer immédiatement
+      audio.play();
+      // Ouverture du popup texte (utilise votre fonction existante)
+      showTextAnnotationCustom(`
+        <b>Ambiance sonore du PAR</b><br>
+        <em>Source :  Vidéo « PAR LGV Sud-Est Paris Gare de Lyon (8 sur 9) » disponible sur la chaîne YouTube « Rails et Histoire » </em>
+      `);
+    });
+    let annotationSound2 = new Potree.Annotation({
+      position: new THREE.Vector3(4.71, 9.65, 3.10),
+      title: iconSound2
+    });
+    annotationSound2.visible = true;
+    viewer.scene.annotations.add(annotationSound2);
+    
 
     //---------------- Début du chargement des modèles 3D (OBJ)----------------//
     {

@@ -441,6 +441,7 @@
       function addTextAnnotationClickHandler(annotation, duration = 1000) {
           annotation.title.find("img").click((event) => {
               event.stopPropagation();
+              event.preventDefault();
               if (typeof TWEEN !== 'undefined') {
                   TWEEN.removeAll();
               }

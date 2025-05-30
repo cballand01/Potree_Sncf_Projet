@@ -685,6 +685,17 @@
           cameraPosition: new THREE.Vector3(1.58, 9.79, 2.70),
           cameraTarget: new THREE.Vector3(0.93, 10.07, 2.70)
       });
+      iconInfo2.find("img").on("click", event => {
+        event.stopPropagation();
+        event.preventDefault();
+
+      showTextAnnotationCustom(`
+        <b>But du Tableau de Contrôle Optique (TCO)</b><br>
+        Le TCO fournit une vue d'ensemble du trafic ferroviaire en temps réel, 
+        permettant aux régulateurs de prendre des décisions éclairées 
+        pour assurer la sécurité, la fluidité et l'efficacité des trajets.
+      `);
+
       addTextAnnotationClickHandler(annotationTexte2);
       annotationTexte2.visible = true;
       viewer.scene.annotations.add(annotationTexte2);

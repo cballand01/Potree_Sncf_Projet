@@ -541,6 +541,16 @@
       joystickMove.style.transform = 'translate(-50%, -50%)';
     });
 
+    /**
+     * Met en pause et remet à zéro toutes les annotations audio
+     */
+    function pauseAllAnnotationAudio() {
+      document.querySelectorAll('audio[id^="audioAnnotation"]').forEach(a => {
+        a.pause();
+        a.currentTime = 0;
+      });
+    }
+
     //---------------- Annotations audios ----------------//
     // Icône pour l’annotation sonore 1 (télephone)
     let iconSound1 = $(`<span>

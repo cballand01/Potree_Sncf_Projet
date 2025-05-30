@@ -89,12 +89,11 @@
     /* Pour que la popup vidéo prenne tout l’écran */
     #videoPopup {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(0, 0, 0, 0.9);
-      display: none;           /* tu peux passer à display: flex; quand tu ouvres */
+      inset: 0;               /* équivalent à top:0; right:0; bottom:0; left:0 */
+      width: 100%;            /* prend 100% de la zone parent (ici, la fenêtre) */
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      display: none;          /* passera à 'flex' en JS */
       align-items: center;
       justify-content: center;
       z-index: 9999;

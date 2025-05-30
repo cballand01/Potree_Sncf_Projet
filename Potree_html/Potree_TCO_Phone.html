@@ -1756,8 +1756,11 @@
 
   popupImage.addEventListener('dragstart', (e) => e.preventDefault());
 
-  // Réinitialisation à la fermeture
-  document.querySelector('.closePopup').addEventListener('click', () => {
+  // Réinitialisation à la fermeture et cache la popup
+  document.querySelector('#imagePopup .closePopup').addEventListener('click', () => {
+    // Masque la popup
+    document.getElementById('imagePopup').style.display = 'none';
+    // Réinitialise transform
     scale = 1;
     panX = 0;
     panY = 0;

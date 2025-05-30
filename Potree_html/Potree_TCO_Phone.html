@@ -662,14 +662,6 @@
           cameraPosition: new THREE.Vector3(6.19, 6.30, 1.99),
           cameraTarget: new THREE.Vector3(5.31, 8.20, 1.25)
       });
-      annotationTexte1.myDescription = `
-        Un Poste de Relais à Transit Souple (PRS) est un dispositif de commande ferroviaire
-        qui permet de gérer la circulation des trains dans des zones où plusieurs itinéraires
-        se croisent ou se séparent. Contrairement aux systèmes traditionnels qui utilisent
-        des relais mécaniques ou électromagnétiques rigides, le PRS repose sur des mécanismes
-        à transit souple, offrant ainsi une plus grande souplesse et une adaptation plus
-        facile aux besoins spécifiques du réseau.
-      `;
       addTextAnnotationClickHandler(annotationTexte1);
       annotationTexte1.visible = true;
       viewer.scene.annotations.add(annotationTexte1.myDescription);
@@ -681,7 +673,7 @@
       let annotationTexte2 = new Potree.Annotation({
           position: new THREE.Vector3(0.98, 10.26, 3.00),
           title: iconInfo2, // Ici on met l'élément HTML au lieu du texte
-          description: "Le but du Tableau de Contrôle Optique (TCO) est de fournir une vue d'ensemble du trafic ferroviaire en temps réel, permettant aux régulateurs de prendre des décisions éclairées pour assurer la sécurité, la fluidité et l'efficacité des trajets des trains.",
+          description: "",
           cameraPosition: new THREE.Vector3(1.58, 9.79, 2.70),
           cameraTarget: new THREE.Vector3(0.93, 10.07, 2.70)
       });

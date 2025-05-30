@@ -655,7 +655,6 @@
       let iconInfo1 = $(`<span>
         <img src="/Potree_Sncf_Projet/build/potree/resources/icons/info.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
       </span>`);
-      let annotationTexte1.myDescription = "Un Poste de Relais à Transit Souple (PRS) est un dispositif de commande ferroviaire qui permet de gérer la circulation des trains dans des zones où plusieurs itinéraires se croisent ou se séparent. Contrairement aux systèmes traditionnels qui utilisent des relais mécaniques ou électromagnétiques rigides, le PRS repose sur des mécanismes à transit souple, offrant ainsi une plus grande souplesse et une adaptation plus facile aux besoins spécifiques du réseau.",
       let annotationTexte1 = new Potree.Annotation({
           position: new THREE.Vector3(5.46, 9.28, 1.24),
           title: iconInfo1, // Ici on met l'élément HTML au lieu du texte
@@ -663,6 +662,14 @@
           cameraPosition: new THREE.Vector3(6.19, 6.30, 1.99),
           cameraTarget: new THREE.Vector3(5.31, 8.20, 1.25)
       });
+      annotationTexte1.myDescription = `
+        Un Poste de Relais à Transit Souple (PRS) est un dispositif de commande ferroviaire
+        qui permet de gérer la circulation des trains dans des zones où plusieurs itinéraires
+        se croisent ou se séparent. Contrairement aux systèmes traditionnels qui utilisent
+        des relais mécaniques ou électromagnétiques rigides, le PRS repose sur des mécanismes
+        à transit souple, offrant ainsi une plus grande souplesse et une adaptation plus
+        facile aux besoins spécifiques du réseau.
+      `;
       addTextAnnotationClickHandler(annotationTexte1);
       annotationTexte1.visible = true;
       viewer.scene.annotations.add(annotationTexte1.myDescription);

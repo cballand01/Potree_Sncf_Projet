@@ -366,7 +366,7 @@
       }
     }
   
-    Potree.loadPointCloud("https://storage.googleapis.com/projet-potree-sncf/NuageTCO/Nuage_Sans_Sol_et_Tableaux/metadata.json", "Salle_TCO", function(e){
+    Potree.loadPointCloud("https://storage.googleapis.com/projet-potree-sncf/NuageTCO/Nuage_complet/metadata.json", "Salle_TCO", function(e){
       viewer.scene.addPointCloud(e.pointcloud);
       let material = e.pointcloud.material;
       material.size = 1.3;

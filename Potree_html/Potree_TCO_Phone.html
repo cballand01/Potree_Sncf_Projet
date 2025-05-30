@@ -280,6 +280,18 @@
     </div>
   </div>
 
+  <!-- Popup pour la lecture de vidéo -->
+  <div id="videoPopup">
+    <div id="videoPopupContent">
+      <span class="closeVideoPopup">&times;</span>
+      <video id="popupVideo" controls style="width:100%; max-height:80vh; border-radius:4px;">
+        <source src="" type="video/mp4">
+        Votre navigateur ne supporte pas la vidéo.
+      </video>
+      <div id="popupVideoText" style="color:#000; font-size:14px; line-height:1.4;"></div>
+    </div>
+  </div>
+
   <!-- Popup Textes -->
   <div id="textAnnotationPopupCustom">
     <button id="closeTextAnnotationPopupCustom" onclick="hideTextAnnotationCustom()">×</button>

@@ -1584,22 +1584,14 @@ document.addEventListener('DOMContentLoaded', function() {
     popupImage.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
 
     // Maintenant, on « clamp » panX/panY pour que l'image ne dépasse pas du conteneur
-    // Récupère les dimensions du conteneur (le overlay plein écran) et de l'image actuelle
     const containerRect = popupOverlay.getBoundingClientRect();
-    const imgRect = popupImage.getBoundingClientRect();
+    const imgRect       = popupImage.getBoundingClientRect();
 
-    // Largeur/hauteur de l'image après transformation
     const transformedWidth  = imgRect.width;
     const transformedHeight = imgRect.height;
+    const containerWidth    = containerRect.width;
+    const containerHeight   = containerRect.height;
 
-    // Largeur/hauteur du conteneur (visible dans le popup)
-    const containerWidth  = containerRect.width;
-    const containerHeight = containerRect.height;
-
-    // Calcul des limites de translation :
-    // On autorise que l'image ne puisse jamais laisser un bord vide :
-    // - si l'image est plus large que le conteneur, on limite panX pour que les bords restent visibles
-    // - sinon, on centre horizontalement (panX = 0)
     let minPanX, maxPanX, minPanY, maxPanY;
 
     if (transformedWidth > containerWidth) {
@@ -1607,7 +1599,6 @@ document.addEventListener('DOMContentLoaded', function() {
       minPanX = -overflowX;
       maxPanX = overflowX;
     } else {
-      // image plus petite ou égale : on bloque au centre
       minPanX = maxPanX = 0;
     }
 
@@ -1619,41 +1610,37 @@ document.addEventListener('DOMContentLoaded', function() {
       minPanY = maxPanY = 0;
     }
 
-    // Clamp
     panX = Math.min(Math.max(panX, minPanX), maxPanX);
     panY = Math.min(Math.max(panY, minPanY), maxPanY);
 
-    // Ré-applique la transform correctement clampée
     popupImage.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
   }
 
   // 1) ZOOM AVEC LA MOLETTE (desktop)
   popupImage.addEventListener('wheel', function(e) {
     e.preventDefault();
-    const rect = popupImage.getBoundingClientRect();
+    const rect   = popupImage.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
-    const imageCX = rect.width / 2;
+    const imageCX = rect.width  / 2;
     const imageCY = rect.height / 2;
     const offsetX = mouseX - imageCX;
     const offsetY = mouseY - imageCY;
 
-    const zoomingIn = e.deltaY < 0;
-    const oldScale = scale;
-    let newScale = Math.max(minScale, Math.min(maxScale,
+    const zoomingIn   = e.deltaY < 0;
+    const oldScale    = scale;
+    let   newScale    = Math.max(minScale, Math.min(maxScale,
       scale * (zoomingIn ? zoomFactor : 1 / zoomFactor)
     ));
 
-    // Si on zoome assez pour garder > 1.05× ou qu'on entre en zoom in
     if (zoomingIn || newScale > 1.05) {
       const zoomRatio = newScale / oldScale;
       panX -= offsetX * (zoomRatio - 1);
       panY -= offsetY * (zoomRatio - 1);
     }
 
-    // Si on revient en dessous de 1.05×, on recentre progressivement
     if (!zoomingIn && newScale <= 1.05) {
-      const t = (newScale - 1) / 0.05; // 1→0
+      const t = (newScale - 1) / 0.05;
       panX *= t;
       panY *= t;
     }
@@ -1680,7 +1667,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!isPanning) return;
     isPanning = false;
     popupImage.style.cursor = (scale > 1) ? 'grab' : 'default';
-    // Si on redescend sous 1.05×, on remet tout à zéro
     if (scale <= 1.05) {
       scale = 1;
       panX = 0;
@@ -1692,7 +1678,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // 3) PINCH & PAN AU TOUCH (mobile)
   popupImage.addEventListener('touchstart', function(e) {
-    // Deux doigts → début pinch
     if (e.touches.length === 2) {
       e.preventDefault();
       isPinching = true;
@@ -1700,13 +1685,12 @@ document.addEventListener('DOMContentLoaded', function() {
       const dx = t1.clientX - t0.clientX;
       const dy = t1.clientY - t0.clientY;
       initialPinchDistance = Math.hypot(dx, dy);
-      initialScale = scale;
-      initialPanX = panX;
-      initialPanY = panY;
-      pinchMidX = (t0.clientX + t1.clientX) / 2;
-      pinchMidY = (t0.clientY + t1.clientY) / 2;
+      initialScale         = scale;
+      initialPanX          = panX;
+      initialPanY          = panY;
+      pinchMidX            = (t0.clientX + t1.clientX) / 2;
+      pinchMidY            = (t0.clientY + t1.clientY) / 2;
     }
-    // Un seul doigt ET zoomé → pan
     else if (e.touches.length === 1 && scale > 1) {
       const touch = e.touches[0];
       isPanning = true;
@@ -1717,25 +1701,21 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   popupImage.addEventListener('touchmove', function(e) {
-    // Pinch à deux doigts
     if (isPinching && e.touches.length === 2) {
       e.preventDefault();
-      const t0 = e.touches[0], t1 = e.touches[1];
+      const t0  = e.touches[0], t1 = e.touches[1];
       const dx = t1.clientX - t0.clientX;
       const dy = t1.clientY - t0.clientY;
       const currentDistance = Math.hypot(dx, dy);
 
-      // Nouvel échelle
       let newScale = initialScale * (currentDistance / initialPinchDistance);
       newScale = Math.max(minScale, Math.min(maxScale, newScale));
       const zoomRatio = newScale / initialScale;
 
-      // Calcul du centre de l'image
-      const rect = popupImage.getBoundingClientRect();
+      const rect    = popupImage.getBoundingClientRect();
       const imageCX = rect.left + rect.width / 2;
-      const imageCY = rect.top + rect.height / 2;
+      const imageCY = rect.top  + rect.height / 2;
 
-      // Offset entre le centre de pinch et le centre de l'image
       const offsetX = pinchMidX - imageCX;
       const offsetY = pinchMidY - imageCY;
 
@@ -1745,7 +1725,6 @@ document.addEventListener('DOMContentLoaded', function() {
       scale = newScale;
       updateTransform();
     }
-    // Pan à un seul doigt
     else if (isPanning && e.touches.length === 1) {
       e.preventDefault();
       const touch = e.touches[0];
@@ -1756,10 +1735,8 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   popupImage.addEventListener('touchend', function(e) {
-    // Fin du pinch
     if (isPinching && e.touches.length < 2) {
       isPinching = false;
-      // Si on retombe sous 1.05×, reset
       if (scale <= 1.05) {
         scale = 1;
         panX = 0;
@@ -1767,7 +1744,6 @@ document.addEventListener('DOMContentLoaded', function() {
         updateTransform();
       }
     }
-    // Fin du pan
     if (isPanning && e.touches.length === 0) {
       isPanning = false;
       popupImage.style.cursor = (scale > 1) ? 'grab' : 'default';
@@ -1781,14 +1757,17 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   popupImage.addEventListener('touchcancel', function() {
-    isPanning = false;
+    isPanning  = false;
     isPinching = false;
   });
 
-  // 4) RÉINITIALISATION AU CLIC SUR “×”
+  // 4) FERMETURE DU POPUP
   const closeBtn = document.querySelector('#popupContent .closePopup');
   if (closeBtn) {
     closeBtn.addEventListener('click', function() {
+      // 4.a) On ferme la fenêtre
+      popupOverlay.style.display = 'none';
+      // 4.b) On remet l’image à l’échelle/position d’origine
       scale = 1;
       panX = 0;
       panY = 0;
@@ -1797,8 +1776,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
-
-
 
 <script>
   function open360Viewer(imagePath) {

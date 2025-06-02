@@ -1185,41 +1185,44 @@
       viewer.scene.annotations.add(annotation3606);
 
       //---------------- Seuils de distance d'affichage ----------------//
-      const distanceThresholdImage = 4; //images
-      const distanceThreshold3D = 4; //liens3D
-      const distanceGoto = 7; //liens html
-      const distanceThresholdAnimation = 4; //video
-      const distanceThreshold360 = 5; //360
-
+      const distanceThresholdAudio = 4; //audios
+      const distanceThresholdText = 0; //textes
+      const distanceThresholdImage = 2; //images
+      const distanceThreshold3D = 2.5; //liens3D
+      const distanceGoto = 4; //liens html
+      const distanceThresholdExp = 1; //textes rapprochés
+      const distanceThresholdAnimation = 0; //video
+      const distanceThreshold360 = 3; //360
+      
       // Fonction pour vérifier si la caméra est dans la plage de gisement et dans la distance de l'annotation
-      function isCameraInVisibilityCone(cameraPos, annotationPos, maxDistance, minGisement, maxGisement) {
-          let camera = viewer.scene.getActiveCamera();
-          if (!camera || !camera.position) {
-              console.error("La caméra ou sa position sont indéfinis.");
-              return false;
-          }
-          // 1. Calculer la distance entre la caméra et l'annotation
-          let distance = cameraPos.distanceTo(annotationPos);
-          if (distance > maxDistance) {
-              return false;
-          }
-          // 2. Calculer la direction de l'annotation VERS la caméra (INVERSION ici)
-          let directionToCamera = new THREE.Vector3().subVectors(cameraPos, annotationPos);
-          directionToCamera.z = 0;
-          directionToCamera.normalize();
-          // 3. Calculer l'angle en degrés avec alignement à 0°=Nord
-          let angleRad = Math.atan2(directionToCamera.y, directionToCamera.x);
-          let angleDeg = THREE.MathUtils.radToDeg(angleRad);
-          angleDeg = (angleDeg - 90 + 360) % 360; // corriger pour mettre Nord à 0°
-          // 4. Normaliser minGisement et maxGisement entre 0° et 360°
-          if (minGisement < 0) minGisement += 360;
-          if (maxGisement < 0) maxGisement += 360;
-          // 5. Vérifier si l'angle est dans l'intervalle
-          if (minGisement <= maxGisement) {
-              return angleDeg >= minGisement && angleDeg <= maxGisement;
+      function isCameraInVisibilityCone(cameraPos, annotationPos, maxDistance, gisementRanges) {
+        let camera = viewer.scene.getActiveCamera();
+        if (!camera || !camera.position) return false;
+
+        let distance = cameraPos.distanceTo(annotationPos);
+        if (distance > maxDistance) return false;
+
+        let directionToCamera = new THREE.Vector3().subVectors(cameraPos, annotationPos);
+        directionToCamera.z = 0;
+        directionToCamera.normalize();
+
+        let angleRad = Math.atan2(directionToCamera.y, directionToCamera.x);
+        let angleDeg = THREE.MathUtils.radToDeg(angleRad);
+        angleDeg = (angleDeg - 90 + 360) % 360;
+
+        for (let range of gisementRanges) {
+          let { min, max } = range;
+          if (min < 0) min += 360;
+          if (max < 0) max += 360;
+
+          if (min <= max) {
+            if (angleDeg >= min && angleDeg <= max) return true;
           } else {
-              return angleDeg >= minGisement || angleDeg <= maxGisement;
+            if (angleDeg >= min || angleDeg <= max) return true;
           }
+        }
+
+        return false;  // Important : ajout nécessaire !
       }
 
       // Mise à jour de la visibilité des annotations en fonction de la distance et du gisement

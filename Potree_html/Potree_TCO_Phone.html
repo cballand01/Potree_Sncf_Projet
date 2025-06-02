@@ -1188,26 +1188,6 @@
       viewer.scene.annotations.add(annotationImage11);
 
       //---------------- Liens visualisation 3D ----------------//
-      // Annotation 3D 1
-      let icon3D1 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_Tableau.html --> 
-        <span>
-          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
-        </span>
-      `);
-      icon3D1.find("img").click((event) => {
-        event.stopPropagation();
-        window.open("/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_1.html", "_blank");
-      });
-      let annotation3D1 = new Potree.Annotation({
-        position: new THREE.Vector3(9.38, 11.03, 2.30),
-        title: icon3D1,
-        description: "",
-      });
-      addAnnotationClickHandler(annotation3D1);
-      annotation3D1.visible = true;
-      viewer.scene.annotations.add(annotation3D1);
-    
-
       // Annotation 3D 2
       let icon3D2 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_PRS4.html --> 
         <span>
@@ -1309,27 +1289,6 @@
       viewer.scene.annotations.add(annotation3D6);
       
 
-      // Annotation 3D 7
-      let icon3D7 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_tab_total.html --> 
-        <span>
-          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/3d.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
-        </span>
-      `);
-      icon3D7.find("img").click((event) => {
-        event.stopPropagation();
-        window.open("/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_Complet.html", "_blank");
-      });
-      let annotation3D7 = new Potree.Annotation({
-        position: new THREE.Vector3(0.95, 10.98, 1.43),
-        title: icon3D7,
-        description: "",
-      });
-      addAnnotationClickHandler(annotation3D7);
-      annotation3D7.visible = true;
-      viewer.scene.annotations.add(annotation3D7);
-      
-
-
       //---------------- Liens autre salle ----------------//
       // Annotation Goto 1
       let icongoto1 = $(`<!-- Icône pour annotation qui ouvre SDR.html --> 
@@ -1342,7 +1301,7 @@
       `);
       icongoto1.find("img").click((event) => {
         event.stopPropagation();
-        window.open("/Potree_Sncf_Projet/Potree_html/Potree_SDR.html", "_blank");
+        window.open("/Potree_Sncf_Projet/Potree_html/Potree_SDR_Phone.html", "_blank");
       });
       let lienSDR = new Potree.Annotation({
         position: new THREE.Vector3(8.96, 15.89, 1.75),
@@ -1364,7 +1323,7 @@
       `);
       icongoto2.find("img").click((event) => {
         event.stopPropagation();
-        window.open("/Potree_Sncf_Projet/Potree_html/Potree_EXTERIEUR.html", "_blank");
+        window.open("/Potree_Sncf_Projet/Potree_html/Potree_EXTERIEUR_Phone.html", "_blank");
       });
       let lienEXT = new Potree.Annotation({
         position: new THREE.Vector3(2.35, 2.43, 1.36),
@@ -1419,7 +1378,7 @@
       `);
       icon3603.find("img").click((event) => {
         event.stopPropagation();
-        open360Viewer("https://storage.googleapis.com/projet-potree-sncf/Images/Images_360/DJI_20250306104823_0673_D_ETN.JPG");
+        open360Viewer("https://storage.googleapis.com/projet-potree-sncf/Images/Images_360/6720x3360_DJI_20250306104823_0673_D_ETN.jpg");
       });
       let annotation3603 = new Potree.Annotation({
         position: new THREE.Vector3(8.96, 15.89, 1.35),
@@ -1436,7 +1395,7 @@
       `);
       icon3604.find("img").click((event) => {
         event.stopPropagation();
-        open360Viewer("https://storage.googleapis.com/projet-potree-sncf/Images/Images_360/DJI_20250306140048_0775_D_ETN.JPG");
+        open360Viewer("https://storage.googleapis.com/projet-potree-sncf/Images/Images_360/6720x3360_DJI_20250306140048_0775_D_ETN.jpg");
       });
       let annotation3604 = new Potree.Annotation({
         position: new THREE.Vector3(7.00, 8.00, 3.50),
@@ -1523,13 +1482,11 @@
           { position: annotationImage11.position, maxDistance: distanceThresholdImage, minGisement: 50, maxGisement: 220, annotation: annotationImage11 },  // GALITE
 
           // Annotations 3D
-          { position: annotation3D1.position, maxDistance: distanceThreshold3D, minGisement: 40, maxGisement: 200, annotation: annotation3D1 },  //Tableau 1
           { position: annotation3D2.position, maxDistance: distanceThreshold3D, minGisement: 120, maxGisement: 270, annotation: annotation3D2 },  //PRS 4
           { position: annotation3D3.position, maxDistance: distanceThreshold3D, minGisement: 200, maxGisement: 0, annotation: annotation3D3 },  //PRS 1
           { position: annotation3D4.position, maxDistance: distanceThreshold3D, minGisement: 180, maxGisement: 330, annotation: annotation3D4 },  //PRS 2
           { position: annotation3D5.position, maxDistance: distanceThreshold3D, minGisement: 150, maxGisement: 300, annotation: annotation3D5 },  //PRS 3
           { position: annotation3D6.position, maxDistance: 3.5, minGisement: 300, maxGisement: 50, annotation: annotation3D6 },  //Tableau IDF
-          { position: annotation3D7.position, maxDistance: 5, minGisement: 170, maxGisement: 330, annotation: annotation3D7 },  //Tableau Total
 
           // Lien vers autre salle
           { position: lienSDR.position, maxDistance: distanceGoto, minGisement: 130, maxGisement: 165, annotation: lienSDR },

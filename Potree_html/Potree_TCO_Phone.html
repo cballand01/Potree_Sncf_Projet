@@ -170,67 +170,80 @@
       width: 140px; /* même taille que version desktop */
     }
     
-    /* ========== PREMIER STYLE DU TOGGLE “Lissage” ========== */
+    /* =======================
+   TOGGLE “Lissage” corrigé
+   ======================= */
 
+    /* 1) Conteneur général du toggle (label + switch) */
     .toggle-container {
       display: flex;
       align-items: center;
       gap: 6px;
       user-select: none;
-      /* si besoin de le rendre cliquable en zone plus large,
-         vous pouvez ajouter position: relative; width: auto; height: 24px; ... */
     }
     
-    /* Texte “Lissage” */
-    .toggle-container .toggle-label {
+    /* 2) Texte “Lissage” */
+    .toggle-label {
       color: white;
       font-size: 0.9rem;
       white-space: nowrap;
     }
     
-    /* 1) Masquer l’input d’origine */
-    .toggle-container input[type="checkbox"] {
+    /* 3) Wrapper positionné qui contient le checkbox + la track */
+    .toggle-switch {
+      position: relative;
+      width: 40px;   /* largeur du switch */
+      height: 20px;  /* hauteur du switch */
+      flex-shrink: 0;
+    }
+    
+    /* 4) On masque le checkbox “réel” */
+    .toggle-switch input[type="checkbox"] {
       position: absolute;
+      inset: 0;     /* prend toute la zone du parent (.toggle-switch) */
       width: 100%;
       height: 100%;
-      opacity: 0;
       margin: 0;
+      opacity: 0;
       cursor: pointer;
       z-index: 2;
     }
     
-    /* 2) Track (fond) du switch */
-    .toggle-container .toggle-track {
-      position: relative;
-      width: 40px;
-      height: 20px;
-      background-color: #ccc;    /* Gris clair pour l’état “off” */
-      border-radius: 10px;        /* demi-hauteur = 20/2 */
+    /* 5) La “track” (fond) */
+    .toggle-switch .toggle-track {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;             /* 40px */
+      height: 100%;            /* 20px */
+      background-color: #ccc;  /* gris clair pour état OFF */
+      border-radius: 10px;     /* demi-hauteur = 20px/2 */
       transition: background-color 0.25s ease;
-      flex-shrink: 0;
       z-index: 1;
     }
     
-    /* 3) Thumb (bille blanche) */
-    .toggle-container .toggle-thumb {
+    /* 6) Le “thumb” (petit rond blanc) */
+    .toggle-switch .toggle-thumb {
       position: absolute;
-      top: 1px;                   /* pour centrer verticalement (20px - 18px) /2 */
-      left: 1px;                  /* marge interne de 1px */
-      width: 18px;                /* hauteur - 2 px de marge = 20 - 2 */
+      top: 1px;                /* marge interne haut/bas = (20px - 18px)/2 */
+      left: 1px;               /* marge interne gauche = 1px */
+      width: 18px;             /* hauteur - 2px de marge */
       height: 18px;
       background-color: white;
       border-radius: 50%;
       transition: transform 0.25s ease;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-      z-index: 1;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      z-index: 2;
     }
     
-    /* État “checked” → track devient rouge SNCF + thumb glisse */
-    .toggle-container input[type="checkbox"]:checked + .toggle-track {
-      background-color: #EF3340;  /* Rouge SNCF */
+    /* 7) Quand on coche le checkbox → track devient rouge SNCF */
+    .toggle-switch input[type="checkbox"]:checked + .toggle-track {
+      background-color: #EF3340;  /* rouge SNCF */
     }
-    .toggle-container input[type="checkbox"]:checked + .toggle-track + .toggle-thumb {
-      transform: translateX(20px); /* 40px − 18px − 2px = 20px de décalage */
+    
+    /* 8) Quand on coche le checkbox → on translate le thumb de 20px vers la droite */
+    .toggle-switch input[type="checkbox"]:checked + .toggle-track .toggle-thumb {
+      transform: translateX(20px);
     }
   </style>
 </head>
@@ -495,9 +508,13 @@
       <!-- 3) Toggle « Lissage » -->
       <div class="toggle-container">
         <span class="toggle-label">Lissage</span>
-        <input type="checkbox" id="toggleLissage"/>
-        <div class="toggle-track"></div>
-        <div class="toggle-thumb"></div>
+        <!-- on enveloppe le checkbox + track + thumb dans une <div> “toggle-switch” -->
+        <div class="toggle-switch">
+          <input type="checkbox" id="toggleLissage" />
+          <div class="toggle-track">
+            <div class="toggle-thumb"></div>
+          </div>
+        </div>
       </div>
   
     </div>

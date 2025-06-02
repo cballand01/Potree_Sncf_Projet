@@ -123,63 +123,80 @@
       display: none !important;
     }
 
-     /* 1) Conteneur global, positionné en bas-centre */
+    /* 1) Conteneur fixe en bas-centre */
     #bottomControls {
       position: fixed;
       bottom: 10px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 10000; /* assez haut pour être au-dessus du viewer */
+      z-index: 10000;
       background: rgba(0, 0, 0, 0.6);
       border-radius: 6px;
       padding: 6px 12px;
-      /* largeur auto + contenu flex */
+      /* largeur auto, sizing par contenu */
     }
   
-    /* 2) Aligner tout sur une seule ligne */
+    /* 2) Flex pour aligner tout sur une ligne */
     #bottomControls .controls-content {
       display: flex;
       align-items: center;
-      gap: 12px; /* espace entre les éléments */
+      gap: 12px;
       color: white;
       font-family: Roboto, sans-serif;
       font-size: 0.9rem;
     }
   
-    /* 3) Style du label “Points affichés” */
+    /* 3) Label “Points affichés” */
     .label-points {
       white-space: nowrap;
     }
   
-    /* 4) Slider compact */
+    /* 4) Slider « Points affichés » (style natif, seulement une largeur fixe) */
     .slider-points {
-      width: 120px;
+      width: 140px; /* même largeur que version desktop */
+      /* conservez le style natif du navigateur (track + thumb) */
+      appearance: none;
+      -webkit-appearance: none;
+      background: transparent; /* on ne change pas le track par CSS */
+    }
+    /* Track natif Firefox */
+    .slider-points::-moz-range-track {
       height: 4px;
-      background: #555;
+      background: #888;
       border-radius: 2px;
-      -webkit-appearance: none;
     }
-    /* Thumb du slider */
-    .slider-points::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 14px;
-      height: 14px;
-      background: #2196F3;
-      border-radius: 50%;
-      border: 2px solid white;
-      margin-top: -5px; /* pour centrer verticalement */
-      cursor: pointer;
+    /* Track natif WebKit/Chrome */
+    .slider-points::-webkit-slider-runnable-track {
+      height: 4px;
+      background: #888;
+      border-radius: 2px;
     }
+    /* Thumb natif Firefox */
     .slider-points::-moz-range-thumb {
       width: 14px;
       height: 14px;
       background: #2196F3;
-      border-radius: 50%;
       border: 2px solid white;
+      border-radius: 50%;
       cursor: pointer;
     }
+    /* Thumb natif WebKit/Chrome */
+    .slider-points::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      margin-top: -5px; /* centrer sur track */
+      background: #2196F3;
+      border: 2px solid white;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    /* Supprimer le focus outline si besoin */
+    .slider-points:focus {
+      outline: none;
+    }
   
-    /* 5) Toggle “Lissage” */
+    /* 5) Toggle « Lissage »  */
     .toggle-container {
       position: relative;
       display: flex;
@@ -187,12 +204,12 @@
       gap: 6px;
       user-select: none;
     }
-    /* Texte “Lissage” */
+    /* Texte « Lissage » */
     .toggle-label {
-      white-space: nowrap;
       color: white;
+      white-space: nowrap;
     }
-    /* Input checkbox caché */
+    /* Cacher la checkbox elle-même */
     .toggle-container input[type="checkbox"] {
       position: absolute;
       width: 100%;
@@ -202,16 +219,16 @@
       cursor: pointer;
       z-index: 2;
     }
-    /* Track (fond) */
+    /* Track du switch */
     .toggle-container .toggle-track {
-      width: 36px;
+      width: 34px;
       height: 18px;
       background-color: #888;
       border-radius: 9px;
       transition: background-color 0.25s ease;
       flex-shrink: 0;
     }
-    /* Thumb (bouton rond) */
+    /* Bille (thumb) du switch */
     .toggle-container .toggle-thumb {
       position: absolute;
       top: 1px;
@@ -224,12 +241,12 @@
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
       z-index: 1;
     }
-    /* Quand coché : track rouge SNCF, thumb déplacé */
+    /* État coché → track rouge SNCF, thumb déplacé */
     .toggle-container input[type="checkbox"]:checked + .toggle-track {
       background-color: #EF3340;
     }
     .toggle-container input[type="checkbox"]:checked + .toggle-track + .toggle-thumb {
-      transform: translateX(18px);
+      transform: translateX(16px);
     }
   </style>
 </head>
@@ -470,13 +487,17 @@
     <div id="panorama" style=" width: 100vw; height: 100vh;"></div>
   </div>
 
+  <!-- ======================================
+     BOTTOM CONTROLS (POINTS + LISSAGE)
+     ====================================== -->
   <div id="bottomControls">
     <div class="controls-content">
-      <!-- Label + valeur -->
+      <!-- 1) Label + valeur actuelle -->
       <span class="label-points">
         Points affichés : <span id="pointBudgetValue">2 000 000</span>
       </span>
-      <!-- Slider compact -->
+  
+      <!-- 2) Slider « Points affichés » (style natif) -->
       <input
         type="range"
         id="pointBudgetSlider"
@@ -486,7 +507,8 @@
         value="2000000"
         class="slider-points"
       />
-      <!-- Toggle Lissage -->
+  
+      <!-- 3) Toggle « Lissage » -->
       <div class="toggle-container">
         <span class="toggle-label">Lissage</span>
         <input type="checkbox" id="toggleLissage" />

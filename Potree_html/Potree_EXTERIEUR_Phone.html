@@ -122,6 +122,130 @@
     .potree_annotation .annotationDescription {
       display: none !important;
     }
+
+    /* ==========================
+    1) Conteneur fixe en bas-centre
+    ========================== */
+    #bottomControls {
+      position: fixed;
+      z-index: 1 !important;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10000;
+    
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 6px;
+      padding: 6px 12px;
+    }
+    
+    /* ==========================
+       2) Flex pour aligner tout sur une ligne
+       ========================== */
+    #bottomControls .controls-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: Roboto, sans-serif;
+      font-size: 0.9rem;
+      color: white;
+    }
+    
+    /* ==========================
+       3) Groupe “Points affichés” (colonne)
+       ========================== */
+    .points-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      white-space: nowrap;
+    }
+    
+    /* ==========================
+       4) Slider “slider-points”
+       (ON NE LE REDÉFINIT PAS : il reprend votre CSS desktop existant)
+       Il suffit juste de lui donner une largeur fixe pour être compact.
+       ========================== */
+    .slider-points {
+      width: 140px; /* même taille que version desktop */
+    }
+    
+    /* =======================
+    TOGGLE “Lissage” corrigé
+    ======================= */
+
+    /* 1) Conteneur général du toggle (label + switch) */
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      user-select: none;
+    }
+    
+    /* 2) Texte “Lissage” */
+    .toggle-label {
+      color: white;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+    
+    /* 3) Wrapper positionné qui contient le checkbox + la track */
+    .toggle-switch {
+      position: relative;
+      width: 40px;   /* largeur du switch */
+      height: 20px;  /* hauteur du switch */
+      flex-shrink: 0;
+    }
+    
+    /* 4) On masque le checkbox “réel” */
+    .toggle-switch input[type="checkbox"] {
+      position: absolute;
+      inset: 0;     /* prend toute la zone du parent (.toggle-switch) */
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 2;
+    }
+    
+    /* 5) La “track” (fond) */
+    .toggle-switch .toggle-track {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;             /* 40px */
+      height: 100%;            /* 20px */
+      background-color: #ccc;  /* gris clair pour état OFF */
+      border-radius: 10px;     /* demi-hauteur = 20px/2 */
+      transition: background-color 0.25s ease;
+      z-index: 1;
+    }
+    
+    /* 6) Le “thumb” (petit rond blanc) */
+    .toggle-switch .toggle-thumb {
+      position: absolute;
+      top: 1px;                /* marge interne haut/bas = (20px - 18px)/2 */
+      left: 1px;               /* marge interne gauche = 1px */
+      width: 18px;             /* hauteur - 2px de marge */
+      height: 18px;
+      background-color: white;
+      border-radius: 50%;
+      transition: transform 0.25s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      z-index: 2;
+    }
+    
+    /* 7) Quand on coche le checkbox → track devient rouge SNCF */
+    .toggle-switch input[type="checkbox"]:checked + .toggle-track {
+      background-color: #EF3340;  /* rouge SNCF */
+    }
+    
+    /* 8) Quand on coche le checkbox → on translate le thumb de 20px vers la droite */
+    .toggle-switch input[type="checkbox"]:checked + .toggle-track .toggle-thumb {
+      transform: translateX(20px);
+    }
   </style>
 </head>
 
@@ -359,6 +483,41 @@
   <div id="popup360" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 9999;">
     <span id="close360" style="position: absolute; top: 20px; right: 30px; font-size: 30px; color: white; cursor: pointer; z-index: 1000;">&times;</span>
     <div id="panorama" style=" width: 100vw; height: 100vh;"></div>
+  </div>
+
+  <div id="bottomControls">
+    <div class="controls-content">
+  
+      <!-- 1) Groupe “Points affichés” placé en colonne -->
+      <div class="points-group">
+        <span class="label-points">Points affichés :</span>
+        <span id="pointBudgetValue">2 000 000</span>
+      </div>
+  
+      <!-- 2) Slider « Points affichés » (le slider reprend votre CSS desktop EXISTANT) -->
+      <input
+        type="range"
+        id="pointBudgetSlider"
+        min="100000"
+        max="10000000"
+        step="100000"
+        value="2000000"
+        class="slider-points"
+      />
+  
+      <!-- 3) Toggle « Lissage » -->
+      <div class="toggle-container">
+        <span class="toggle-label">Lissage</span>
+        <!-- on enveloppe le checkbox + track + thumb dans une <div> “toggle-switch” -->
+        <div class="toggle-switch">
+          <input type="checkbox" id="toggleLissage" />
+          <div class="toggle-track">
+            <div class="toggle-thumb"></div>
+          </div>
+        </div>
+      </div>
+  
+    </div>
   </div>
 
 
@@ -1004,6 +1163,45 @@
       const popup = document.getElementById('textAnnotationPopupCustom');
       popup.style.display = 'none';
   }
+</script>
+
+<script>
+  // On attend que Potree (window.viewer) soit défini pour pouvoir agir.
+  document.addEventListener("DOMContentLoaded", () => {
+    const slider = document.getElementById("pointBudgetSlider");
+    const labelValue = document.getElementById("pointBudgetValue");
+    const checkbox = document.getElementById("toggleLissage");
+
+    // Fonction pour formater les nombres avec des espaces
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+
+    // 1) Au démarrage, afficher la valeur initiale
+    const initial = parseInt(slider.value, 10);
+    labelValue.textContent = formatNumber(initial);
+
+    // 2) Lorsque l’on déplace le slider, on met à jour le label et Potree
+    slider.addEventListener("input", (e) => {
+      const val = parseInt(e.target.value, 10);
+      labelValue.textContent = formatNumber(val);
+      if (window.viewer) {
+        window.viewer.setPointBudget(val);
+      }
+    });
+
+    // 3) Au chargement de la page, synchroniser l’état du toggle avec viewer.useHQ
+    if (window.viewer && window.viewer.useHQ) {
+      checkbox.checked = true;
+    }
+
+    // 4) Quand on coche/décoche “Lissage”, on met à jour viewer.useHQ
+    checkbox.addEventListener("change", (e) => {
+      if (window.viewer) {
+        window.viewer.useHQ = e.target.checked;
+      }
+    });
+  });
 </script>
 
 

@@ -1427,6 +1427,60 @@
       annotationImage14.visible = true;
       viewer.scene.annotations.add(annotationImage14);
 
+      // Annotation avec image 15 (TCO4)
+      let iconImage15 = $(` 
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      iconImage15.find("img").click((event) => {
+        event.stopPropagation();
+        viewer.scene.view.setView(annotationImage15.cameraPosition, annotationImage15.cameraTarget, 1000);
+        setTimeout(() => {
+          const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/175A0728.JPG";
+          const imageDescription = "";
+          $("#popupImage").attr("src", imageUrl);
+          $("#popupText").text(imageDescription);
+          $("#imagePopup").css("display", "flex");
+        }, 2000);
+      });
+      let annotationImage15 = new Potree.Annotation({
+        position: new THREE.Vector3(2.20, 12.68, 2.80),
+        title: iconImage15,
+        cameraPosition: new THREE.Vector3(3.40, 11.40, 2),
+        cameraTarget: new THREE.Vector3(2.20, 12.68, 2.80)
+      });
+      addAnnotationClickHandler(annotationImage15);
+      annotationImage15.visible = true;
+      viewer.scene.annotations.add(annotationImage15);
+
+      // Annotation avec image 16 (TCO5)
+      let iconImage16 = $(` 
+        <span>
+          <img src="/Potree_Sncf_Projet/build/potree/resources/icons/picture.svg" class="annotation-action-icon" style="filter: invert(1); cursor: pointer;" />
+        </span>
+      `);
+      iconImage16.find("img").click((event) => {
+        event.stopPropagation();
+        viewer.scene.view.setView(annotationImage16.cameraPosition, annotationImage16.cameraTarget, 1000);
+        setTimeout(() => {
+          const imageUrl = "https://storage.googleapis.com/projet-potree-sncf/Images/Images_Techniques/175A0731.JPG";
+          const imageDescription = "";
+          $("#popupImage").attr("src", imageUrl);
+          $("#popupText").text(imageDescription);
+          $("#imagePopup").css("display", "flex");
+        }, 2000);
+      });
+      let annotationImage16 = new Potree.Annotation({
+        position: new THREE.Vector3(3.97, 14.39, 2.80),
+        title: iconImage16,
+        cameraPosition: new THREE.Vector3(4.86, 12.73, 2),
+        cameraTarget: new THREE.Vector3(3.97, 14.39, 2.80)
+      });
+      addAnnotationClickHandler(annotationImage16);
+      annotationImage16.visible = true;
+      viewer.scene.annotations.add(annotationImage16);
+
       //---------------- Liens visualisation 3D ----------------//
       // Annotation 3D 2
       let icon3D2 = $(`<!-- Icône pour annotation 3D qui ouvre TCO_PRS4.html --> 
@@ -1723,6 +1777,8 @@
           { position: annotationImage12.position, maxDistance: distanceThresholdImage, minGisement: 240, maxGisement: 60, annotation: annotationImage12 },  // TCO1
           { position: annotationImage13.position, maxDistance: distanceThresholdImage, minGisement: 220, maxGisement: 15, annotation: annotationImage13 },  // TCO2
           { position: annotationImage13.position, maxDistance: distanceThresholdImage, minGisement: 170, maxGisement: 330, annotation: annotationImage13 },  // TCO3
+          { position: annotationImage14.position, maxDistance: distanceThresholdImage, minGisement: 150, maxGisement: 340, annotation: annotationImage14 },  // TCO4
+          { position: annotationImage15.position, maxDistance: distanceThresholdImage, minGisement: 130, maxGisement: 290, annotation: annotationImage15 },  // TCO5
 
 
           // Annotations 3D

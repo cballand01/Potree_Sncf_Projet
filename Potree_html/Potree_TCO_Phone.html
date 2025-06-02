@@ -123,9 +123,9 @@
       display: none !important;
     }
 
-    /* ----------------------------------------
-     1) Le bandeau “PointBudget” centré
-     ---------------------------------------- */
+    /* --------------------------------------------------
+     1) Bandeau “PointBudget” centré, version plus sobre
+     -------------------------------------------------- */
     #splat_buttons {
       position: absolute;
       top: 10px;
@@ -134,25 +134,53 @@
       z-index: 10000;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;              /* espace réduit entre texte et slider */
     }
   
-    /* Change la couleur et la taille du label “Points affichés” */
+    /* Le label “Points affichés” plus compact */
     #pointBudgetContainer label {
       color: white;
-      font-size: 0.9rem;
-      margin-bottom: 2px;
-    }
-    #pointBudgetSlider {
-      width: 140px;
-    }
-    #pointBudgetValue {
-      margin-left: 4px;
+      font-size: 0.85rem;    /* un peu plus petit */
+      margin: 0;             /* plus de marge */
+      white-space: nowrap;   /* empêche le retour à la ligne */
     }
   
-    /* ----------------------------------------
-       2) Toggle “Lissage” en haut à droite
-       ---------------------------------------- */
+    /* Slider plus compact en largeur */
+    #pointBudgetSlider {
+      width: 100px;          /* largeur réduite */
+      height: 4px;           /* hauteur un peu plus fine */
+      -webkit-appearance: none;
+         -moz-appearance: none;
+              appearance: none;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
+      outline: none;
+      transition: background 0.2s ease;
+    }
+  
+    /* Styles du thumb (le cercle bleu) */
+    #pointBudgetSlider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #4285F4;   /* bleu plus discret */
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+      margin-top: -4px;       /* centrage vertical du thumb */
+    }
+    #pointBudgetSlider::-moz-range-thumb {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #4285F4;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+  
+    /* --------------------------------------------------
+       2) Toggle “Lissage” en haut à droite, version plus petite
+       -------------------------------------------------- */
     .toggle-container {
       position: absolute;
       top: 10px;
@@ -162,19 +190,19 @@
       gap: 6px;
       z-index: 10000;
       background: transparent;
-      height: 26px;
+      height: 20px;          /* hauteur réduite */
     }
     .toggle-label {
       color: white;
-      font-size: 0.9rem;
+      font-size: 0.85rem;    /* texte plus petit */
       user-select: none;
     }
     .toggle-container .toggle-track {
       position: relative;
-      width: 40px;
-      height: 20px;
+      width: 32px;           /* plus étroit */
+      height: 16px;          /* plus court */
       background-color: #ccc;
-      border-radius: 10px;
+      border-radius: 8px;
       transition: background-color 0.25s ease;
       flex-shrink: 0;
     }
@@ -182,8 +210,8 @@
       position: absolute;
       top: 1px;
       left: 1px;
-      width: 18px;
-      height: 18px;
+      width: 14px;           /* diamètre = hauteur - 2px */
+      height: 14px;
       background-color: white;
       border-radius: 50%;
       transition: transform 0.25s ease;
@@ -193,7 +221,7 @@
       background-color: #EF3340; /* Rouge SNCF */
     }
     .toggle-container input[type="checkbox"]:checked + .toggle-track + .toggle-thumb {
-      transform: translateX(20px);
+      transform: translateX(16px); /* déplacement = largeur track - diamètre thumb - 2px */
     }
     .toggle-container input[type="checkbox"] {
       position: absolute;

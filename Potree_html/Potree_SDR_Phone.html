@@ -1260,14 +1260,9 @@
 
           // Vérification de la visibilité de chaque annotation
           annotations.forEach(item => {
-              let {position, maxDistance, minGisement, maxGisement, annotation} = item;
-
-              // Vérifie si l'annotation doit être visible en fonction de la distance et du gisement
-              if (isCameraInVisibilityCone(cameraPos, position, maxDistance, minGisement, maxGisement)) {
-                  annotation.visible = true;
-              } else {
-                  annotation.visible = false;
-              }
+            let { position, maxDistance, gisementRanges, annotation } = item;
+          
+            annotation.visible = isCameraInVisibilityCone(cameraPos, position, maxDistance, gisementRanges);
           });
       });
     });

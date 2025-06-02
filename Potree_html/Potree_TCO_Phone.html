@@ -123,131 +123,113 @@
       display: none !important;
     }
 
-     /* ------------------------------
-     Conteneur bottom-bar (tout en bas, centré)
-     ------------------------------ */
-    #bottom_controls {
-      position: absolute;
+     /* 1) Conteneur global, positionné en bas-centre */
+    #bottomControls {
+      position: fixed;
       bottom: 10px;
       left: 50%;
       transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 12px;               /* espace entre slider et toggle */
-      padding: 6px 12px;       /* un peu de “respiration” */
-      background: transparent; /* pas de fond opaque */
-      z-index: 10000;
+      z-index: 10000; /* assez haut pour être au-dessus du viewer */
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 6px;
+      padding: 6px 12px;
+      /* largeur auto + contenu flex */
     }
   
-    /* ------------------------------
-       Texte du slider “Points affichés”
-       ------------------------------ */
-    #bottom_controls label {
+    /* 2) Aligner tout sur une seule ligne */
+    #bottomControls .controls-content {
+      display: flex;
+      align-items: center;
+      gap: 12px; /* espace entre les éléments */
       color: white;
+      font-family: Roboto, sans-serif;
       font-size: 0.9rem;
-      margin: 0 8px 0 0;       /* petit écart à droite du label */
+    }
+  
+    /* 3) Style du label “Points affichés” */
+    .label-points {
       white-space: nowrap;
     }
   
-    /* ------------------------------
-       Slider plus sobre (largeur modérée, hauteur fine)
-       ------------------------------ */
-    #pointBudgetSlider {
-      width: 160px;            /* largeur raisonnable */
+    /* 4) Slider compact */
+    .slider-points {
+      width: 120px;
       height: 4px;
-      -webkit-appearance: none;
-         -moz-appearance: none;
-              appearance: none;
-      background: rgba(255,255,255,0.3);
+      background: #555;
       border-radius: 2px;
-      outline: none;
-      transition: background-color 0.2s ease;
-    }
-  
-    /* Thumb du slider (cercle bleu) */
-    #pointBudgetSlider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #4285F4;      /* bleu vif mais discret */
-      cursor: pointer;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.3);
-      margin-top: -4px;         /* pour centrer verticalement */
     }
-    #pointBudgetSlider::-moz-range-thumb {
-      width: 12px;
-      height: 12px;
+    /* Thumb du slider */
+    .slider-points::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      background: #2196F3;
       border-radius: 50%;
-      background: #4285F4;
+      border: 2px solid white;
+      margin-top: -5px; /* pour centrer verticalement */
       cursor: pointer;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+    .slider-points::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      background: #2196F3;
+      border-radius: 50%;
+      border: 2px solid white;
+      cursor: pointer;
     }
   
-    /* Track / barre inactive du slider (lorsqu’on tire le thumb) */
-    #pointBudgetSlider:hover {
-      background: rgba(255,255,255,0.5);
-    }
-  
-    /* ------------------------------
-       Toggle “Lissage” très compact
-       ------------------------------ */
+    /* 5) Toggle “Lissage” */
     .toggle-container {
+      position: relative;
       display: flex;
       align-items: center;
       gap: 6px;
       user-select: none;
     }
+    /* Texte “Lissage” */
     .toggle-label {
-      color: white;
-      font-size: 0.9rem;
       white-space: nowrap;
+      color: white;
     }
+    /* Input checkbox caché */
     .toggle-container input[type="checkbox"] {
-      position: relative;
-      width: 32px;            /* largeur totale du track */
-      height: 16px;           /* hauteur du track */
-      margin: 0;
+      position: absolute;
+      width: 100%;
+      height: 100%;
       opacity: 0;
+      margin: 0;
       cursor: pointer;
       z-index: 2;
     }
+    /* Track (fond) */
     .toggle-container .toggle-track {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 32px;
-      height: 16px;
-      background-color: #ccc;
-      border-radius: 8px;
+      width: 36px;
+      height: 18px;
+      background-color: #888;
+      border-radius: 9px;
       transition: background-color 0.25s ease;
       flex-shrink: 0;
     }
+    /* Thumb (bouton rond) */
     .toggle-container .toggle-thumb {
       position: absolute;
       top: 1px;
       left: 1px;
-      width: 14px;            /* hauteur - 2px */
-      height: 14px;
+      width: 16px;
+      height: 16px;
       background-color: white;
       border-radius: 50%;
       transition: transform 0.25s ease;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      z-index: 1;
     }
-  
-    /* Quand le checkbox est coché, on change la couleur du track et on déplace le thumb */
+    /* Quand coché : track rouge SNCF, thumb déplacé */
     .toggle-container input[type="checkbox"]:checked + .toggle-track {
-      background-color: #EF3340; /* Rouge SNCF */
+      background-color: #EF3340;
     }
     .toggle-container input[type="checkbox"]:checked + .toggle-track + .toggle-thumb {
-      transform: translateX(16px); /* décalage = largeur track - diamètre thumb - 2px */
-    }
-  
-    /* Pour que le toggle ne prenne pas trop d’espace visuel */
-    .toggle-container,
-    .toggle-container .toggle-track,
-    .toggle-container .toggle-thumb {
-      background: transparent;
+      transform: translateX(18px);
     }
   </style>
 </head>
@@ -488,13 +470,13 @@
     <div id="panorama" style=" width: 100vw; height: 100vh;"></div>
   </div>
 
-  <!-- Conteneur bottom-bar regroupant le slider + le toggle -->
-  <div id="bottom_controls">
-    <!-- Label + valeur + slider -->
-    <div id="pointBudgetContainer">
-      <label for="pointBudgetSlider">
+  <div id="bottomControls">
+    <div class="controls-content">
+      <!-- Label + valeur -->
+      <span class="label-points">
         Points affichés : <span id="pointBudgetValue">2 000 000</span>
-      </label>
+      </span>
+      <!-- Slider compact -->
       <input
         type="range"
         id="pointBudgetSlider"
@@ -502,18 +484,17 @@
         max="10000000"
         step="100000"
         value="2000000"
+        class="slider-points"
       />
-    </div>
-  
-    <!-- Switch “Lissage” -->
-    <div class="toggle-container">
-      <span class="toggle-label">Lissage</span>
-      <input type="checkbox" id="toggleLissageMobile" />
-      <div class="toggle-track"></div>
-      <div class="toggle-thumb"></div>
+      <!-- Toggle Lissage -->
+      <div class="toggle-container">
+        <span class="toggle-label">Lissage</span>
+        <input type="checkbox" id="toggleLissage" />
+        <div class="toggle-track"></div>
+        <div class="toggle-thumb"></div>
+      </div>
     </div>
   </div>
-
 
   <!-- Chargement des bibliothèques JavaScript -->
   <script src="/Potree_Sncf_Projet/libs/jquery/jquery-3.1.1.min.js"></script>
@@ -1916,42 +1897,42 @@
 </script>
 
 <script>
-  // 1) Gérer le slider “PointBudget”
-  const pointBudgetSlider = document.getElementById("pointBudgetSlider");
-  const pointBudgetValue  = document.getElementById("pointBudgetValue");
+  // On attend que Potree (window.viewer) soit défini pour pouvoir agir.
+  document.addEventListener("DOMContentLoaded", () => {
+    const slider = document.getElementById("pointBudgetSlider");
+    const labelValue = document.getElementById("pointBudgetValue");
+    const checkbox = document.getElementById("toggleLissage");
 
-  function formatNumber(num) {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-  }
+    // Fonction pour formater les nombres avec des espaces
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
 
-  if (pointBudgetSlider) {
-    pointBudgetSlider.addEventListener("input", function(e) {
+    // 1) Au démarrage, afficher la valeur initiale
+    const initial = parseInt(slider.value, 10);
+    labelValue.textContent = formatNumber(initial);
+
+    // 2) Lorsque l’on déplace le slider, on met à jour le label et Potree
+    slider.addEventListener("input", (e) => {
       const val = parseInt(e.target.value, 10);
-      pointBudgetValue.textContent = formatNumber(val);
+      labelValue.textContent = formatNumber(val);
       if (window.viewer) {
         window.viewer.setPointBudget(val);
       }
     });
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const initial = parseInt(pointBudgetSlider.value, 10);
-      pointBudgetValue.textContent = formatNumber(initial);
-    });
-  }
+    // 3) Au chargement de la page, synchroniser l’état du toggle avec viewer.useHQ
+    if (window.viewer && window.viewer.useHQ) {
+      checkbox.checked = true;
+    }
 
-  // 2) Gérer le toggle “Lissage”
-  const checkboxLissage = document.getElementById("toggleLissageMobile");
-  if (checkboxLissage) {
-    checkboxLissage.addEventListener("change", function() {
-      if (!window.viewer) return;
-      window.viewer.useHQ = checkboxLissage.checked;
-    });
-    document.addEventListener("DOMContentLoaded", () => {
-      if (window.viewer && window.viewer.useHQ) {
-        checkboxLissage.checked = true;
+    // 4) Quand on coche/décoche “Lissage”, on met à jour viewer.useHQ
+    checkbox.addEventListener("change", (e) => {
+      if (window.viewer) {
+        window.viewer.useHQ = e.target.checked;
       }
     });
-  }
+  });
 </script>
 
 </body>

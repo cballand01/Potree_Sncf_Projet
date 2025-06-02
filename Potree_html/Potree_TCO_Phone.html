@@ -547,7 +547,7 @@
     let initialTarget = new THREE.Vector3(4.99, 9.46, 1.72);
   
     window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
-    viewer.setPointBudget(5000000);
+    viewer.setPointBudget(2000000);
     viewer.setFOV(80);
     viewer.loadSettingsFromURL();
   
@@ -556,7 +556,7 @@
     viewer.setEDLStrength(0);
     viewer.setEDLOpacity(1);
   
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.1);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
     viewer.scene.scene.add(ambientLight);
     
     // Désactive les contrôles Potree
@@ -582,7 +582,7 @@
       e.pointcloud.position.set(0, 0, 0.14);
   
       viewer.scene.view.setView(initialPosition, initialTarget);
-      viewer.useHQ = true;
+      viewer.useHQ = false;
 
       // fonction qui permet de cliquer sur une annotation même si l'animation du hotpsot n'est pas terminée
       function addAnnotationClickHandler(annotation, duration = 1000) {

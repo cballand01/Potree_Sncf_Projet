@@ -1555,44 +1555,58 @@
 
 <!-- Script pour gérer le zoom et le pan sur l'image de la popup -->
 <script>
-  const popupImage = document.getElementById('popupImage');
+document.addEventListener('DOMContentLoaded', function() {
+  const imagePopup = document.getElementById('popupImage');
   let scale = 1;
   let panX = 0;
   let panY = 0;
-  const zoomFactor = 1.1;
+
+  // Variables pour le drag un doigt
+  let isPanning = false;
+  let startPanX = 0, startPanY = 0;
+  let startTouchX = 0, startTouchY = 0;
+
+  // Variables pour le pinch à deux doigts
+  let isPinching = false;
+  let initialPinchDistance = 0;
+  let initialScale = 1;
+  let pinchMidX = 0, pinchMidY = 0;
+  let initialPanX = 0, initialPanY = 0;
+
   const maxScale = 5;
   const minScale = 1;
+  const zoomFactorPerWheel = 1.1; // reste facultatif sur mobile
 
   function updateTransform() {
-    popupImage.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
-    popupImage.style.cursor = (scale > 1) ? 'grab' : 'default';
+    imagePopup.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+    imagePopup.style.cursor = (scale > 1) ? (isPanning ? 'grabbing' : 'grab') : 'default';
   }
 
-  popupImage.addEventListener('wheel', function (e) {
+  // --- 1) GESTION DU WHEEL (desktop ou émulation) ---
+  imagePopup.addEventListener('wheel', function(e) {
     e.preventDefault();
-
-    const rect = popupImage.getBoundingClientRect();
+    // Optionnel : ne pas zoomer si aucun CSS desktop ne le prévoyait
+    // On garde quand même le code pour qu’en mode navigateur on puisse tester.
+    const rect = imagePopup.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
-
     const imageCX = rect.width / 2;
     const imageCY = rect.height / 2;
-
     const offsetX = mouseX - imageCX;
     const offsetY = mouseY - imageCY;
 
     const zoomingIn = e.deltaY < 0;
     const oldScale = scale;
-    const newScale = Math.max(minScale, Math.min(maxScale, scale * (zoomingIn ? zoomFactor : 1 / zoomFactor)));
+    const newScale = Math.max(minScale, Math.min(maxScale, scale * (zoomingIn ? zoomFactorPerWheel : 1 / zoomFactorPerWheel)));
+    const zoomRatio = newScale / oldScale;
 
     if (zoomingIn || newScale > 1.05) {
-      const zoomRatio = newScale / oldScale;
-      panX -= offsetX * (zoomRatio - 1);
-      panY -= offsetY * (zoomRatio - 1);
+      panX = panX - offsetX * (zoomRatio - 1);
+      panY = panY - offsetY * (zoomRatio - 1);
     }
-
     if (!zoomingIn && newScale <= 1.05) {
-      const t = (newScale - 1) / 0.05; // entre 1 et 0
+      // Ramener progressivement pan à zéro quand on revient à 1×
+      const t = (newScale - 1) / 0.05; // go from 1→0
       panX *= t;
       panY *= t;
     }
@@ -1601,42 +1615,147 @@
     updateTransform();
   });
 
-  // PAN uniquement si zoomé
-  let isPanning = false, startX = 0, startY = 0;
-
-  popupImage.addEventListener('mousedown', (e) => {
-    if (scale <= 1) return; // Pas de pan si taille originale
+  // --- 2) GESTION DU DRAG À LA SOURIS (desktop) ---
+  imagePopup.addEventListener('mousedown', function(e) {
+    if (scale <= 1) return;
     isPanning = true;
-    startX = e.clientX - panX;
-    startY = e.clientY - panY;
-    popupImage.style.cursor = 'grabbing';
+    startPanX = panX;
+    startPanY = panY;
+    startTouchX = e.clientX;
+    startTouchY = e.clientY;
+    imagePopup.style.cursor = 'grabbing';
   });
-
-  document.addEventListener('mousemove', (e) => {
+  document.addEventListener('mousemove', function(e) {
     if (!isPanning) return;
-    panX = e.clientX - startX;
-    panY = e.clientY - startY;
+    const dx = e.clientX - startTouchX;
+    const dy = e.clientY - startTouchY;
+    panX = startPanX + dx;
+    panY = startPanY + dy;
     updateTransform();
   });
-
-  document.addEventListener('mouseup', () => {
+  document.addEventListener('mouseup', function() {
     isPanning = false;
-    popupImage.style.cursor = (scale > 1) ? 'grab' : 'default';
+    imagePopup.style.cursor = (scale > 1) ? 'grab' : 'default';
   });
 
-  popupImage.addEventListener('dragstart', (e) => e.preventDefault());
+  // --- 3) GESTION DU TOUCH (MOBILE) ---
 
-  // Réinitialisation à la fermeture et cache la popup
-  document.querySelector('#imagePopup .closePopup').addEventListener('click', () => {
-    // Masque la popup
-    document.getElementById('imagePopup').style.display = 'none';
-    // Réinitialise transform
+  imagePopup.addEventListener('touchstart', function(e) {
+    // Si deux doigts : début du pinch
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      isPinching = true;
+      // Calculer la distance initiale entre les deux doigts
+      const t0 = e.touches[0], t1 = e.touches[1];
+      const dx = t1.clientX - t0.clientX;
+      const dy = t1.clientY - t0.clientY;
+      initialPinchDistance = Math.hypot(dx, dy);
+      initialScale = scale;
+      initialPanX = panX;
+      initialPanY = panY;
+      // Milieu des deux doigts
+      pinchMidX = (t0.clientX + t1.clientX) / 2;
+      pinchMidY = (t0.clientY + t1.clientY) / 2;
+    }
+    // Si un seul doigt ET qu'on est déjà zoomé : début du pan
+    else if (e.touches.length === 1 && scale > 1) {
+      isPanning = true;
+      const touch = e.touches[0];
+      startPanX = panX;
+      startPanY = panY;
+      startTouchX = touch.clientX;
+      startTouchY = touch.clientY;
+      imagePopup.style.cursor = 'grabbing';
+    }
+  });
+
+  imagePopup.addEventListener('touchmove', function(e) {
+    // Pinch à deux doigts
+    if (isPinching && e.touches.length === 2) {
+      e.preventDefault();
+      const t0 = e.touches[0], t1 = e.touches[1];
+      const dx = t1.clientX - t0.clientX;
+      const dy = t1.clientY - t0.clientY;
+      const currentDistance = Math.hypot(dx, dy);
+      // Calcul du ratio de zoom
+      let newScale = initialScale * (currentDistance / initialPinchDistance);
+      newScale = Math.max(minScale, Math.min(maxScale, newScale));
+      const zoomRatio = newScale / initialScale;
+
+      // Coordonnées du centre de l'image
+      const rect = imagePopup.getBoundingClientRect();
+      const imageCX = rect.left + rect.width / 2;
+      const imageCY = rect.top + rect.height / 2;
+
+      // Offset entre le milieu des doigts et le centre de l'image
+      const offsetX = pinchMidX - imageCX;
+      const offsetY = pinchMidY - imageCY;
+
+      // Recalcule du pan pour garder le centre de pinch stable
+      panX = initialPanX - offsetX * (zoomRatio - 1);
+      panY = initialPanY - offsetY * (zoomRatio - 1);
+
+      scale = newScale;
+      updateTransform();
+    }
+    // Pan à un seul doigt
+    else if (isPanning && e.touches.length === 1) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const dx = touch.clientX - startTouchX;
+      const dy = touch.clientY - startTouchY;
+      panX = startPanX + dx;
+      panY = startPanY + dy;
+      updateTransform();
+    }
+  });
+
+  imagePopup.addEventListener('touchend', function(e) {
+    // Fin du pinch si moins de 2 doigts
+    if (isPinching && e.touches.length < 2) {
+      isPinching = false;
+      // Si on revient sous 1.05×, on recentre progressivement
+      if (scale <= 1.05) {
+        scale = 1;
+        panX = 0;
+        panY = 0;
+        updateTransform();
+      }
+    }
+    // Fin du pan si plus de 0 doigts ou qu’on passe à 0 touches
+    if (isPanning && e.touches.length === 0) {
+      isPanning = false;
+      imagePopup.style.cursor = (scale > 1) ? 'grab' : 'default';
+      // Si on a zoomé moins que 1.05×, on réinitialise
+      if (scale <= 1.05) {
+        scale = 1;
+        panX = 0;
+        panY = 0;
+        updateTransform();
+      }
+    }
+  });
+
+  // Empêche la sélection par défaut
+  imagePopup.addEventListener('touchcancel', function() {
+    isPanning = false;
+    isPinching = false;
+  });
+
+  // --- 4) FERMETURE DE LA POPUP ---
+  const closeBtn = document.querySelector('#popupContent .closePopup');
+  closeBtn.addEventListener('click', function() {
+    const overlay = document.getElementById('imagePopup');
+    overlay.style.display = 'none';
+    // Remise à l’état initial
     scale = 1;
     panX = 0;
     panY = 0;
     updateTransform();
   });
+});
 </script>
+
 
 <script>
   function open360Viewer(imagePath) {

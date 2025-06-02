@@ -124,50 +124,64 @@
     }
 
     /* --------------------------------------------
-     Styles pour le petit toggle “Lissage” SNCF
-     Adapté à un affichage mobile (50×26px)
+     Styles pour le petit toggle “Lissage des points”
+     Positionné en haut à droite, fond transparent
      -------------------------------------------- */
-    /* Container réduit pour mobile */
+
+    /* Container du toggle, positionné en haut à droite */
     .toggle-container {
-      position: relative;
-      width: 50px;    /* largeur globale du switch */
-      height: 26px;   /* hauteur globale du switch */
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: auto;        /* largeur minimale nécessaire pour le toggle + texte */
+      height: 26px;       /* hauteur fixe */
+      display: flex;
+      align-items: center;
+      gap: 6px;           /* espace entre le texte et le switch */
+      z-index: 10000;     /* au-dessus du viewer */
+      background: transparent;  /* aucun fond sombre */
     }
   
-    /* Le fond (track) du switch */
+    /* Texte accompagnant le toggle */
+    .toggle-label {
+      color: white;
+      font-size: 0.9rem;
+      user-select: none;  /* empêchera la sélection accidentelle */
+    }
+  
+    /* Track (fond) du switch */
     .toggle-container .toggle-track {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #ccc;      /* gris clair pour l’état “off” */
-      border-radius: 13px;         /* hauteur/2 = 26/2 */
+      position: relative;
+      width: 40px;             /* largeur du track réduit */
+      height: 20px;            /* hauteur du track */
+      background-color: #ccc;  /* gris clair pour l’état “off” */
+      border-radius: 10px;     /* hauteur/2 */
       transition: background-color 0.25s ease;
+      flex-shrink: 0;          /* ne pas réduire */
     }
   
     /* Le bouton rond (thumb) */
     .toggle-container .toggle-thumb {
       position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 22px;   /* diamètre = hauteur - 4px (pour marges internes) */
-      height: 22px;
+      top: 1px;
+      left: 1px;
+      width: 18px;             /* diamètre = hauteur - 2px (pour laisser 1px de marge) */
+      height: 18px;
       background-color: white;
       border-radius: 50%;
-      transition: transform 0.25s ease, background-color 0.25s ease;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      transition: transform 0.25s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
   
-    /* Cas “checked” : track et thumb changent de couleur et de position */
+    /* Lorsque le checkbox est coché → changer la couleur du track et déplacer le thumb */
     .toggle-container input[type="checkbox"]:checked + .toggle-track {
       background-color: #EF3340; /* Rouge SNCF */
     }
     .toggle-container input[type="checkbox"]:checked + .toggle-track + .toggle-thumb {
-      transform: translateX(24px); /* déplace le thumb vers la droite */
+      transform: translateX(20px); /* déplacer le thumb vers la droite */
     }
   
-    /* Masquer l’input checkbox d’origine (pour cliquer sur toute la zone) */
+    /* Masquer l’input d’origine (pour pouvoir cliquer partout sur le switch) */
     .toggle-container input[type="checkbox"] {
       position: absolute;
       width: 100%;
@@ -439,6 +453,7 @@
   
     <!-- Petit toggle “Lissage” (Mobile) -->
     <div class="toggle-container">
+      <span class="toggle-label">Lissage des points</span>
       <input type="checkbox" id="toggleLissageMobile">
       <div class="toggle-track"></div>
       <div class="toggle-thumb"></div>
@@ -1881,18 +1896,17 @@
   const checkboxLissage = document.getElementById("toggleLissageMobile");
 
   if (checkboxLissage) {
+    // Au changement de l’état du toggle (coché ou non)
     checkboxLissage.addEventListener("change", function() {
       if (!window.viewer) return;
 
-      // Si coché → activer HQ (lissage), sinon désactiver
-      if (checkboxLissage.checked) {
-        window.viewer.useHQ = true;
-      } else {
-        window.viewer.useHQ = false;
-      }
+      // Si le toggle est coché → activer le lissage (HQ)
+      // Sinon → désactiver le lissage
+      window.viewer.useHQ = checkboxLissage.checked;
     });
 
-    // Facultatif : définir l’état initial en fonction de viewer.useHQ
+    // Optionnel : si viewer.useHQ est déjà vrai au chargement,
+    // on coche automatiquement le toggle
     document.addEventListener("DOMContentLoaded", () => {
       if (window.viewer && window.viewer.useHQ) {
         checkboxLissage.checked = true;

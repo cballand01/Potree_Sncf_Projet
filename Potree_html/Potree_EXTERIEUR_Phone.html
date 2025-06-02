@@ -384,8 +384,8 @@
     import {MTLLoader} from "/Potree_Sncf_Projet/libs/three.js/loaders/MTLLoader.js";
     import {GLTFLoader} from "/Potree_Sncf_Projet/libs/three.js/loaders/GLTFLoader.js";
   
-    let initialPosition = new THREE.Vector3(11.30, 12.66, 0.58);
-    let initialTarget = new THREE.Vector3(8.57, 11.21, 1.57);
+    let initialPosition = new THREE.Vector3(56.46, 49.69, 7);
+    let initialTarget = new THREE.Vector3(77.83, 53.82, 9.75);
   
     window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
     viewer.setPointBudget(5000000);
@@ -688,13 +688,13 @@
 
       //---------------- Seuils de distance d'affichage ----------------//
       const distanceThresholdAudio = 4; //audios
-      const distanceThresholdText = 0; //textes
-      const distanceThresholdImage = 2; //images
-      const distanceThreshold3D = 2.5; //liens3D
-      const distanceGoto = 4; //liens html
+      const distanceThresholdText = 10; //textes
+      const distanceThresholdImage = 10; //images
+      const distanceThreshold3D = 4; //liens3D
+      const distanceGoto = 10; //liens html
       const distanceThresholdExp = 1; //textes rapprochés
-      const distanceThresholdAnimation = 0; //video
-      const distanceThreshold360 = 3; //360
+      const distanceThresholdAnimation = 4; //video
+      const distanceThreshold360 = 5; //360
       
       // Fonction pour vérifier si la caméra est dans la plage de gisement et dans la distance de l'annotation
       function isCameraInVisibilityCone(cameraPos, annotationPos, maxDistance, gisementRanges) {

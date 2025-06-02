@@ -123,65 +123,78 @@
       display: none !important;
     }
 
-    /* --------------------------------------------
-     Styles pour le petit toggle “Lissage des points”
-     Positionné en haut à droite, fond transparent
-     -------------------------------------------- */
-
-    /* Container du toggle, positionné en haut à droite */
+    /* ----------------------------------------
+     1) Le bandeau “PointBudget” centré
+     ---------------------------------------- */
+    #splat_buttons {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+  
+    /* Change la couleur et la taille du label “Points affichés” */
+    #pointBudgetContainer label {
+      color: white;
+      font-size: 0.9rem;
+      margin-bottom: 2px;
+    }
+    #pointBudgetSlider {
+      width: 140px;
+    }
+    #pointBudgetValue {
+      margin-left: 4px;
+    }
+  
+    /* ----------------------------------------
+       2) Toggle “Lissage” en haut à droite
+       ---------------------------------------- */
     .toggle-container {
       position: absolute;
       top: 10px;
       right: 10px;
-      width: auto;        /* largeur minimale nécessaire pour le toggle + texte */
-      height: 26px;       /* hauteur fixe */
       display: flex;
       align-items: center;
-      gap: 6px;           /* espace entre le texte et le switch */
-      z-index: 10000;     /* au-dessus du viewer */
-      background: transparent;  /* aucun fond sombre */
+      gap: 6px;
+      z-index: 10000;
+      background: transparent;
+      height: 26px;
     }
-  
-    /* Texte accompagnant le toggle */
     .toggle-label {
       color: white;
       font-size: 0.9rem;
-      user-select: none;  /* empêchera la sélection accidentelle */
+      user-select: none;
     }
-  
-    /* Track (fond) du switch */
     .toggle-container .toggle-track {
       position: relative;
-      width: 40px;             /* largeur du track réduit */
-      height: 20px;            /* hauteur du track */
-      background-color: #ccc;  /* gris clair pour l’état “off” */
-      border-radius: 10px;     /* hauteur/2 */
+      width: 40px;
+      height: 20px;
+      background-color: #ccc;
+      border-radius: 10px;
       transition: background-color 0.25s ease;
-      flex-shrink: 0;          /* ne pas réduire */
+      flex-shrink: 0;
     }
-  
-    /* Le bouton rond (thumb) */
     .toggle-container .toggle-thumb {
       position: absolute;
       top: 1px;
       left: 1px;
-      width: 18px;             /* diamètre = hauteur - 2px (pour laisser 1px de marge) */
+      width: 18px;
       height: 18px;
       background-color: white;
       border-radius: 50%;
       transition: transform 0.25s ease;
       box-shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
-  
-    /* Lorsque le checkbox est coché → changer la couleur du track et déplacer le thumb */
     .toggle-container input[type="checkbox"]:checked + .toggle-track {
       background-color: #EF3340; /* Rouge SNCF */
     }
     .toggle-container input[type="checkbox"]:checked + .toggle-track + .toggle-thumb {
-      transform: translateX(20px); /* déplacer le thumb vers la droite */
+      transform: translateX(20px);
     }
-  
-    /* Masquer l’input d’origine (pour pouvoir cliquer partout sur le switch) */
     .toggle-container input[type="checkbox"] {
       position: absolute;
       width: 100%;
@@ -430,34 +443,30 @@
     <div id="panorama" style=" width: 100vw; height: 100vh;"></div>
   </div>
 
-  <!-- =========================================
-     Contrôles PointBudget et Lissage (Mobile)
-     (À placer juste après le splash, avant le Potree)
-     ========================================= -->
-  <div id="splat_buttons" style="position: absolute; top: 10px; left: 10px; z-index: 10000; display: flex; gap: 12px; align-items: center;">
-    <!-- Slider PointBudget (déjà en place si vous l’avez ajouté précédemment) -->
-    <div id="pointBudgetContainer" style="display: flex; flex-direction: column; align-items: flex-start;">
-      <label for="pointBudgetSlider" style="color: white; font-size: 0.9rem; margin-bottom: 2px;">
+  <!-- → Bandeau “PointBudget” centré -->
+  <div id="splat_buttons">
+    <div id="pointBudgetContainer" style="display: flex; flex-direction: column; align-items: center;">
+      <label for="pointBudgetSlider">
         Points affichés : <span id="pointBudgetValue">2 000 000</span>
       </label>
-      <input 
-        type="range" 
-        id="pointBudgetSlider" 
-        min="100000" 
-        max="10000000" 
-        step="100000" 
-        value="2000000" 
+      <input
+        type="range"
+        id="pointBudgetSlider"
+        min="100000"
+        max="10000000"
+        step="100000"
+        value="2000000"
         style="width: 140px;"
       >
     </div>
+  </div>
   
-    <!-- Petit toggle “Lissage” (Mobile) -->
-    <div class="toggle-container">
-      <span class="toggle-label">Lissage des points</span>
-      <input type="checkbox" id="toggleLissageMobile">
-      <div class="toggle-track"></div>
-      <div class="toggle-thumb"></div>
-    </div>
+  <!-- → Toggle “Lissage” en haut à droite -->
+  <div class="toggle-container">
+    <span class="toggle-label">Lissage</span>
+    <input type="checkbox" id="toggleLissageMobile">
+    <div class="toggle-track"></div>
+    <div class="toggle-thumb"></div>
   </div>
 
 
@@ -1862,18 +1871,14 @@
 </script>
 
 <script>
-  // ----------------------------------------------
   // 1) Gérer le slider “PointBudget”
-  // ----------------------------------------------
   const pointBudgetSlider = document.getElementById("pointBudgetSlider");
   const pointBudgetValue  = document.getElementById("pointBudgetValue");
 
-  // Formatte un nombre avec des espaces (ex. 2000000 → "2 000 000")
   function formatNumber(num) {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "); 
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   }
 
-  // Au mouvement du slider, on met à jour Potree et l’affichage
   if (pointBudgetSlider) {
     pointBudgetSlider.addEventListener("input", function(e) {
       const val = parseInt(e.target.value, 10);
@@ -1883,30 +1888,19 @@
       }
     });
 
-    // Initialiser correctement le label au chargement
     document.addEventListener("DOMContentLoaded", () => {
       const initial = parseInt(pointBudgetSlider.value, 10);
       pointBudgetValue.textContent = formatNumber(initial);
     });
   }
 
-  // ----------------------------------------------
   // 2) Gérer le toggle “Lissage”
-  // ----------------------------------------------
   const checkboxLissage = document.getElementById("toggleLissageMobile");
-
   if (checkboxLissage) {
-    // Au changement de l’état du toggle (coché ou non)
     checkboxLissage.addEventListener("change", function() {
       if (!window.viewer) return;
-
-      // Si le toggle est coché → activer le lissage (HQ)
-      // Sinon → désactiver le lissage
       window.viewer.useHQ = checkboxLissage.checked;
     });
-
-    // Optionnel : si viewer.useHQ est déjà vrai au chargement,
-    // on coche automatiquement le toggle
     document.addEventListener("DOMContentLoaded", () => {
       if (window.viewer && window.viewer.useHQ) {
         checkboxLissage.checked = true;
@@ -1914,7 +1908,6 @@
     });
   }
 </script>
-
 
 </body>
 </html>

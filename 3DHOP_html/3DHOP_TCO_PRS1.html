@@ -64,6 +64,13 @@
       width: 100px;     /* Ajustez la taille du logo */
       height: auto;    /* Maintient les proportions du logo */
     }
+
+    /* Cacher le logo sur téléphone (portrait ou paysage) */
+    @media (max-width: 768px), (max-height: 768px) {
+      #logo-container {
+        display: none !important;
+      }
+    }
   </style>
   <!--SPIDERGL-->
   <script type="text/javascript" src="/Potree_Sncf_Projet/libs/3DHOP/js/spidergl.js"></script>

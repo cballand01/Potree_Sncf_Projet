@@ -170,22 +170,26 @@
       width: 140px; /* même taille que version desktop */
     }
     
-    /* ==========================
-       5) Toggle “Lissage” corrigé
-       ========================== */
+    /* ===========================
+   Toggle “Lissage” style
+   =========================== */
+
     .toggle-container {
-      position: relative;
       display: flex;
       align-items: center;
       gap: 6px;
       user-select: none;
+      /* facultatif : si besoin de verrouiller la taille verticale */
     }
     
+    /* Texte “Lissage” */
     .toggle-container .toggle-label {
       color: white;
+      font-size: 0.9rem;
       white-space: nowrap;
     }
     
+    /* 1) On cache l’input checkbox (mais il reste cliquable) */
     .toggle-container input[type="checkbox"] {
       position: absolute;
       width: 100%;
@@ -193,40 +197,41 @@
       opacity: 0;
       margin: 0;
       cursor: pointer;
-      z-index: 2;
+      z-index: 2; /* toujours au-dessus du track et du thumb */
     }
     
-    /* Track du switch */
+    /* 2) Track (fond) de la pilule */
     .toggle-container .toggle-track {
-      width: 36px;        /* un peu plus large pour laisser place au thumb */
-      height: 20px;
-      background-color: #888;
-      border-radius: 10px;
+      position: relative;
+      width: 50px;
+      height: 24px;
+      background-color: #ccc;       /* gris clair = état “off” */
+      border-radius: 12px;           /* demi-hauteur */
       transition: background-color 0.25s ease;
       flex-shrink: 0;
-      position: relative; /* oblig. pour bien caler le thumb */
-    }
-    
-    /* Bille (thumb) du switch */
-    .toggle-container .toggle-thumb {
-      position: absolute;
-      top: 2px;
-      left: 2px;          /* on place tout juste à l’intérieur du track */
-      width: 16px;
-      height: 16px;
-      background-color: white;
-      border-radius: 50%;
-      transition: transform 0.25s ease;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.3);
       z-index: 1;
     }
     
-    /* Quand le checkbox est coché → track devient rouge SNCF, thumb se décale */
+    /* 3) Thumb (bille) */
+    .toggle-container .toggle-thumb {
+      position: absolute;
+      top: 1px;                      /* pour centrer verticalement la bille */
+      left: 1px;                     /* marge intérieure */
+      width: 22px;                   /* hauteur - 2px */
+      height: 22px;
+      background-color: white;
+      border-radius: 50%;
+      transition: transform 0.25s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      z-index: 1;
+    }
+    
+    /* Lorsque le checkbox est coché → track devient rouge SNCF & thumb glisse vers la droite */
     .toggle-container input[type="checkbox"]:checked + .toggle-track {
-      background-color: #EF3340;
+      background-color: #EF3340;     /* rouge SNCF */
     }
     .toggle-container input[type="checkbox"]:checked + .toggle-track + .toggle-thumb {
-      transform: translateX(16px);
+      transform: translateX(26px);   /* décalage = largeur du track – diamètre du thumb – 2*1px de marge */
     }
   </style>
 </head>

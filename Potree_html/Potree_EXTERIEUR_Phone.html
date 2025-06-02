@@ -1045,35 +1045,83 @@
 
 <!-- Script pour gérer le zoom et le pan sur l'image de la popup -->
 <script>
-  const popupImage = document.getElementById('popupImage');
+document.addEventListener('DOMContentLoaded', function() {
+  const popupOverlay = document.getElementById('imagePopup'); 
+  const popupImage   = document.getElementById('popupImage');
+
   let scale = 1;
   let panX = 0;
   let panY = 0;
+
   const zoomFactor = 1.1;
   const maxScale = 5;
   const minScale = 1;
 
+  // Variables pour le drag à la souris (desktop)
+  let isPanning = false;
+  let startX = 0, startY = 0;
+
+  // Variables pour le pinch à deux doigts (mobile)
+  let isPinching = false;
+  let initialPinchDistance = 0;
+  let initialScale = 1;
+  let pinchMidX = 0, pinchMidY = 0;
+  let initialPanX = 0, initialPanY = 0;
+
+  // Met à jour transform + clamp pour empêcher le débordement
   function updateTransform() {
+    // Applique d'abord échelle + translation
     popupImage.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
-    popupImage.style.cursor = (scale > 1) ? 'grab' : 'default';
+
+    // Maintenant, on « clamp » panX/panY pour que l'image ne dépasse pas du conteneur
+    const containerRect = popupOverlay.getBoundingClientRect();
+    const imgRect       = popupImage.getBoundingClientRect();
+
+    const transformedWidth  = imgRect.width;
+    const transformedHeight = imgRect.height;
+    const containerWidth    = containerRect.width;
+    const containerHeight   = containerRect.height;
+
+    let minPanX, maxPanX, minPanY, maxPanY;
+
+    if (transformedWidth > containerWidth) {
+      const overflowX = (transformedWidth - containerWidth) / 2;
+      minPanX = -overflowX;
+      maxPanX = overflowX;
+    } else {
+      minPanX = maxPanX = 0;
+    }
+
+    if (transformedHeight > containerHeight) {
+      const overflowY = (transformedHeight - containerHeight) / 2;
+      minPanY = -overflowY;
+      maxPanY = overflowY;
+    } else {
+      minPanY = maxPanY = 0;
+    }
+
+    panX = Math.min(Math.max(panX, minPanX), maxPanX);
+    panY = Math.min(Math.max(panY, minPanY), maxPanY);
+
+    popupImage.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
   }
 
-  popupImage.addEventListener('wheel', function (e) {
+  // 1) ZOOM AVEC LA MOLETTE (desktop)
+  popupImage.addEventListener('wheel', function(e) {
     e.preventDefault();
-
-    const rect = popupImage.getBoundingClientRect();
+    const rect   = popupImage.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
-
-    const imageCX = rect.width / 2;
+    const imageCX = rect.width  / 2;
     const imageCY = rect.height / 2;
-
     const offsetX = mouseX - imageCX;
     const offsetY = mouseY - imageCY;
 
-    const zoomingIn = e.deltaY < 0;
-    const oldScale = scale;
-    const newScale = Math.max(minScale, Math.min(maxScale, scale * (zoomingIn ? zoomFactor : 1 / zoomFactor)));
+    const zoomingIn   = e.deltaY < 0;
+    const oldScale    = scale;
+    let   newScale    = Math.max(minScale, Math.min(maxScale,
+      scale * (zoomingIn ? zoomFactor : 1 / zoomFactor)
+    ));
 
     if (zoomingIn || newScale > 1.05) {
       const zoomRatio = newScale / oldScale;
@@ -1082,7 +1130,7 @@
     }
 
     if (!zoomingIn && newScale <= 1.05) {
-      const t = (newScale - 1) / 0.05; // entre 1 et 0
+      const t = (newScale - 1) / 0.05;
       panX *= t;
       panY *= t;
     }
@@ -1091,42 +1139,134 @@
     updateTransform();
   });
 
-  // PAN uniquement si zoomé
-  let isPanning = false, startX = 0, startY = 0;
-
-  popupImage.addEventListener('mousedown', (e) => {
-    if (scale <= 1) return; // Pas de pan si taille originale
+  // 2) PAN À LA SOURIS (desktop)
+  popupImage.addEventListener('mousedown', function(e) {
+    if (scale <= 1) return;
     isPanning = true;
     startX = e.clientX - panX;
     startY = e.clientY - panY;
     popupImage.style.cursor = 'grabbing';
   });
-
-  document.addEventListener('mousemove', (e) => {
+  document.addEventListener('mousemove', function(e) {
     if (!isPanning) return;
     panX = e.clientX - startX;
     panY = e.clientY - startY;
     updateTransform();
   });
-
-  document.addEventListener('mouseup', () => {
+  document.addEventListener('mouseup', function() {
+    if (!isPanning) return;
     isPanning = false;
     popupImage.style.cursor = (scale > 1) ? 'grab' : 'default';
+    if (scale <= 1.05) {
+      scale = 1;
+      panX = 0;
+      panY = 0;
+      updateTransform();
+    }
+  });
+  popupImage.addEventListener('dragstart', e => e.preventDefault());
+
+  // 3) PINCH & PAN AU TOUCH (mobile)
+  popupImage.addEventListener('touchstart', function(e) {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      isPinching = true;
+      const t0 = e.touches[0], t1 = e.touches[1];
+      const dx = t1.clientX - t0.clientX;
+      const dy = t1.clientY - t0.clientY;
+      initialPinchDistance = Math.hypot(dx, dy);
+      initialScale         = scale;
+      initialPanX          = panX;
+      initialPanY          = panY;
+      pinchMidX            = (t0.clientX + t1.clientX) / 2;
+      pinchMidY            = (t0.clientY + t1.clientY) / 2;
+    }
+    else if (e.touches.length === 1 && scale > 1) {
+      const touch = e.touches[0];
+      isPanning = true;
+      startX = touch.clientX - panX;
+      startY = touch.clientY - panY;
+      popupImage.style.cursor = 'grabbing';
+    }
   });
 
-  popupImage.addEventListener('dragstart', (e) => e.preventDefault());
+  popupImage.addEventListener('touchmove', function(e) {
+    if (isPinching && e.touches.length === 2) {
+      e.preventDefault();
+      const t0  = e.touches[0], t1 = e.touches[1];
+      const dx = t1.clientX - t0.clientX;
+      const dy = t1.clientY - t0.clientY;
+      const currentDistance = Math.hypot(dx, dy);
 
-  // Réinitialisation à la fermeture et cache la popup
-  document.querySelector('#imagePopup .closePopup').addEventListener('click', () => {
-    // Masque la popup
-    document.getElementById('imagePopup').style.display = 'none';
-    // Réinitialise transform
-    scale = 1;
-    panX = 0;
-    panY = 0;
-    updateTransform();
+      let newScale = initialScale * (currentDistance / initialPinchDistance);
+      newScale = Math.max(minScale, Math.min(maxScale, newScale));
+      const zoomRatio = newScale / initialScale;
+
+      const rect    = popupImage.getBoundingClientRect();
+      const imageCX = rect.left + rect.width / 2;
+      const imageCY = rect.top  + rect.height / 2;
+
+      const offsetX = pinchMidX - imageCX;
+      const offsetY = pinchMidY - imageCY;
+
+      panX = initialPanX - offsetX * (zoomRatio - 1);
+      panY = initialPanY - offsetY * (zoomRatio - 1);
+
+      scale = newScale;
+      updateTransform();
+    }
+    else if (isPanning && e.touches.length === 1) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      panX = touch.clientX - startX;
+      panY = touch.clientY - startY;
+      updateTransform();
+    }
   });
+
+  popupImage.addEventListener('touchend', function(e) {
+    if (isPinching && e.touches.length < 2) {
+      isPinching = false;
+      if (scale <= 1.05) {
+        scale = 1;
+        panX = 0;
+        panY = 0;
+        updateTransform();
+      }
+    }
+    if (isPanning && e.touches.length === 0) {
+      isPanning = false;
+      popupImage.style.cursor = (scale > 1) ? 'grab' : 'default';
+      if (scale <= 1.05) {
+        scale = 1;
+        panX = 0;
+        panY = 0;
+        updateTransform();
+      }
+    }
+  });
+
+  popupImage.addEventListener('touchcancel', function() {
+    isPanning  = false;
+    isPinching = false;
+  });
+
+  // 4) FERMETURE DU POPUP
+  const closeBtn = document.querySelector('#popupContent .closePopup');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', function() {
+      // 4.a) On ferme la fenêtre
+      popupOverlay.style.display = 'none';
+      // 4.b) On remet l’image à l’échelle/position d’origine
+      scale = 1;
+      panX = 0;
+      panY = 0;
+      updateTransform();
+    });
+  }
+});
 </script>
+
 
 <script>
   function open360Viewer(imagePath) {

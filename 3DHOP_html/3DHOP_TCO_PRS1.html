@@ -65,8 +65,7 @@
       height: auto;    /* Maintient les proportions du logo */
     }
 
-    /* Cacher le logo sur téléphone (portrait ou paysage) */
-    @media (max-width: 768px), (max-height: 768px) {
+    @media only screen and (max-width: 768px) {
       #logo-container {
         display: none !important;
       }

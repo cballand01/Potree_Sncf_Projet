@@ -123,51 +123,57 @@
       display: none !important;
     }
 
-    /* --------------------------------------------------
-     1) Bandeau “PointBudget” centré, version plus sobre
-     -------------------------------------------------- */
-    #splat_buttons {
+     /* ------------------------------
+     Conteneur bottom-bar (tout en bas, centré)
+     ------------------------------ */
+    #bottom_controls {
       position: absolute;
-      top: 10px;
+      bottom: 10px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 10000;
       display: flex;
       align-items: center;
-      gap: 8px;              /* espace réduit entre texte et slider */
+      gap: 12px;               /* espace entre slider et toggle */
+      padding: 6px 12px;       /* un peu de “respiration” */
+      background: transparent; /* pas de fond opaque */
+      z-index: 10000;
     }
   
-    /* Le label “Points affichés” plus compact */
-    #pointBudgetContainer label {
+    /* ------------------------------
+       Texte du slider “Points affichés”
+       ------------------------------ */
+    #bottom_controls label {
       color: white;
-      font-size: 0.85rem;    /* un peu plus petit */
-      margin: 0;             /* plus de marge */
-      white-space: nowrap;   /* empêche le retour à la ligne */
+      font-size: 0.9rem;
+      margin: 0 8px 0 0;       /* petit écart à droite du label */
+      white-space: nowrap;
     }
   
-    /* Slider plus compact en largeur */
+    /* ------------------------------
+       Slider plus sobre (largeur modérée, hauteur fine)
+       ------------------------------ */
     #pointBudgetSlider {
-      width: 100px;          /* largeur réduite */
-      height: 4px;           /* hauteur un peu plus fine */
+      width: 160px;            /* largeur raisonnable */
+      height: 4px;
       -webkit-appearance: none;
          -moz-appearance: none;
               appearance: none;
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(255,255,255,0.3);
       border-radius: 2px;
       outline: none;
-      transition: background 0.2s ease;
+      transition: background-color 0.2s ease;
     }
   
-    /* Styles du thumb (le cercle bleu) */
+    /* Thumb du slider (cercle bleu) */
     #pointBudgetSlider::-webkit-slider-thumb {
       -webkit-appearance: none;
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      background: #4285F4;   /* bleu plus discret */
+      background: #4285F4;      /* bleu vif mais discret */
       cursor: pointer;
       box-shadow: 0 1px 2px rgba(0,0,0,0.3);
-      margin-top: -4px;       /* centrage vertical du thumb */
+      margin-top: -4px;         /* pour centrer verticalement */
     }
     #pointBudgetSlider::-moz-range-thumb {
       width: 12px;
@@ -178,29 +184,40 @@
       box-shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
   
-    /* --------------------------------------------------
-       2) Toggle “Lissage” en haut à droite, version plus petite
-       -------------------------------------------------- */
+    /* Track / barre inactive du slider (lorsqu’on tire le thumb) */
+    #pointBudgetSlider:hover {
+      background: rgba(255,255,255,0.5);
+    }
+  
+    /* ------------------------------
+       Toggle “Lissage” très compact
+       ------------------------------ */
     .toggle-container {
-      position: absolute;
-      top: 10px;
-      right: 10px;
       display: flex;
       align-items: center;
       gap: 6px;
-      z-index: 10000;
-      background: transparent;
-      height: 20px;          /* hauteur réduite */
+      user-select: none;
     }
     .toggle-label {
       color: white;
-      font-size: 0.85rem;    /* texte plus petit */
-      user-select: none;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+    .toggle-container input[type="checkbox"] {
+      position: relative;
+      width: 32px;            /* largeur totale du track */
+      height: 16px;           /* hauteur du track */
+      margin: 0;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 2;
     }
     .toggle-container .toggle-track {
-      position: relative;
-      width: 32px;           /* plus étroit */
-      height: 16px;          /* plus court */
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 32px;
+      height: 16px;
       background-color: #ccc;
       border-radius: 8px;
       transition: background-color 0.25s ease;
@@ -210,27 +227,27 @@
       position: absolute;
       top: 1px;
       left: 1px;
-      width: 14px;           /* diamètre = hauteur - 2px */
+      width: 14px;            /* hauteur - 2px */
       height: 14px;
       background-color: white;
       border-radius: 50%;
       transition: transform 0.25s ease;
       box-shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
+  
+    /* Quand le checkbox est coché, on change la couleur du track et on déplace le thumb */
     .toggle-container input[type="checkbox"]:checked + .toggle-track {
       background-color: #EF3340; /* Rouge SNCF */
     }
     .toggle-container input[type="checkbox"]:checked + .toggle-track + .toggle-thumb {
-      transform: translateX(16px); /* déplacement = largeur track - diamètre thumb - 2px */
+      transform: translateX(16px); /* décalage = largeur track - diamètre thumb - 2px */
     }
-    .toggle-container input[type="checkbox"] {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      margin: 0;
-      cursor: pointer;
-      z-index: 2;
+  
+    /* Pour que le toggle ne prenne pas trop d’espace visuel */
+    .toggle-container,
+    .toggle-container .toggle-track,
+    .toggle-container .toggle-thumb {
+      background: transparent;
     }
   </style>
 </head>
@@ -471,9 +488,10 @@
     <div id="panorama" style=" width: 100vw; height: 100vh;"></div>
   </div>
 
-  <!-- → Bandeau “PointBudget” centré -->
-  <div id="splat_buttons">
-    <div id="pointBudgetContainer" style="display: flex; flex-direction: column; align-items: center;">
+  <!-- Conteneur bottom-bar regroupant le slider + le toggle -->
+  <div id="bottom_controls">
+    <!-- Label + valeur + slider -->
+    <div id="pointBudgetContainer">
       <label for="pointBudgetSlider">
         Points affichés : <span id="pointBudgetValue">2 000 000</span>
       </label>
@@ -484,17 +502,16 @@
         max="10000000"
         step="100000"
         value="2000000"
-        style="width: 140px;"
-      >
+      />
     </div>
-  </div>
   
-  <!-- → Toggle “Lissage” en haut à droite -->
-  <div class="toggle-container">
-    <span class="toggle-label">Lissage</span>
-    <input type="checkbox" id="toggleLissageMobile">
-    <div class="toggle-track"></div>
-    <div class="toggle-thumb"></div>
+    <!-- Switch “Lissage” -->
+    <div class="toggle-container">
+      <span class="toggle-label">Lissage</span>
+      <input type="checkbox" id="toggleLissageMobile" />
+      <div class="toggle-track"></div>
+      <div class="toggle-thumb"></div>
+    </div>
   </div>
 
 

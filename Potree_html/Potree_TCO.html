@@ -1706,36 +1706,34 @@
 
     // Fonction de navigation vers un hotspot donné
     function goToHotspot(index, playAudio = false) {
-        if (index < 0 || index >= hotspots.length) return;
-        const hp = hotspots[index];
+      if (index < 0 || index >= hotspots.length) return;
+      const hp = hotspots[index];
+      const isSameHotspot = index === window.currentHotspotIndex;
     
-        // Met à jour le nom affiché
-        document.getElementById("hotspotName").textContent = hp.name;
-    
-        // Positionne la vue
-        viewer.scene.view.setView(hp.position, hp.target, 5000);
-
+      if (!(isSameHotspot && !playAudio)) {
         if (window.currentHotspotAudio) {
-            window.currentHotspotAudio.pause();
-            window.currentHotspotAudio.currentTime = 0;
+          window.currentHotspotAudio.pause();
+          window.currentHotspotAudio.currentTime = 0;
         }
         document.getElementById('playPauseIcon').src = "/Potree_Sncf_Projet/build/potree/resources/icons/pause.svg";
         document.getElementById('playPauseIcon').alt = "Pause";
-      
-        lastHotspotView = { position: hp.position, target: hp.target, name: hp.name };
+      }
     
-        // Gère l’affichage et le lancement de l’audio
-        const audioBar = document.getElementById("audioBar");
-        if (hp.audioId && document.getElementById(hp.audioId)) {
-            audioBar.style.display = "flex";
-            if (playAudio) {
-                // Remet l’audio à zéro et le lance
-                playHotspotAudio(hp.audioId);
-            }
-        } else {
-            audioBar.style.display = "none";
-            playHotspotAudio(null); // Arrête toute piste s’il n’y a pas d’audio
+      window.currentHotspotIndex = index;
+      document.getElementById("hotspotName").textContent = hp.name;
+      viewer.scene.view.setView(hp.position, hp.target, 5000);
+      lastHotspotView = { position: hp.position, target: hp.target, name: hp.name };
+    
+      const audioBar = document.getElementById("audioBar");
+      if (hp.audioId && document.getElementById(hp.audioId)) {
+        audioBar.style.display = "flex";
+        if (playAudio) {
+          playHotspotAudio(hp.audioId);
         }
+      } else {
+        audioBar.style.display = "none";
+        playHotspotAudio(null);
+      }
     }
     let currentHotspotIndex = 0;
     window.hotspots = hotspots;

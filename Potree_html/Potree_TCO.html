@@ -1716,25 +1716,30 @@
     ];
 
     // Fonction de navigation vers un hotspot donné
-    function goToHotspot(index, playAudio = true) {
+    function goToHotspot(index, playAudio = false) {
         if (index < 0 || index >= hotspots.length) return;
         const hp = hotspots[index];
+    
+        // Met à jour le nom affiché
         document.getElementById("hotspotName").textContent = hp.name;
+    
+        // Positionne la vue
         viewer.scene.view.setView(hp.position, hp.target, 5000);
         lastHotspotView = { position: hp.position, target: hp.target, name: hp.name };
-        
-        // Ne jouer l'audio que si playAudio est vrai
-        // Afficher ou masquer la barre audio selon la présence d’un audio
+    
+        // Gère l’affichage et le lancement de l’audio
         const audioBar = document.getElementById("audioBar");
         if (hp.audioId && document.getElementById(hp.audioId)) {
             audioBar.style.display = "flex";
             if (playAudio) {
+                // Lance l’audio seulement si playAudio vaut true
                 playHotspotAudio(hp.audioId);
             }
         } else {
             audioBar.style.display = "none";
-            playHotspotAudio(null); // Arrête l’audio s’il n’y en a pas
+            playHotspotAudio(null); // Arrête toute piste s’il n’y a pas d’audio pour ce hotspot
         }
+    }
     }
     let currentHotspotIndex = 0;
     window.hotspots = hotspots;
@@ -2058,8 +2063,10 @@
   
   <!-- Script pour la navigation entre les hotspots de la visite guidée -->
   <script>
+    // Clic sur le nom du hotspot (ne relance pas l’audio)
     document.getElementById("hotspots").addEventListener("click", function() {
-      goToHotspot(currentHotspotIndex);
+        // On appelle sans second argument => playAudio = false
+        goToHotspot(currentHotspotIndex, false);
     });
 
     // Navigation vers le hotspot précédent
@@ -2068,7 +2075,8 @@
         if (currentHotspotIndex < 0) {
             currentHotspotIndex = hotspots.length - 1;
         }
-        goToHotspot(currentHotspotIndex);
+        // Ici, on précise true pour jouer l’audio lors du changement
+        goToHotspot(currentHotspotIndex, true);
     });
     
     // Navigation vers le hotspot suivant
@@ -2077,7 +2085,8 @@
         if (currentHotspotIndex >= hotspots.length) {
             currentHotspotIndex = 0;
         }
-        goToHotspot(currentHotspotIndex);
+        // Ici aussi, playAudio = true
+        goToHotspot(currentHotspotIndex, true);
     });
   </script>
   

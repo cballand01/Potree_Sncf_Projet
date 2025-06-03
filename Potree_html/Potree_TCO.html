@@ -350,13 +350,14 @@
   </div>
 
   <!-- Éléments audio pour les hotspots -->
-  <audio id="audioHotspot0" src="https://storage.googleapis.com/projet-potree-sncf/Audios/01.mp3" preload="auto"></audio>
+  <audio id="audioHotspot0" src="https://storage.googleapis.com/projet-potree-sncf/Audios/Visite1.mp3" preload="auto"></audio>
   <audio id="audioHotspot1" src="https://storage.googleapis.com/projet-potree-sncf/Audios/02.mp3" preload="auto"></audio>
   <audio id="audioHotspot2" src="https://storage.googleapis.com/projet-potree-sncf/Audios/02.mp3" preload="auto"></audio>
 
   <!-- Éléments audio pour les annotations -->
   <audio id="audioAnnotation1" src="https://storage.googleapis.com/projet-potree-sncf/Audios/Extrait2.mp3" preload="auto"></audio>
   <audio id="audioAnnotation2" src="https://storage.googleapis.com/projet-potree-sncf/Audios/Extrait1.mp3" preload="auto"></audio>
+
 
   <!-- Chargement des bibliothèques JavaScript -->
   <script src="/Potree_Sncf_Projet/libs/jquery/jquery-3.1.1.min.js"></script>
@@ -1702,7 +1703,7 @@
     
     // Définition des hotspots pour la visite guidée
     const hotspots = [
-      { name: "DÉBUT DE LA VISITE", position: new THREE.Vector3(8.34, 8.15, 4.92), target: new THREE.Vector3(3.31, 10.11, 1.31), audioId: null },
+      { name: "DÉBUT DE LA VISITE", position: new THREE.Vector3(8.34, 8.15, 4.92), target: new THREE.Vector3(3.31, 10.11, 1.31), audioId: "audioHotspot0" },
       { name: "POSTE DE RELAIS À TRANSIT SOUPLE", position: new THREE.Vector3(8.19, 7.88, 2.12), target: new THREE.Vector3(1.14, 11.41, 1.73), audioId: null },
       { name: "POSTE ÎLE-DE-FRANCE", position: new THREE.Vector3(6.65, 7.57, 2.12), target: new THREE.Vector3(6.64, 5.40, 1.65), audioId: null },
       { name: "POSTE ÎLE-DE-FRANCE", position: new THREE.Vector3(7.3, 4, 2.2), target: new THREE.Vector3(6.5, 2, 1.5), audioId: null },

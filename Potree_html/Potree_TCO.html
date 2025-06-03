@@ -1732,12 +1732,12 @@
         if (hp.audioId && document.getElementById(hp.audioId)) {
             audioBar.style.display = "flex";
             if (playAudio) {
-                // Lance l’audio seulement si playAudio vaut true
+                // Remet l’audio à zéro et le lance
                 playHotspotAudio(hp.audioId);
             }
         } else {
             audioBar.style.display = "none";
-            playHotspotAudio(null); // Arrête toute piste s’il n’y a pas d’audio pour ce hotspot
+            playHotspotAudio(null); // Arrête toute piste s’il n’y a pas d’audio
         }
     }
     let currentHotspotIndex = 0;
@@ -1873,7 +1873,7 @@
           
             currentHotspotIndex = 0; //Réinitialise l'index du hotspot
             // Aller au premier hotspot (ou rester au hotspot actuel si besoin)
-            goToHotspot(0, false);
+            goToHotspot(0, true);
 
             viewer.useHQ = true;
             document.getElementById("toggleLissage").textContent = "Désactiver lissage";
@@ -2404,7 +2404,7 @@
       document.getElementById("toggleLissage").textContent = "Désactiver lissage";
       document.getElementById('welcomePopup').style.display = 'none';
 
-      goToHotspot(0, false);
+      goToHotspot(0, true);
 
       // Afficher la popup d'instructions
       document.getElementById('instructionsPopup').style.display = 'block';

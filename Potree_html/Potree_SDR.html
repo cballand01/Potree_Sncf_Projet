@@ -1486,6 +1486,14 @@
     
         // Positionne la vue
         viewer.scene.view.setView(hp.position, hp.target, 5000);
+
+        if (window.currentHotspotAudio) {
+            window.currentHotspotAudio.pause();
+            window.currentHotspotAudio.currentTime = 0;
+        }
+        document.getElementById('playPauseIcon').src = "/Potree_Sncf_Projet/build/potree/resources/icons/pause.svg";
+        document.getElementById('playPauseIcon').alt = "Pause";
+      
         lastHotspotView = { position: hp.position, target: hp.target, name: hp.name };
     
         // Gère l’affichage et le lancement de l’audio
@@ -1697,7 +1705,15 @@
             } else {
                 document.getElementById("toggleLissage").textContent = "Activer lissage";
             }
-        }
+
+            // === Nouvel ajout : remettre le bouton Play/Pause dans l'état "pause" ===
+            if (window.currentHotspotAudio) {
+                 window.currentHotspotAudio.pause();
+                 window.currentHotspotAudio.currentTime = 0;
+             }
+             document.getElementById('playPauseIcon').src = "/Potree_Sncf_Projet/build/potree/resources/icons/pause.svg";
+             document.getElementById('playPauseIcon').alt = "Pause";
+          }
     });
     // Affichage en temps réel de la position de la caméra
     const camDiv = document.getElementById("cameraPosition");

@@ -1640,7 +1640,7 @@
           
             currentHotspotIndex = 0; //Réinitialise l'index du hotspot
             // Aller au premier hotspot (ou rester au hotspot actuel si besoin)
-            goToHotspot(0, false);
+            goToHotspot(0, true);
 
             viewer.useHQ = true;
             document.getElementById("toggleLissage").textContent = "Désactiver lissage";
@@ -2147,7 +2147,7 @@
       document.getElementById("toggleLissage").textContent = "Désactiver lissage";
       document.getElementById('welcomePopup').style.display = 'none';
 
-      goToHotspot(0, false);
+      goToHotspot(0, true);
 
       // Afficher la popup d'instructions
       document.getElementById('instructionsPopup').style.display = 'block';

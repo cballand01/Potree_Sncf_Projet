@@ -489,6 +489,16 @@
           });
       }
 
+      /**
+      * Met en pause et remet à zéro toutes les annotations audio
+      */
+      function pauseAllAnnotationAudio() {
+        document.querySelectorAll('audio[id^="audioAnnotation"]').forEach(a => {
+          a.pause();
+          a.currentTime = 0;
+        });
+      }
+
       // Bouton de retour à la vue initiale
       const btn = document.getElementById("recenterButton");
       btn.querySelector(".custom-tooltip").textContent = "Retour à la vue initiale";

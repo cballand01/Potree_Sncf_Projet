@@ -54,6 +54,12 @@
     .hide-mobile { display:block; }
     .mobile-only { display: none; }
 
+    @media (max-width:480px) {
+      .hide-mobile { display:none; }
+      .cards { grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); }
+      .card a { padding:1rem; font-size:1rem; }
+    }
+
     /* Cartes POTREE modernisées */
     .potree-card {
       position:relative; width:100%; height:280px;
@@ -94,14 +100,30 @@
       .potree-card:hover .text { transform:translateY(0); }
     }
 
-    /* Version 3DHOP-like sur mobile ≤768px */
+    /* Version 3DHOP-like et 3DHOP restreint sur mobile ≤768px */
     @media (max-width:768px) {
+      /* Masquer les potree-card */
       .potree-card { display: none !important; }
+
+      /* Afficher les cartes “mobile-only” (liées à POTREE) */
       .cards.mobile-only {
         display: grid;
         grid-template-columns: 1fr;
         gap: 1rem;
         margin: 1rem;
+      }
+
+      /* Dans la section 3DHOP (deuxième .section), masquer toutes les .card */
+      .section:nth-of-type(2) .cards .card {
+        display: none !important;
+      }
+      /* Puis réafficher uniquement PRS1, PRS2, PRS3, PRS4 et IDF */
+      .section:nth-of-type(2) .cards .img-prs1,
+      .section:nth-of-type(2) .cards .img-prs2,
+      .section:nth-of-type(2) .cards .img-prs3,
+      .section:nth-of-type(2) .cards .img-prs4,
+      .section:nth-of-type(2) .cards .img-idf {
+        display: block !important;
       }
     }
 
@@ -181,17 +203,16 @@
     .img-prs2 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS2.png'); }
     .img-prs3 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS3.png'); }
     .img-prs4 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS4.png'); }
-    .img-idf { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_IDF.png'); }
-    .img-tableau1 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau1.png'); }
-    .img-tab-haut { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_Haut.png'); }
+    .img-idf  { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_IDF.png'); }
+    .img-tab-haut  { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_Haut.png'); }
     .img-tab-central { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_Central.png'); }
     .img-tab-bas { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_Bas.png'); }
     .img-tab-total { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_tableau_Complet.png'); }
+    .img-arm1-avant { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/SDR_Armoire1_Avant.png'); }
+    .img-arm2-arriere { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/SDR_Armoire2_Arriere.png'); }
     .img-tco { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO.png'); }
     .img-sdr { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/SDR.png'); }
     .img-ext { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/Exterieur.png'); }
-    .img-arm1-avant { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/SDR_Armoire1_Avant.png'); }
-    .img-arm2-arriere { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/SDR_Armoire2_Arriere.png'); }
   </style>
 </head>
 <body>
@@ -354,7 +375,7 @@
         });
       }
 
-      // Masquer les potree-card sur mobile (portrait + paysage)
+      // Si on est sur mobile (portrait ou paysage), masquer les potree-card
       if (isMobile) {
         document.querySelectorAll(".potree-card").forEach(card => {
           card.style.display = "none";

@@ -54,12 +54,6 @@
     .hide-mobile { display:block; }
     .mobile-only { display: none; }
 
-    @media (max-width:480px) {
-      .hide-mobile { display:none; }
-      .cards { grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); }
-      .card a { padding:1rem; font-size:1rem; }
-    }
-
     /* Cartes POTREE modernisées */
     .potree-card {
       position:relative; width:100%; height:280px;
@@ -100,8 +94,8 @@
       .potree-card:hover .text { transform:translateY(0); }
     }
 
-    /* Version 3DHOP-like sur mobile ≤480px */
-    @media (max-width:480px) {
+    /* Version 3DHOP-like sur mobile ≤768px */
+    @media (max-width:768px) {
       .potree-card { display: none !important; }
       .cards.mobile-only {
         display: grid;
@@ -150,7 +144,7 @@
     }
 
     /* Adaptation du header sur mobile */
-    @media (max-width: 480px) {
+    @media (max-width: 768px) {
       header {
         padding: 1.5rem 1rem;    /* moins d’espace vertical */
       }
@@ -162,7 +156,7 @@
       }
     }
 
-     /* Avertissement mobile (bannière en haut) */
+    /* Avertissement mobile (bannière en haut) */
     .mobile-warning {
       display: none;                /* cachée par défaut */
       position: fixed;
@@ -360,6 +354,13 @@
         });
       }
 
+      // Masquer les potree-card sur mobile (portrait + paysage)
+      if (isMobile) {
+        document.querySelectorAll(".potree-card").forEach(card => {
+          card.style.display = "none";
+        });
+      }
+
       // Header shrink & bottom banner
       let lastScrollTop = 0;
       const header = document.querySelector("header");
@@ -378,7 +379,7 @@
       if (isMobile) {
         const warning = document.getElementById("mobile-warning");
         warning.style.display = "block";
-  
+
         // Permettre de fermer la bannière manuellement
         document.getElementById("mobile-warning-close")
           .addEventListener("click", () => {

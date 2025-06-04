@@ -177,8 +177,8 @@
       z-index: 2000;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
-    @media (min-width: 481px) {
-      /* Ne jamais afficher sur tablette+ */
+    /* Le bandeau reste visible tant que l’on est sur mobile (quelque soit l’orientation) */
+    @media (min-width: 768px) {
       .mobile-warning { display: none !important; }
     }
 

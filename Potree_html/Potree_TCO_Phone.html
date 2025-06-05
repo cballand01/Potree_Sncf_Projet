@@ -613,138 +613,158 @@
       }
 
       checkAllLoaded();
-  
-      // Joystick ajouté ici pour être sûr que viewer soit initialisé
-      const joystickContainer = document.getElementById('joystick-container');
-      const joystick = document.getElementById('joystick');
-  
-      let dragging = false;
-      let startX, startY, currentX, currentY;
-      let maxDistance = joystickContainer.offsetWidth / 2;
-  
-      joystickContainer.addEventListener('pointerdown', function(e) {
-        dragging = true;
-        startX = e.clientX;
-        startY = e.clientY;
-      });
-  
-      window.addEventListener('pointermove', function(e) {
-        if (!dragging) return;
-  
-        currentX = e.clientX - startX;
-        currentY = e.clientY - startY;
-  
-        const distance = Math.min(maxDistance, Math.hypot(currentX, currentY));
-        const angle = Math.atan2(currentY, currentX);
-  
-        const joystickX = distance * Math.cos(angle);
-        const joystickY = distance * Math.sin(angle);
-  
-        joystick.style.transform = `translate(calc(-50% + ${joystickX}px), calc(-50% + ${joystickY}px))`;
-  
-        const sensitivity = 0.0005;
-        viewer.scene.view.yaw -= joystickX * sensitivity;
-        viewer.scene.view.pitch -= joystickY * sensitivity;
-      });
-  
-      window.addEventListener('pointerup', function() {
-        dragging = false;
-        joystick.style.transform = 'translate(-50%, -50%)';
-      });
-  
-      window.addEventListener('pointerleave', function() {
-        dragging = false;
-        joystick.style.transform = 'translate(-50%, -50%)';
+
+      <!-- === GESTIONNAIRE DE JOYSTICKS === -->
+      // --- 1) État global des deux joysticks ---
+      const rotationStick = {
+        pointerId: null,
+        active: false,
+        deltaX: 0,
+        deltaY: 0,
+        centerX: 0,
+        centerY: 0,
+        maxDist: 0
+      };
+    
+      const moveStick = {
+        pointerId: null,
+        active: false,
+        deltaX: 0,
+        deltaY: 0,
+        centerX: 0,
+        centerY: 0,
+        maxDist: 0
+      };
+    
+      // --- 2) Sélecteurs DOM des conteneurs ---
+      const rotContainer = document.getElementById('joystick-container');
+      const rotThumb     = document.getElementById('joystick');
+      const movContainer = document.getElementById('joystick-move-container');
+      const movThumb     = document.getElementById('joystick-move');
+    
+      // Fonction utilitaire pour récupérer les directions caméra Three.js
+      function getCameraDirections(camera) {
+        const cameraDir   = new THREE.Vector3();
+        camera.getWorldDirection(cameraDir);
+    
+        const cameraRight = new THREE.Vector3();
+        cameraRight.crossVectors(camera.up, cameraDir).normalize();
+    
+        return {
+          forward: cameraDir.normalize(),
+          right: cameraRight
+        };
+      }
+    
+      // --- 3) Gestionnaire pour le joystick de rotation (yaw/pitch) ---
+      rotContainer.addEventListener('pointerdown', (e) => {
+        if (rotationStick.active) return; // ignore si déjà actif
+        rotationStick.pointerId = e.pointerId;
+        rotationStick.active    = true;
+        const rect = rotContainer.getBoundingClientRect();
+        rotationStick.centerX = rect.left + rect.width  / 2;
+        rotationStick.centerY = rect.top  + rect.height / 2;
+        rotationStick.maxDist  = rect.width / 2;
+        rotContainer.setPointerCapture(e.pointerId);
       });
     
-
-      // === Second Joystick (Déplacement corrigé) ===
-      const joystickMoveContainer = document.getElementById('joystick-move-container');
-      const joystickMove = document.getElementById('joystick-move');
-
-      let draggingMove = false;
-      let initialTouchX, initialTouchY;
-      let maxDistanceMove = 60; // valeur par défaut
-
-      joystickMoveContainer.addEventListener('pointerdown', (e) => {
-        draggingMove = true;
-        initialTouchX = e.clientX;
-        initialTouchY = e.clientY;
-
-        // on le recalcule ici, DOM prêt
-        maxDistanceMove = joystickMoveContainer.offsetWidth / 2;
+      rotContainer.addEventListener('pointermove', (e) => {
+        if (!rotationStick.active || e.pointerId !== rotationStick.pointerId) return;
+        const dx = e.clientX - rotationStick.centerX;
+        const dy = e.clientY - rotationStick.centerY;
+        const dist = Math.hypot(dx, dy);
+        const angle = Math.atan2(dy, dx);
+        const clampedDist = Math.min(dist, rotationStick.maxDist);
+        const clampedX = clampedDist * Math.cos(angle);
+        const clampedY = clampedDist * Math.sin(angle);
+    
+        rotationStick.deltaX = clampedX / rotationStick.maxDist; // normalisé [-1, +1]
+        rotationStick.deltaY = clampedY / rotationStick.maxDist; // normalisé [-1, +1]
+    
+        rotThumb.style.transform = `translate(calc(-50% + ${clampedX}px), calc(-50% + ${clampedY}px))`;
       });
-
-
-      // Fonction pour obtenir les vecteurs de direction (avant et droite) avec Three.js
-      function getCameraDirections(camera) {
-        const cameraDirection = new THREE.Vector3();
-        camera.getWorldDirection(cameraDirection);
-
-        const cameraRight = new THREE.Vector3();
-        cameraRight.crossVectors(camera.up, cameraDirection).normalize();
-
-        return { forward: cameraDirection.normalize(), right: cameraRight };
+    
+      rotContainer.addEventListener('pointerup', (e) => {
+        if (!rotationStick.active || e.pointerId !== rotationStick.pointerId) return;
+        rotationStick.active    = false;
+        rotationStick.pointerId = null;
+        rotationStick.deltaX = 0;
+        rotationStick.deltaY = 0;
+        rotThumb.style.transform = 'translate(-50%, -50%)';
+        rotContainer.releasePointerCapture(e.pointerId);
+      });
+    
+      // --- 4) Gestionnaire pour le joystick de déplacement (forward/right) ---
+      movContainer.addEventListener('pointerdown', (e) => {
+        if (moveStick.active) return;
+        moveStick.pointerId = e.pointerId;
+        moveStick.active    = true;
+        const rect = movContainer.getBoundingClientRect();
+        moveStick.centerX = rect.left + rect.width  / 2;
+        moveStick.centerY = rect.top  + rect.height / 2;
+        moveStick.maxDist  = rect.width / 2;
+        movContainer.setPointerCapture(e.pointerId);
+      });
+    
+      movContainer.addEventListener('pointermove', (e) => {
+        if (!moveStick.active || e.pointerId !== moveStick.pointerId) return;
+        const dx = e.clientX - moveStick.centerX;
+        const dy = e.clientY - moveStick.centerY;
+        const dist = Math.hypot(dx, dy);
+        const angle = Math.atan2(dy, dx);
+        const clampedDist = Math.min(dist, moveStick.maxDist);
+        const clampedX = clampedDist * Math.cos(angle);
+        const clampedY = clampedDist * Math.sin(angle);
+    
+        moveStick.deltaX = clampedX / moveStick.maxDist; // droite/gauche normalisé
+        moveStick.deltaY = clampedY / moveStick.maxDist; // avant/arrière normalisé
+    
+        movThumb.style.transform = `translate(calc(-50% + ${clampedX}px), calc(-50% + ${clampedY}px))`;
+      });
+    
+      movContainer.addEventListener('pointerup', (e) => {
+        if (!moveStick.active || e.pointerId !== moveStick.pointerId) return;
+        moveStick.active    = false;
+        moveStick.pointerId = null;
+        moveStick.deltaX = 0;
+        moveStick.deltaY = 0;
+        movThumb.style.transform = 'translate(-50%, -50%)';
+        movContainer.releasePointerCapture(e.pointerId);
+      });
+    
+      // --- 5) Boucle d’animation : applique rotation + déplacement par frame ---
+      function animateJoys() {
+        requestAnimationFrame(animateJoys);
+    
+        // a) Rotation caméra (yaw/pitch)
+        if (rotationStick.active) {
+          const sensRot = 0.02; // ajustable
+          const yawDelta    = - rotationStick.deltaX * sensRot;
+          const pitchDelta  = - rotationStick.deltaY * sensRot;
+          viewer.scene.view.yaw   += yawDelta;
+          viewer.scene.view.pitch += pitchDelta;
+        }
+    
+        // b) Déplacement caméra (forward/right)
+        if (moveStick.active) {
+          const sensMove = 0.5; // ajustable
+          const potreeCam = viewer.scene.getActiveCamera();
+          if (potreeCam) {
+            const dirs = getCameraDirections(potreeCam);
+            const forwardMove = dirs.forward.clone().multiplyScalar(- moveStick.deltaY * sensMove);
+            const sideMove    = dirs.right.clone().multiplyScalar( moveStick.deltaX * sensMove);
+            if (viewer.scene.view.position) {
+              viewer.scene.view.position.add(forwardMove).add(sideMove);
+            }
+            if (viewer.scene.view.target) {
+              viewer.scene.view.target.add(forwardMove).add(sideMove);
+            }
+          }
+        }
       }
-
-      // Début du mouvement joystick
-      joystickMoveContainer.addEventListener('pointerdown', (e) => {
-        draggingMove = true;
-        initialTouchX = e.clientX;
-        initialTouchY = e.clientY;
-      });
-
-      // Mouvement joystick
-      window.addEventListener('pointermove', (e) => {
-        if (!draggingMove) return;
-
-        const rect = joystickMoveContainer.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-
-        const deltaX = e.clientX - centerX;
-        const deltaY = e.clientY - centerY;
-
-        const distance = Math.min(maxDistanceMove, Math.hypot(deltaX, deltaY));
-        const angle = Math.atan2(deltaY, deltaX);
-
-        const joystickPosX = distance * Math.cos(angle);
-        const joystickPosY = distance * Math.sin(angle);
-
-        joystickMove.style.transform = `translate(calc(-50% + ${joystickPosX}px), calc(-50% + ${joystickPosY}px))`;
-
-        // Déplacement caméra avec directions calculées via Three.js
-        const distanceRatio = distance / maxDistanceMove; // entre 0 (centre) et 1 (bord)
-        const moveSpeed = 0.001 * distanceRatio; // vitesse progressive
-
-        const potreeCamera = viewer.scene.getActiveCamera();
-        const directions = getCameraDirections(potreeCamera);
-
-        const forwardMovement = directions.forward.clone().multiplyScalar(-joystickPosY * moveSpeed);
-        const sideMovement = directions.right.clone().multiplyScalar(-joystickPosX * moveSpeed);
-        
-        if (viewer.scene.view?.position) {
-          viewer.scene.view.position.add(forwardMovement).add(sideMovement);
-        }
-        if (viewer.scene.view?.target) {
-          viewer.scene.view.target.add(forwardMovement).add(sideMovement);
-        }
-
-        // Mise à jour fluide des positions initiales pour un déplacement continu
-        initialTouchX = e.clientX;
-        initialTouchY = e.clientY;
-      });
-
-      // Fin du mouvement joystick
-      window.addEventListener('pointerup', () => {
-        draggingMove = false;
-        joystickMove.style.transform = 'translate(-50%, -50%)';
-      });
-
-      window.addEventListener('pointercancel', () => {
-        draggingMove = false;
-        joystickMove.style.transform = 'translate(-50%, -50%)';
-      });
+    
+      // Démarrer la boucle de mise à jour
+      requestAnimationFrame(animateJoys);
 
       /**
        * Met en pause et remet à zéro toutes les annotations audio

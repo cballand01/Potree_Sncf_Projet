@@ -8,7 +8,7 @@
 
   <!-- LE FAVICON -->
   <link rel="icon" href="https://storage.googleapis.com/projet-potree-sncf/Images/Logo/Logo_LGV_Simple.png" type="image/png">
-
+  
   <style>
     /* Reset & box-sizing */
     *, *::before, *::after { box-sizing: border-box; }
@@ -24,36 +24,15 @@
 
     /* Header modernisé */
     header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background-color: #111;
-      color: #fff;
-      display: flex;
-      align-items: center;       /* centre verticalement */
-      padding: 0.5rem 1rem;       /* réduit la hauteur tout en laissant un peu d’espace */
+      position: sticky; top: 0; z-index: 1000;
+      background-color: #111; color: #fff;
+      padding: 3rem 1rem; text-align: center;
+      transition: transform 0.3s ease;
       box-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
-    header img.logo {
-      height: 3rem;               /* logo sur toute la hauteur du header (environ) */
-      margin-right: 1rem;
-    }
-    header .header-text {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    header .header-text h1 {
-      margin: 0;
-      font-size: 1.75rem;
-    }
-    header .header-text p {
-      margin: 0;
-      font-size: 1rem;
-      opacity: 0.8;
-      margin-top: 0.25rem;
-    }
-    header.shrink { transform: translateY(-100%); transition: transform 0.3s ease; }
+    header.shrink { transform: translateY(-100%); }
+    header h1 { margin: 0; font-size: 2.5rem; }
+    header p { margin: 0; font-size: 1.2rem; opacity: 0.8; }
 
     /* Contenu principal */
     main { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
@@ -65,8 +44,8 @@
     /* Texte explicatif (largeur étendue + drop cap) */
     .section p.description {
       margin: 0 auto 2rem;
-      max-width: 900px;
-      width: 100%;
+      max-width: 900px;                  /* largeur maximale */
+      width: 100%;                       /* occupe tout l’espace disponible */
       font-size: 1rem;
       text-align: justify;
       text-align-last: left;
@@ -76,7 +55,7 @@
     }
     .section p.description::first-letter {
       float: left;
-      font-size: 3.5rem;
+      font-size: 3.5rem;                 /* taille “drop cap” */
       line-height: 1;
       margin-right: 0.5rem;
       font-weight: bold;
@@ -99,6 +78,7 @@
     }
     .hide-mobile { display:block; }
     .mobile-only { display: none; }
+
     @media (max-width:480px) {
       .hide-mobile { display:none; }
       .cards { grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); }
@@ -213,16 +193,13 @@
     /* Adaptation du header sur mobile */
     @media (max-width: 768px) {
       header {
-        padding: 1rem 1rem;    /* moins d’espace vertical */
+        padding: 1.5rem 1rem;    /* moins d’espace vertical */
       }
-      header img.logo {
-        height: 2.5rem;
+      header h1 {
+        font-size: 1.5rem;      /* titre plus petit */
       }
-      header .header-text h1 {
-        font-size: 1.25rem;
-      }
-      header .header-text p {
-        font-size: 0.9rem;
+      header p {
+        font-size: 1rem;        /* sous-titre plus petit */
       }
     }
 
@@ -264,17 +241,9 @@
   </style>
 </head>
 <body>
-  <!-- Header avec logo à gauche et texte à droite -->
   <header>
-    <!-- Logo côté gauche (pleine hauteur du header) -->
-    <img src="https://storage.googleapis.com/projet-potree-sncf/Images/Logo/Logo_LGV_PL.png"
-         alt="Logo PAR" class="logo" />
-
-    <!-- Texte à droite (titre + sous-titre) -->
-    <div class="header-text">
-      <h1>Poste d'aiguillage et de régulation de la LGV Paris-Lyon</h1>
-      <p>Visualisez et explorez les modèles et nuages de points</p>
-    </div>
+    <h1>Poste d'aiguillage et de régulation de la LGV Paris-Lyon</h1>
+    <p>Visualisez et explorez les modèles et nuages de points</p>
   </header>
 
   <main>
@@ -351,7 +320,6 @@
         De plus, chaque modèle est remis à l’échelle à l’aide du nuage de points, garantissant une cohérence métrique entre tous les éléments. Vous bénéficiez ainsi d’une vue détaillée 
         des éléments techniques du PAR de la LGV Paris-Lyon.</span>
       </p>
-
       <div class="cards">
         <div class="card img-prs1"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_PRS1.html">P.R.S. n°1</a></div>
         <div class="card img-prs2"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_PRS2.html">P.R.S. n°2</a></div>

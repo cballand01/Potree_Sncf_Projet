@@ -246,6 +246,13 @@
     .toggle-switch input[type="checkbox"]:checked + .toggle-track .toggle-thumb {
       transform: translateX(20px);
     }
+
+     /* === Bloquer toute interaction sur le canvas Potree === */
+    #potree_render_area canvas {
+      touch-action: none;
+      pointer-events: none;
+    }
+    
   </style>
 </head>
 

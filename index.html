@@ -36,13 +36,26 @@
     .section h2 {
       font-size: 2rem; margin-bottom: 1rem; text-align: center; color: #222;
     }
+
+    /* Texte explicatif (largeur étendue + drop cap) */
     .section p.description {
       margin: 0 auto 2rem;
-      max-width: 800px;
+      max-width: 900px;                  /* largeur maximale */
+      width: 100%;                       /* occupe tout l’espace disponible */
       font-size: 1rem;
-      text-align: center;
+      text-align: justify;
+      text-align-last: left;
       color: #555;
       line-height: 1.4;
+      position: relative;
+    }
+    .section p.description::first-letter {
+      float: left;
+      font-size: 3.5rem;                 /* taille “drop cap” */
+      line-height: 1;
+      margin-right: 0.5rem;
+      font-weight: bold;
+      color: #222;
     }
 
     /* Cartes 3DHOP */
@@ -234,10 +247,10 @@
     <section class="section">
       <h2>Nuages de points & Visite guidée - POTREE</h2>
       <p class="description">
-        Potree combine la puissance des nuages de points et des modèles 3D pour offrir un rendu immersif et précis. 
+        P<span>otree combine la puissance des nuages de points et des modèles 3D pour offrir un rendu immersif et précis. 
         Les nuages de points, facilement générés par des scanners 3D, apportent du relief et du contexte spatial aux données. 
         Ils servent de base pour mettre en valeur les modèles 3D, les images détaillées et les annotations interactives. 
-        Ainsi, chaque élément se situe dans son environnement réel et prend tout son sens.
+        Ainsi, chaque élément se situe dans son environnement réel et prend tout son sens.</span>
       </p>
 
       <!-- Visite Extérieur -->
@@ -298,9 +311,9 @@
     <section class="section">
       <h2>Modèles 3D - 3DHOP</h2>
       <p class="description">
-        Les modèles 3D présentés ici sont réalisés à partir de photogrammétrie, une technique qui combine de nombreuses photographies pour reconstruire 
-        des surfaces avec une grande précision. Chaque modèle reflète fidèlement la géométrie réelle des objets étudiés, 
-        offrant ainsi un niveau de détail optimal pour explorer l’architecture, l’équipement et l’outillage du site.
+        L<span>es modèles 3D présentés ici sont réalisés à partir de photogrammétrie, une technique qui combine de nombreuses photographies 
+        pour reconstruire des surfaces avec une grande précision. Chaque modèle reflète fidèlement la géométrie réelle des objets étudiés, 
+        offrant ainsi un niveau de détail optimal pour explorer l’architecture, l’équipement et l’outillage du site.</span>
       </p>
       <div class="cards">
         <div class="card img-prs1"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_PRS1.html">P.R.S. n°1</a></div>

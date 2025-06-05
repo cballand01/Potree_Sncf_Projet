@@ -246,6 +246,12 @@
     .toggle-switch input[type="checkbox"]:checked + .toggle-track .toggle-thumb {
       transform: translateX(20px);
     }
+
+    /* Désactive tout événement tactile/clic sur le canvas Potree */
+    #potree_render_area canvas {
+      touch-action: none;    /* empêche le navigateur de déclencher scroll/pinch par défaut */
+      pointer-events: none;  /* bloque tous les “pointer” (touch/clic) sur le canvas lui-même */
+    }
   </style>
 </head>
 

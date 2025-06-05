@@ -636,7 +636,7 @@
         maxDist: 0
       };
     
-      // --- 2) Sélecteurs DOM des conteneurs ---
+      // --- 2) Sélecteurs DOM des conteneurs / thumbs ---
       const rotContainer = document.getElementById('joystick-container');
       const rotThumb     = document.getElementById('joystick');
       const movContainer = document.getElementById('joystick-move-container');
@@ -658,7 +658,7 @@
     
       // --- 3) Gestionnaire pour le joystick de rotation (yaw/pitch) ---
       rotContainer.addEventListener('pointerdown', (e) => {
-        if (rotationStick.active) return; // ignore si déjà actif
+        if (rotationStick.active) return;
         rotationStick.pointerId = e.pointerId;
         rotationStick.active    = true;
         const rect = rotContainer.getBoundingClientRect();
@@ -678,8 +678,8 @@
         const clampedX = clampedDist * Math.cos(angle);
         const clampedY = clampedDist * Math.sin(angle);
     
-        rotationStick.deltaX = clampedX / rotationStick.maxDist; // normalisé [-1, +1]
-        rotationStick.deltaY = clampedY / rotationStick.maxDist; // normalisé [-1, +1]
+        rotationStick.deltaX = clampedX / rotationStick.maxDist; // [-1…+1]
+        rotationStick.deltaY = clampedY / rotationStick.maxDist; // [-1…+1]
     
         rotThumb.style.transform = `translate(calc(-50% + ${clampedX}px), calc(-50% + ${clampedY}px))`;
       });
@@ -716,8 +716,8 @@
         const clampedX = clampedDist * Math.cos(angle);
         const clampedY = clampedDist * Math.sin(angle);
     
-        moveStick.deltaX = clampedX / moveStick.maxDist; // droite/gauche normalisé
-        moveStick.deltaY = clampedY / moveStick.maxDist; // avant/arrière normalisé
+        moveStick.deltaX = clampedX / moveStick.maxDist; // [-1…+1]
+        moveStick.deltaY = clampedY / moveStick.maxDist; // [-1…+1]
     
         movThumb.style.transform = `translate(calc(-50% + ${clampedX}px), calc(-50% + ${clampedY}px))`;
       });
@@ -736,23 +736,45 @@
       function animateJoys() {
         requestAnimationFrame(animateJoys);
     
-        // a) Rotation caméra (yaw/pitch)
+        // ----- a) Rotation caméra (yaw/pitch) avec sensibilité 0.0005 comme avant -----
         if (rotationStick.active) {
-          const sensRot = 0.02; // ajustable
-          const yawDelta    = - rotationStick.deltaX * sensRot;
-          const pitchDelta  = - rotationStick.deltaY * sensRot;
+          // On récupère la “distance” en pixels depuis le centre du stick :
+          const rawX = rotationStick.deltaX * rotationStick.maxDist;
+          const rawY = rotationStick.deltaY * rotationStick.maxDist;
+    
+          // Ancienne formule : viewer.scene.view.yaw   -= joystickX * 0.0005;
+          //                   viewer.scene.view.pitch -= joystickY * 0.0005;
+          // Donc ici :
+          const sensRot = 0.0005;
+          const yawDelta   = - rawX * sensRot;
+          const pitchDelta = - rawY * sensRot;
+    
           viewer.scene.view.yaw   += yawDelta;
           viewer.scene.view.pitch += pitchDelta;
         }
     
-        // b) Déplacement caméra (forward/right)
+        // ----- b) Déplacement caméra (forward/right) avec sensibilité 0.001 comme avant -----
         if (moveStick.active) {
-          const sensMove = 0.5; // ajustable
+          // On recalcule “joystickPosX” et “joystickPosY” en pixels :
+          const rawX = moveStick.deltaX * moveStick.maxDist;
+          const rawY = moveStick.deltaY * moveStick.maxDist;
+    
+          // Ancienne formule :
+          //   const distance = Math.hypot(rawX, rawY);
+          //   const moveSpeed = 0.001 * (distance / maxDist);
+          //   const forward = directions.forward.clone().multiplyScalar(- rawY * moveSpeed);
+          //   const side    = directions.right.clone().multiplyScalar(- rawX * moveSpeed);
+          // On la réécrit ici :
+          const distanceFromCenter = Math.hypot(rawX, rawY);
+          const moveSpeed = 0.001 * (distanceFromCenter / moveStick.maxDist);
+    
           const potreeCam = viewer.scene.getActiveCamera();
           if (potreeCam) {
             const dirs = getCameraDirections(potreeCam);
-            const forwardMove = dirs.forward.clone().multiplyScalar(- moveStick.deltaY * sensMove);
-            const sideMove    = dirs.right.clone().multiplyScalar( moveStick.deltaX * sensMove);
+    
+            const forwardMove = dirs.forward.clone().multiplyScalar(- rawY * moveSpeed);
+            const sideMove    = dirs.right.clone().multiplyScalar(- rawX * moveSpeed);
+    
             if (viewer.scene.view.position) {
               viewer.scene.view.position.add(forwardMove).add(sideMove);
             }
@@ -763,9 +785,9 @@
         }
       }
     
-      // Démarrer la boucle de mise à jour
+      // Démarre la boucle
       requestAnimationFrame(animateJoys);
-
+      
       /**
        * Met en pause et remet à zéro toutes les annotations audio
        */

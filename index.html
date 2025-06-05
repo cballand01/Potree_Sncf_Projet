@@ -26,13 +26,27 @@
     header {
       position: sticky; top: 0; z-index: 1000;
       background-color: #111; color: #fff;
-      padding: 3rem 1rem; text-align: center;
+      padding: 3rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transition: transform 0.3s ease;
       box-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
     header.shrink { transform: translateY(-100%); }
-    header h1 { margin: 0; font-size: 2.5rem; }
-    header p { margin: 0; font-size: 1.2rem; opacity: 0.8; }
+
+    /* Logo dans le header */
+    header .logo {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 60px; /* ajustez la taille si nécessaire */
+      height: auto;
+    }
+
+    header h1 { margin: 0; font-size: 2.5rem; text-align: center; }
+    header p { margin: 0; font-size: 1.2rem; opacity: 0.8; text-align: center; }
 
     /* Contenu principal */
     main { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
@@ -242,6 +256,9 @@
 </head>
 <body>
   <header>
+    <!-- Logo ajouté en haut à gauche -->
+    <img src="https://storage.googleapis.com/projet-potree-sncf/Images/Logo/Logo_LGV_PL.png" alt="Logo PAR" class="logo">
+
     <h1>Poste d'aiguillage et de régulation de la LGV Paris-Lyon</h1>
     <p>Visualisez et explorez les modèles et nuages de points</p>
   </header>

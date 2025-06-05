@@ -179,6 +179,15 @@
       } else if(action=='full' || action=='full_on') 
         fullscreenSwitch(); 
     }
+
+    //Force le navigateur à ne pas afficher le logo SNCF Réseau si c'est un téléphone
+    document.addEventListener("DOMContentLoaded", function(){
+      var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
+      if(isMobile){
+        var logo = document.getElementById("logo-container");
+        if(logo) logo.style.display = "none";
+      }
+    });
     
     $(document).ready(function(){
       init3dhop();

@@ -210,22 +210,24 @@
     .bottom-banner a { color: #4a90e2; text-decoration: underline; }
 
     /* Onglet latéral “connexion” */
+    /* Onglet latéral “connexion” 🡇 déplacé en bas à droite */
     #connection-tab {
       position: fixed;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      background: #4a90e2;
+      bottom: 20px;      /* on place 20px du bas */
+      right: 20px;       /* et 20px de la droite */
       width: 40px;
       height: 40px;
-      border-radius: 4px 0 0 4px;
+      background: #4a90e2;
+      border-radius: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       z-index: 2000;
-      color: #fff;
-      font-size: 1.2rem;
+    }
+    #connection-tab img {
+      width: 24px;       /* taille de l’icône */
+      height: 24px;
     }
     #connection-modal {
       position: fixed;
@@ -386,7 +388,9 @@
   </main>
 
   <!-- Onglet latéral “connexion” -->
-  <div id="connection-tab" title="Infos connexion">🔌</div>
+  <div id="connection-tab" title="Infos connexion">
+    <img src="https://storage.googleapis.com/projet-potree-sncf/Images/Logo/wifi.svg" alt="Wi-Fi icon">
+  </div>
   <div id="connection-modal">
     <div class="close">×</div>
     <h3>Vérification de la connexion</h3>

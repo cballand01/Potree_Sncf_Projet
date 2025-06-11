@@ -235,7 +235,7 @@
       position: fixed;
       bottom: 20px;
       right: -320px;
-      width: 260px;               /* un peu plus large pour 0/500 */
+      width: 300px;               /* élargi de 260px → 300px */
       background: #fff;
       border: 1px solid #ccc;
       padding: 1rem;
@@ -249,7 +249,8 @@
       text-align: center;
     }
     #connection-modal.open {
-      right: 20px;            /* slide jusqu’à 20px du bord droit */
+      right: 20px;
+    }            /* slide jusqu’à 20px du bord droit */
     }
     #connection-modal h3 {
       margin: 0 0 0.5rem;
@@ -533,25 +534,19 @@
         }
       });
       
-      // —— Mesure réelle du débit via image ——
-      function measureDownloadSpeed() {
-        return new Promise((resolve, reject) => {
-          const imageAddr    = 'https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_tableau_Complet.png';
-          const downloadSize = 1500000; // octets réels du fichier
-          let startTime = Date.now();
+      // —— Mesure réelle du débit via fetch+blob ——
+      async function measureDownloadSpeed() {
+        // on force le cache-busting
+        const url = 'https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_tableau_Complet.png'
+                  + '?_cb=' + Date.now();
+        const start = performance.now();
+        const response = await fetch(url, { cache: 'no-store' });
+        const blob     = await response.blob();
+        const duration = (performance.now() - start) / 1000; // en secondes
       
-          const img = new Image();
-          img.onload = () => {
-            const duration   = (Date.now() - startTime) / 1000;        // secondes
-            const bitsLoaded = downloadSize * 8;                      // bits
-            const mbps       = bitsLoaded / duration / (1024 * 1024); // Mbps
-            resolve(mbps);
-          };
-          img.onerror = () => reject(new Error('Erreur téléchargement image'));
-      
-          // force le cache‐busting
-          img.src = imageAddr + '?_cb=' + startTime;
-        });
+        // débit en Mbps = (bytes×8) / (duration×1_000_000)
+        const bitsLoaded = blob.size * 8;
+        return bitsLoaded / (duration * 1_000_000);
       }
       
       // —— Mise à jour de la jauge (0–500 Mo/s) ——

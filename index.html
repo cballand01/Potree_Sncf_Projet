@@ -50,8 +50,6 @@
       text-align: center;
       color: #222;
     }
-
-    /* Texte explicatif (largeur étendue + drop cap) */
     .section p.description {
       margin: 0 auto 2rem;
       max-width: 900px;
@@ -182,7 +180,9 @@
         gap: 1rem;
         margin: 1rem;
       }
-      .section:nth-of-type(2) .cards .card { display: none !important; }
+      .section:nth-of-type(2) .cards .card {
+        display: none !important;
+      }
       .section:nth-of-type(2) .cards .img-prs1,
       .section:nth-of-type(2) .cards .img-prs2,
       .section:nth-of-type(2) .cards .img-prs3,
@@ -228,12 +228,12 @@
       width: 24px;
       height: 24px;
     }
-    
-    /* Modal en slider, aligné sur le bouton en bas */
+
+    /* Slider modal aligné bas */
     #connection-modal {
       position: fixed;
-      bottom: 20px;           /* même distance du bas que le tab */
-      right: -320px;          /* caché hors écran */
+      bottom: 20px;
+      right: -320px;
       width: 300px;
       background: #fff;
       border: 1px solid #ccc;
@@ -243,21 +243,11 @@
       z-index: 2000;
     }
     #connection-modal.open {
-      right: 20px;            /* slide jusqu’à 20px du bord droit */
+      right: 20px;
     }
-    
     #connection-modal h3 {
       margin: 0 0 0.5rem;
       font-size: 1.1rem;
-    }
-
-    /* Adaptation du header sur mobile */
-    @media (max-width: 768px) {
-      header {
-        padding: 1.5rem 1rem;
-      }
-      header h1 { font-size: 1.5rem; }
-      header p  { font-size: 1rem; }
     }
 
     /* Avertissement mobile (bannière en haut) */
@@ -384,7 +374,7 @@
     </section>
   </main>
 
-  <!-- Onglet latéral “connexion” -->
+  <!-- Slider de connexion -->
   <div id="connection-tab" title="Infos connexion">
     <img src="https://storage.googleapis.com/projet-potree-sncf/Images/Logo/wifi.svg" alt="Wi-Fi icon">
   </div>
@@ -403,7 +393,7 @@
     <a href="https://3dhop.net/" target="_blank" rel="noopener noreferrer">3DHOP</a>
   </div>
 
-  <!-- BANNIÈRE D’AVERTISSEMENT POUR MOBILE -->
+  <!-- Avertissement mobile -->
   <div id="mobile-warning" class="mobile-warning">
     ⚠️ Attention : cette version simplifiée n’est pas optimisée pour mobile. Un ordinateur offre une meilleure expérience.
     <span id="mobile-warning-close" style="cursor:pointer; margin-left:1rem; font-weight:bold;">×</span>
@@ -467,14 +457,15 @@
         document.getElementById("mobile-warning").style.display = "block";
       }
 
-      // Onglet connexion modal
-      const tab = document.getElementById('connection-tab');
-      const modal = document.getElementById('connection-modal');
-      const closeBtn = modal.querySelector('.close');
-      tab.addEventListener('click', () => modal.style.display = 'block');
-      closeBtn.addEventListener('click', () => modal.style.display = 'none');
+      // Slider de connexion
+      const connectionTab   = document.getElementById('connection-tab');
+      const connectionModal = document.getElementById('connection-modal');
+      connectionTab.addEventListener('click', () => {
+        connectionModal.classList.toggle('open');
+        connectionTab.style.right = connectionModal.classList.contains('open') ? '320px' : '20px';
+      });
 
-      // Affichage débit internet si disponible
+      // Affichage débit internet
       function updateConnectionSpeed() {
         const speedEl = document.getElementById('connection-speed');
         if (navigator.connection && navigator.connection.downlink) {
@@ -487,20 +478,6 @@
       if (navigator.connection) {
         navigator.connection.addEventListener('change', updateConnectionSpeed);
       }
-
-      // Onglet connexion modal en slider
-      const connectionTab   = document.getElementById('connection-tab');
-      const connectionModal = document.getElementById('connection-modal');
-    
-      connectionTab.addEventListener('click', () => {
-        connectionModal.classList.toggle('open');
-        // décale aussi le bouton pour qu'il suive la fenêtre
-        if (connectionModal.classList.contains('open')) {
-          connectionTab.style.right = '320px';
-        } else {
-          connectionTab.style.right = '20px';
-        }
-      });
     });
   </script>
 </body>

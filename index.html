@@ -498,15 +498,15 @@
       }
 
       // Onglet connexion modal en slider
-      const tab   = document.getElementById('connection-tab');
-      const modal = document.getElementById('connection-modal');
-      const close = modal.querySelector('.close');
-  
-      tab.addEventListener('click', () => {
-        modal.classList.add('open');
+      const connectionTab      = document.getElementById('connection-tab');
+      const connectionModal    = document.getElementById('connection-modal');
+      const connectionCloseBtn = connectionModal.querySelector('.close');
+    
+      connectionTab.addEventListener('click', () => {
+        connectionModal.classList.add('open');
       });
-      close.addEventListener('click', () => {
-        modal.classList.remove('open');
+      connectionCloseBtn.addEventListener('click', () => {
+        connectionModal.classList.remove('open');
       });
     });
   </script>

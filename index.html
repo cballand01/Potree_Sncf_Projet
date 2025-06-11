@@ -438,7 +438,7 @@
         />
         <!-- repères 0 & 500 -->
         <text x="8"  y="98" font-size="10" fill="#333">0</text>
-        <text x="181" y="98" font-size="10" fill="#333">500</text>
+        <text x="181" y="98" font-size="10" fill="#333">300</text>
       </svg>
       <div class="gauge-label">
         <span id="connection-speed">–</span> Mbps
@@ -545,7 +545,7 @@
         return new Promise((resolve, reject) => {
           const imageAddr    = 'https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_tableau_Complet.png';
           const downloadSize = 1500000; // octets réels du fichier
-          let startTime;
+          let startTime = Date.now();
       
           const img = new Image();
           img.onload = () => {
@@ -556,35 +556,36 @@
           };
           img.onerror = () => reject(new Error('Erreur téléchargement image'));
       
-          startTime   = Date.now();
-          img.src     = imageAddr + '?_cb=' + startTime;
+          img.src = imageAddr + '?_cb=' + startTime; // force le cache‐busting
         });
       }
       
-      // —— Mise à jour de la jauge (0–500 Mo/s) ——
+      // —— Mise à jour de la jauge (0–300 Mbps) ——
       async function updateConnectionSpeed() {
         const speedEl = document.getElementById('connection-speed');
         const arc     = document.getElementById('gauge-arc');
         let speed;
       
         try {
-          speed = await measureDownloadSpeed();
+          speed = await measureDownloadSpeed(); // en Mbps
         } catch {
           speed = 0;
         }
-
-        // affichage et jauge
-          speedEl.textContent = speed.toFixed(1);
-          const pct = Math.min(speed / 1000, 1);
-          arc.setAttribute('stroke-dasharray', `${pct * 565},565`);
-        
-          // couleur par seuils
-          let color = 'red';
-          if (speed >= 130)     color = 'green';
-          else if (speed >= 80) color = 'yellow';
-          else if (speed >= 20)  color = 'orange';
-          arc.setAttribute('stroke', color);
-        }
+      
+        // affichage en Mbps
+        speedEl.textContent = speed.toFixed(1);
+      
+        // échelle 0–300 Mbps
+        const pct = Math.min(speed / 300, 1);
+        arc.setAttribute('stroke-dasharray', `${pct * 565},565`);
+      
+        // seuils de couleur
+        let color = 'red';
+        if (speed >= 100)    color = 'green';   // excellent
+        else if (speed >= 60) color = 'yellow';  // bon
+        else if (speed >= 25) color = 'orange';  // correct
+        arc.setAttribute('stroke', color);
+      }
     });
   </script>
 

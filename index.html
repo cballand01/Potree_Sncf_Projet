@@ -450,7 +450,7 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
-
+  
       // Liens Potree / SDR / Extérieur
       const map = [
         { id: "ext-link", desktop: "Potree_EXTERIEUR.html", phone: "Potree_EXTERIEUR_Phone.html" },
@@ -467,7 +467,7 @@
             : `/Potree_Sncf_Projet/Potree_html/${desktop}`;
         });
       });
-
+  
       // Mobile-only variants
       ["ext", "tco", "sdr"].forEach(pref => {
         const mob = document.getElementById(`${pref}-link-mobile`);
@@ -479,12 +479,12 @@
             : `/Potree_Sncf_Projet/Potree_html/Potree_${pref.toUpperCase()}.html`;
         });
       });
-
+  
       // Masquer potree-card sur mobile
       if (isMobile) {
         document.querySelectorAll(".potree-card").forEach(card => card.style.display = "none");
       }
-
+  
       // Header shrink & bottom banner
       let lastScrollTop = 0;
       const header = document.querySelector("header");
@@ -496,7 +496,7 @@
         lastScrollTop = Math.max(st, 0);
         banner.classList.toggle("show", (window.innerHeight + window.scrollY) >= document.body.offsetHeight);
       });
-
+  
       // Mobile warning
       document.getElementById("mobile-warning-close")?.addEventListener("click", () => {
         document.getElementById("mobile-warning").style.display = "none";
@@ -504,8 +504,8 @@
       if (isMobile) {
         document.getElementById("mobile-warning").style.display = "block";
       }
-
-      // Slider connexion
+  
+      // —— Slider connexion ——
       const connectionTab   = document.getElementById('connection-tab');
       const connectionModal = document.getElementById('connection-modal');
       connectionTab.addEventListener('click', () => {
@@ -516,40 +516,49 @@
           connectionTab.style.right = '20px';
         }
       });
-      
-      // Affichage débit internet
-      function updateConnectionSpeed() {
+  
+      // —— Mesure réelle du débit et mise à jour de la jauge ——
+      async function measureDownloadSpeed() {
+        const url = 'https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_tableau_Complet.png'
+                  + '?_cb=' + Date.now();
+        const start    = performance.now();
+        const response = await fetch(url);
+        const blob     = await response.blob();
+        const duration = (performance.now() - start) / 1000;
+        return (blob.size * 8) / (duration * 1_000_000);
+      }
+  
+      async function updateConnectionSpeed() {
         const speedEl = document.getElementById('connection-speed');
         const arc     = document.getElementById('gauge-arc');
-        let speed = 0;
-      
-        if (navigator.connection && navigator.connection.downlink) {
-          speed = navigator.connection.downlink;
+        let speed;
+        try {
+          speed = await measureDownloadSpeed();
+        } catch (e) {
+          console.warn('Erreur mesure débit:', e);
+          speed = 0;
         }
         speedEl.textContent = speed.toFixed(1);
-      
-        // Calcule la portion d'arc à afficher (la longueur totale du tracé est ≃ 565)
-        const maxSpeed = 100;              // jauge 0–100 Mbps
+  
+        const maxSpeed = 100;
         const pct      = Math.min(speed / maxSpeed, 1);
         const dash     = pct * 565;
         arc.setAttribute('stroke-dasharray', `${dash},565`);
-      
-        // Choix de la couleur selon seuils
+  
         let color = 'red';
         if (speed >= 60)      color = 'green';
         else if (speed >= 30) color = 'yellow';
         else if (speed >= 10) color = 'orange';
         arc.setAttribute('stroke', color);
       }
-      
-      // Premier affichage dès le chargement
+  
+      // Initialisation & écoute des changements de réseau
       updateConnectionSpeed();
-      
-      // Surveille les modifications de connexion (Wi-Fi ↔ 4G, etc.)
       if (navigator.connection && typeof navigator.connection.addEventListener === 'function') {
         navigator.connection.addEventListener('change', updateConnectionSpeed);
       }
     });
   </script>
+
 </body>
 </html>

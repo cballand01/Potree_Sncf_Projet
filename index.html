@@ -233,15 +233,20 @@
     /* Modal en slider, aligné sur le bouton en bas */
     #connection-modal {
       position: fixed;
-      bottom: 20px;           /* même distance du bas que le tab */
-      right: -320px;          /* caché hors écran */
-      width: 300px;
+      bottom: 20px;
+      right: -320px;
+      width: 260px;               /* un peu plus large pour 0/500 */
       background: #fff;
       border: 1px solid #ccc;
       padding: 1rem;
       box-shadow: 0 2px 10px rgba(0,0,0,0.2);
       transition: right 0.3s ease;
       z-index: 2000;
+    
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
     }
     #connection-modal.open {
       right: 20px;            /* slide jusqu’à 20px du bord droit */
@@ -254,24 +259,23 @@
     /* Gauges connexion */
     .gauge-container {
       position: relative;
-      width: 200px;
-      margin: 0 auto 1rem;
+      width: 240px;
+      margin: 1rem 0 0;
     }
     .gauge {
-      display: block;
       width: 100%;
       height: auto;
+      display: block;
     }
     .gauge-label {
       position: absolute;
-      top: 50%;
+      top: 58%;
       left: 50%;
-      transform: translate(-50%, -20%);
-      font-size: 1.4rem;
+      transform: translate(-50%, -50%);
+      font-size: 1.3rem;
       font-weight: bold;
       color: #333;
     }
-
     /* Adaptation du header sur mobile */
     @media (max-width: 768px) {
       header {
@@ -406,11 +410,17 @@
 
   <!-- Onglet latéral “connexion” -->
   <div id="connection-tab" title="Infos connexion">
-    <img src="https://storage.googleapis.com/projet-potree-sncf/Images/Logo/wifi.svg" alt="Wi-Fi icon">
+    <img
+      src="https://storage.googleapis.com/projet-potree-sncf/Images/Logo/wifi.svg"
+      alt="Icône Wi-Fi"
+    >
   </div>
+  
+  <!-- Modal en slider “connexion” -->
   <div id="connection-modal">
     <h3>Vérification de la connexion</h3>
     <p>Une bonne connexion Internet est primordiale pour que les viewers fonctionnent bien.</p>
+  
     <div class="gauge-container">
       <svg class="gauge" viewBox="0 0 200 100">
         <!-- fond gris pâle -->
@@ -418,16 +428,19 @@
           d="M10,100 A90,90 0 0,1 190,100"
           stroke="#eee" stroke-width="20" fill="none"
         />
-        <!-- tracé coloré dynamique -->
+        <!-- tracé dynamique coloré -->
         <path
           id="gauge-arc"
           d="M10,100 A90,90 0 0,1 190,100"
-          stroke="green" stroke-width="20" fill="none"
+          stroke="red" stroke-width="20" fill="none"
           stroke-dasharray="0,565" stroke-linecap="round"
         />
+        <!-- repères 0 & 500 -->
+        <text x="10"  y="98" font-size="10" fill="#333">0</text>
+        <text x="186" y="98" font-size="10" fill="#333">500</text>
       </svg>
       <div class="gauge-label">
-        <span id="connection-speed">–</span> Mbps
+        <span id="connection-speed">–</span> Mo/s
       </div>
     </div>
   </div>
@@ -510,12 +523,12 @@
       const connectionModal = document.getElementById('connection-modal');
       
       connectionTab.addEventListener('click', async () => {
-        // ouvre/ferme le slider
+        // ouvre/ferme la fenêtre
         connectionModal.classList.toggle('open');
-        connectionTab.style.right = connectionModal.classList.contains('open') ? '320px' : '20px';
+        connectionTab.style.right = connectionModal.classList.contains('open') ? '300px' : '20px';
       
+        // si on vient d'ouvrir, lance la mesure
         if (connectionModal.classList.contains('open')) {
-          // quand on ouvre, mesure en direct et met à jour la jauge
           await updateConnectionSpeed();
         }
       });
@@ -525,46 +538,49 @@
         return new Promise((resolve, reject) => {
           const imageAddr    = 'https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_tableau_Complet.png';
           const downloadSize = 1500000; // octets réels du fichier
-          let startTime;
+          let startTime = Date.now();
       
           const img = new Image();
           img.onload = () => {
-            const duration   = (Date.now() - startTime) / 1000;        // en secondes
-            const bitsLoaded = downloadSize * 8;                      // en bits
-            const mbps       = bitsLoaded / duration / (1024 * 1024); // en Mbps
+            const duration   = (Date.now() - startTime) / 1000;        // secondes
+            const bitsLoaded = downloadSize * 8;                      // bits
+            const mbps       = bitsLoaded / duration / (1024 * 1024); // Mbps
             resolve(mbps);
           };
           img.onerror = () => reject(new Error('Erreur téléchargement image'));
       
-          startTime   = Date.now();
-          img.src     = imageAddr + '?_cb=' + startTime;
+          // force le cache‐busting
+          img.src = imageAddr + '?_cb=' + startTime;
         });
       }
       
+      // —— Mise à jour de la jauge (0–500 Mo/s) ——
       async function updateConnectionSpeed() {
         const speedEl = document.getElementById('connection-speed');
         const arc     = document.getElementById('gauge-arc');
-        let speed;
+        let mbps = 0;
       
         try {
-          speed = await measureDownloadSpeed();
+          mbps = await measureDownloadSpeed(); // en Mbps
         } catch {
-          speed = 0;
+          mbps = 0;
         }
       
-        // affichage et jauge
-        speedEl.textContent = speed.toFixed(1);
-        const pct = Math.min(speed / 1000, 1);
+        // Conversion en Mo/s
+        const mbs = mbps / 8;
+        speedEl.textContent = mbs.toFixed(2);
+      
+        // échelle 0–500 Mo/s (longueur totale du tracé ≃565)
+        const pct = Math.min(mbs / 500, 1);
         arc.setAttribute('stroke-dasharray', `${pct * 565},565`);
       
-        // couleur par seuils
+        // seuils de couleur
         let color = 'red';
-        if (speed >= 300)     color = 'green';
-        else if (speed >= 100) color = 'yellow';
-        else if (speed >= 30)  color = 'orange';
+        if (mbs >= 100)      color = 'green';
+        else if (mbs >= 50)  color = 'yellow';
+        else if (mbs >= 20)  color = 'orange';
         arc.setAttribute('stroke', color);
       }
-
     });
   </script>
 

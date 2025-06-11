@@ -8,7 +8,7 @@
 
   <!-- LE FAVICON -->
   <link rel="icon" href="https://storage.googleapis.com/projet-potree-sncf/Images/Logo/Logo_LGV_Simple.png" type="image/png">
-  
+
   <style>
     /* Reset & box-sizing */
     *, *::before, *::after { box-sizing: border-box; }
@@ -223,12 +223,13 @@
       justify-content: center;
       cursor: pointer;
       z-index: 2000;
+      transition: right 0.3s ease;
     }
     #connection-tab img {
       width: 24px;
       height: 24px;
     }
-    
+
     /* Modal en slider, aligné sur le bouton en bas */
     #connection-modal {
       position: fixed;
@@ -245,7 +246,6 @@
     #connection-modal.open {
       right: 20px;            /* slide jusqu’à 20px du bord droit */
     }
-    
     #connection-modal h3 {
       margin: 0 0 0.5rem;
       font-size: 1.1rem;
@@ -314,7 +314,6 @@
 
       <!-- Visite Extérieur -->
       <div class="potree-card">
-        <div class="new-banner">Nouveauté</div>
         <a href="#" id="ext-link">
           <div class="bg img-ext"></div>
           <div class="overlay">
@@ -365,7 +364,7 @@
       <h2>Zoom sur des détails du PAR de la LGV Paris-Lyon</h2>
       <p class="description">
         <span>Les modèles 3D que vous explorerez ici représentent des composantes techniques des salles du PAR.
-        Vous y découvrirez notamment les Postes de Relais à Transit Souple, véritables tables de contrôle de l’aiguillage des TGV, ainsi que différents tableaux de gestion de la ligne : de la signalisation au réseau électrique, en passant par la gestion du réseau en Île-de-France.
+        Vous y découvrirez notamment les Postes de Relais à Transit Souple, véritables tables de contrôle de l’aiguillage des TGV, ainsi que différents tableaux de gestion du réseau.
         Explorez également, en détail, certaines armoires techniques de la salle des relais.</span>
       </p>
       <div class="cards">
@@ -373,13 +372,13 @@
         <div class="card img-prs2"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_PRS2.html">P.R.S. n°2</a></div>
         <div class="card img-prs3"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_PRS3.html">P.R.S. n°3</a></div>
         <div class="card img-prs4"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_PRS4.html">P.R.S. n°4</a></div>
-        <div class="card img-idf"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_IDF.html">Tableau de gestion du réseau Île-de-France</a></div>
-        <div class="card hide-mobile img-tab-haut"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_Haut.html">Tableau de Contrôle Optique de la LGV Paris-Lyon</a></div>
-        <div class="card hide-mobile img-tab-central"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_Central.html">Tableau de repérage des signaux</a></div>
-        <div class="card hide-mobile img-tab-bas"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_Bas.html">Tableau de gestion du réseau électrique</a></div>
-        <div class="card hide-mobile img-tab-total"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_Complet.html">T.C.O. complet</a></div>
-        <div class="card hide-mobile img-arm1-avant"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_SDR_Armoire1_Avant.html">Armoire Relais (avant)</a></div>
-        <div class="card hide-mobile img-arm2-arriere"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_SDR_Armoire2_Arriere.html">Armoire Relais (arrière)</a></div>
+        <div class="card img-idf"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_IDF.html">Tableau Île-de-France</a></div>
+        <div class="card hide-mobile img-tab-haut"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_Haut.html">TCO Haut</a></div>
+        <div class="card hide-mobile img-tab-central"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_Central.html">TCO Central</a></div>
+        <div class="card hide-mobile img-tab-bas"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_Bas.html">TCO Bas</a></div>
+        <div class="card hide-mobile img-tab-total"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_TCO_Tableau_Complet.html">TCO Complet</a></div>
+        <div class="card hide-mobile img-arm1-avant"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_SDR_Armoire1_Avant.html">Armoire 1 Avant</a></div>
+        <div class="card hide-mobile img-arm2-arriere"><a href="/Potree_Sncf_Projet/3DHOP_html/3DHOP_SDR_Armoire2_Arriere.html">Armoire 2 Arrière</a></div>
       </div>
     </section>
   </main>
@@ -416,8 +415,8 @@
       // Liens Potree / SDR / Extérieur
       const map = [
         { id: "ext-link", desktop: "Potree_EXTERIEUR.html", phone: "Potree_EXTERIEUR_Phone.html" },
-        { id: "tco-link", desktop: "Potree_TCO.html", phone: "Potree_TCO_Phone.html" },
-        { id: "sdr-link", desktop: "Potree_SDR.html", phone: "Potree_SDR_Phone.html" },
+        { id: "tco-link", desktop: "Potree_TCO.html",       phone: "Potree_TCO_Phone.html"       },
+        { id: "sdr-link", desktop: "Potree_SDR.html",       phone: "Potree_SDR_Phone.html"       },
       ];
       map.forEach(({id, desktop, phone}) => {
         const el = document.getElementById(id);
@@ -459,7 +458,7 @@
         banner.classList.toggle("show", (window.innerHeight + window.scrollY) >= document.body.offsetHeight);
       });
 
-      // Mobile warning close
+      // Mobile warning
       document.getElementById("mobile-warning-close")?.addEventListener("click", () => {
         document.getElementById("mobile-warning").style.display = "none";
       });
@@ -467,14 +466,19 @@
         document.getElementById("mobile-warning").style.display = "block";
       }
 
-      // Onglet connexion modal
-      const tab = document.getElementById('connection-tab');
-      const modal = document.getElementById('connection-modal');
-      const closeBtn = modal.querySelector('.close');
-      tab.addEventListener('click', () => modal.style.display = 'block');
-      closeBtn.addEventListener('click', () => modal.style.display = 'none');
+      // Slider connexion
+      const connectionTab   = document.getElementById('connection-tab');
+      const connectionModal = document.getElementById('connection-modal');
+      connectionTab.addEventListener('click', () => {
+        connectionModal.classList.toggle('open');
+        if (connectionModal.classList.contains('open')) {
+          connectionTab.style.right = '320px';
+        } else {
+          connectionTab.style.right = '20px';
+        }
+      });
 
-      // Affichage débit internet si disponible
+      // Affichage débit internet
       function updateConnectionSpeed() {
         const speedEl = document.getElementById('connection-speed');
         if (navigator.connection && navigator.connection.downlink) {
@@ -487,20 +491,6 @@
       if (navigator.connection) {
         navigator.connection.addEventListener('change', updateConnectionSpeed);
       }
-
-      // Onglet connexion modal en slider
-      const connectionTab   = document.getElementById('connection-tab');
-      const connectionModal = document.getElementById('connection-modal');
-    
-      connectionTab.addEventListener('click', () => {
-        connectionModal.classList.toggle('open');
-        // décale aussi le bouton pour qu'il suive la fenêtre
-        if (connectionModal.classList.contains('open')) {
-          connectionTab.style.right = '320px';
-        } else {
-          connectionTab.style.right = '20px';
-        }
-      });
     });
   </script>
 </body>

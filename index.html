@@ -251,6 +251,27 @@
       font-size: 1.1rem;
     }
 
+    /* Gauges connexion */
+    .gauge-container {
+      position: relative;
+      width: 200px;
+      margin: 0 auto 1rem;
+    }
+    .gauge {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .gauge-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -20%);
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #333;
+    }
+
     /* Adaptation du header sur mobile */
     @media (max-width: 768px) {
       header {
@@ -390,7 +411,25 @@
   <div id="connection-modal">
     <h3>Vérification de la connexion</h3>
     <p>Une bonne connexion Internet est primordiale pour que les viewers fonctionnent bien.</p>
-    <p>Vitesse estimée : <strong><span id="connection-speed">–</span> Mbps</strong></p>
+    <div class="gauge-container">
+      <svg class="gauge" viewBox="0 0 200 100">
+        <!-- fond gris pâle -->
+        <path
+          d="M10,100 A90,90 0 0,1 190,100"
+          stroke="#eee" stroke-width="20" fill="none"
+        />
+        <!-- tracé coloré dynamique -->
+        <path
+          id="gauge-arc"
+          d="M10,100 A90,90 0 0,1 190,100"
+          stroke="green" stroke-width="20" fill="none"
+          stroke-dasharray="0,565" stroke-linecap="round"
+        />
+      </svg>
+      <div class="gauge-label">
+        <span id="connection-speed">–</span> Mbps
+      </div>
+    </div>
   </div>
 
   <!-- Bandeau bas -->
@@ -481,15 +520,26 @@
       // Affichage débit internet
       function updateConnectionSpeed() {
         const speedEl = document.getElementById('connection-speed');
+        const arc = document.getElementById('gauge-arc');
+        let speed = 0;
+      
         if (navigator.connection && navigator.connection.downlink) {
-          speedEl.textContent = navigator.connection.downlink.toFixed(1);
-        } else {
-          speedEl.textContent = 'indisponible';
+          speed = navigator.connection.downlink;
         }
-      }
-      updateConnectionSpeed();
-      if (navigator.connection) {
-        navigator.connection.addEventListener('change', updateConnectionSpeed);
+        speedEl.textContent = speed.toFixed(1);
+      
+        // Calcule la portion d'arc à afficher (la longueur totale du chemin est ≈ 565)
+        const maxSpeed = 100; // on fait une jauge sur 0–100 Mbps
+        const pct = Math.min(speed / maxSpeed, 1);
+        const dash = pct * 565;
+        arc.setAttribute('stroke-dasharray', `${dash},565`);
+      
+        // Choix de la couleur selon seuils
+        let color = 'red';
+        if (speed >= 60)       color = 'green';
+        else if (speed >= 30)  color = 'yellow';
+        else if (speed >= 10)  color = 'orange';
+        arc.setAttribute('stroke', color);
       }
     });
   </script>

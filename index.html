@@ -209,30 +209,47 @@
     .bottom-banner.show { display: block; }
     .bottom-banner a { color: #4a90e2; text-decoration: underline; }
 
-    .dev-banner {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: #c00;
+    /* Onglet latéral “connexion” */
+    #connection-tab {
+      position: fixed;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #4a90e2;
+      width: 40px;
+      height: 40px;
+      border-radius: 4px 0 0 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2000;
       color: #fff;
-      text-align: center;
-      font-weight: bold;
-      padding: 0.5rem 0;
-      z-index: 3;
+      font-size: 1.2rem;
     }
-
-    .new-banner {
+    #connection-modal {
+      position: fixed;
+      right: 50px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      display: none;
+      max-width: 300px;
+      z-index: 2000;
+    }
+    #connection-modal h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.1rem;
+    }
+    #connection-modal .close {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: #00bfff;
-      color: #fff;
-      text-align: center;
-      font-weight: bold;
-      padding: 0.5rem 0;
-      z-index: 3;
+      top: 5px;
+      right: 8px;
+      font-size: 1.2rem;
+      cursor: pointer;
     }
 
     /* Adaptation du header sur mobile */
@@ -291,8 +308,8 @@
     <section class="section">
       <h2>Visites guidées du centre Henri Lang, de la salle du TCO et de la salle des relais</h2>
       <p class="description">
-        E<span>xplorez librement les différentes zones du site, de l’extérieur du centre Henri Lang à l’intérieur du bâtiment.  
-        Visitez la salle du Tableau de Contrôle Optique, centre de supervision de la ligne TGV Paris-Lyon, la salle des relais, ainsi que d’autres espaces clés du poste de régulation.  
+        E<span>xplorez librement les différentes zones du site, de l’extérieur du centre Henri Lang à l’intérieur du bâtiment.<br>
+        Visitez la salle du Tableau de Contrôle Optique, centre de supervision de la ligne TGV Paris-Lyon, la salle des relais, ainsi que d’autres espaces clés du poste de régulation.<br>
         Déplacez-vous à votre rythme pour découvrir l’organisation des lieux.
       </p>
 
@@ -368,18 +385,27 @@
     </section>
   </main>
 
-  <!-- Bandeau bas -->
-  <div class="bottom-banner" id="bottom-banner">
-    <span>&copy; Charles BALLAND - Projet de fin d'études - INSA Strasbourg - Spécialité topographie.</span>
-    &nbsp;|&nbsp;
-    <a href="https://github.com/potree/potree" target="_blank">Potree sur GitHub</a>
-    &nbsp;|&nbsp;
-    <a href="https://3dhop.net/" target="_blank">3DHOP</a>
+  <!-- Onglet latéral “connexion” -->
+  <div id="connection-tab" title="Infos connexion">🔌</div>
+  <div id="connection-modal">
+    <div class="close">×</div>
+    <h3>Vérification de la connexion</h3>
+    <p>Une bonne connexion Internet est primordiale pour que les viewers fonctionnent bien.</p>
+    <p>Vitesse estimée : <strong><span id="connection-speed">–</span> Mbps</strong></p>
   </div>
 
-  <!-- BANNIÈRE D’AVERTISSEMENT POUR MOBILE (cachée par défaut) -->
+  <!-- Bandeau bas -->
+  <div class="bottom-banner" id="bottom-banner">
+    <span>&copy; Charles BALLAND – Projet de fin d'études – INSA Strasbourg – Spécialité topographie.</span>
+    &nbsp;|&nbsp;
+    <a href="https://github.com/potree/potree" target="_blank" rel="noopener noreferrer">Potree sur GitHub</a>
+    &nbsp;|&nbsp;
+    <a href="https://3dhop.net/" target="_blank" rel="noopener noreferrer">3DHOP</a>
+  </div>
+
+  <!-- BANNIÈRE D’AVERTISSEMENT POUR MOBILE -->
   <div id="mobile-warning" class="mobile-warning">
-    ⚠️ Attention : cette version simplifiée n’est pas optimisée pour mobile. Un ordinateur offre une meilleure expérience pour visualiser les éléments.
+    ⚠️ Attention : cette version simplifiée n’est pas optimisée pour mobile. Un ordinateur offre une meilleure expérience.
     <span id="mobile-warning-close" style="cursor:pointer; margin-left:1rem; font-weight:bold;">×</span>
   </div>
 
@@ -387,68 +413,38 @@
     document.addEventListener("DOMContentLoaded", () => {
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
 
-      // Extérieur link
-      document.getElementById("ext-link").addEventListener("click", e => {
-        e.preventDefault();
-        window.location.href = isMobile
-          ? "/Potree_Sncf_Projet/Potree_html/Potree_EXTERIEUR_Phone.html"
-          : "/Potree_Sncf_Projet/Potree_html/Potree_EXTERIEUR.html";
-      });
-
-      // TCO link (desktop Potree)
-      document.getElementById("tco-link").addEventListener("click", e => {
-        e.preventDefault();
-        window.location.href = isMobile
-          ? "/Potree_Sncf_Projet/Potree_html/Potree_TCO_Phone.html"
-          : "/Potree_Sncf_Projet/Potree_html/Potree_TCO.html";
-      });
-
-      // SDR link (desktop Potree)
-      document.getElementById("sdr-link").addEventListener("click", e => {
-        e.preventDefault();
-        window.location.href = isMobile
-          ? "/Potree_Sncf_Projet/Potree_html/Potree_SDR_Phone.html"
-          : "/Potree_Sncf_Projet/Potree_html/Potree_SDR.html";
-      });
-
-      // Extérieur link mobile-only
-      const extMobile = document.getElementById("ext-link-mobile");
-      if (extMobile) {
-        extMobile.addEventListener("click", e => {
+      // Liens Potree / SDR / Extérieur
+      const map = [
+        { id: "ext-link", desktop: "Potree_EXTERIEUR.html", phone: "Potree_EXTERIEUR_Phone.html" },
+        { id: "tco-link", desktop: "Potree_TCO.html", phone: "Potree_TCO_Phone.html" },
+        { id: "sdr-link", desktop: "Potree_SDR.html", phone: "Potree_SDR_Phone.html" },
+      ];
+      map.forEach(({id, desktop, phone}) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener("click", e => {
           e.preventDefault();
           window.location.href = isMobile
-            ? "/Potree_Sncf_Projet/Potree_html/Potree_EXTERIEUR_Phone.html"
-            : "/Potree_Sncf_Projet/Potree_html/Potree_EXTERIEUR.html";
+            ? `/Potree_Sncf_Projet/Potree_html/${phone}`
+            : `/Potree_Sncf_Projet/Potree_html/${desktop}`;
         });
-      }
+      });
 
-      // TCO link mobile-only
-      const tcoMobile = document.getElementById("tco-link-mobile");
-      if (tcoMobile) {
-        tcoMobile.addEventListener("click", e => {
+      // Mobile-only variants
+      ["ext", "tco", "sdr"].forEach(pref => {
+        const mob = document.getElementById(`${pref}-link-mobile`);
+        if (!mob) return;
+        mob.addEventListener("click", e => {
           e.preventDefault();
           window.location.href = isMobile
-            ? "/Potree_Sncf_Projet/Potree_html/Potree_TCO_Phone.html"
-            : "/Potree_Sncf_Projet/Potree_html/Potree_TCO.html";
+            ? `/Potree_Sncf_Projet/Potree_html/Potree_${pref.toUpperCase()}_Phone.html`
+            : `/Potree_Sncf_Projet/Potree_html/Potree_${pref.toUpperCase()}.html`;
         });
-      }
+      });
 
-      // SDR link mobile-only
-      const sdrMobile = document.getElementById("sdr-link-mobile");
-      if (sdrMobile) {
-        sdrMobile.addEventListener("click", e => {
-          e.preventDefault();
-          window.location.href = isMobile
-            ? "/Potree_Sncf_Projet/Potree_html/Potree_SDR_Phone.html"
-            : "/Potree_Sncf_Projet/Potree_html/Potree_SDR.html";
-        });
-      }
-
-      // Si on est sur mobile, masquer les potree-card
+      // Masquer potree-card sur mobile
       if (isMobile) {
-        document.querySelectorAll(".potree-card").forEach(card => {
-          card.style.display = "none";
-        });
+        document.querySelectorAll(".potree-card").forEach(card => card.style.display = "none");
       }
 
       // Header shrink & bottom banner
@@ -459,19 +455,37 @@
         const st = window.pageYOffset || document.documentElement.scrollTop;
         if (st > lastScrollTop && st > 100) header.classList.add("shrink");
         else header.classList.remove("shrink");
-        lastScrollTop = st <= 0 ? 0 : st;
-
-        const atBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight;
-        banner.classList.toggle("show", atBottom);
+        lastScrollTop = Math.max(st, 0);
+        banner.classList.toggle("show", (window.innerHeight + window.scrollY) >= document.body.offsetHeight);
       });
 
-      // Avertissement mobile
+      // Mobile warning close
+      document.getElementById("mobile-warning-close")?.addEventListener("click", () => {
+        document.getElementById("mobile-warning").style.display = "none";
+      });
       if (isMobile) {
-        const warning = document.getElementById("mobile-warning");
-        warning.style.display = "block";
-        document.getElementById("mobile-warning-close").addEventListener("click", () => {
-          warning.style.display = "none";
-        });
+        document.getElementById("mobile-warning").style.display = "block";
+      }
+
+      // Onglet connexion modal
+      const tab = document.getElementById('connection-tab');
+      const modal = document.getElementById('connection-modal');
+      const closeBtn = modal.querySelector('.close');
+      tab.addEventListener('click', () => modal.style.display = 'block');
+      closeBtn.addEventListener('click', () => modal.style.display = 'none');
+
+      // Affichage débit internet si disponible
+      function updateConnectionSpeed() {
+        const speedEl = document.getElementById('connection-speed');
+        if (navigator.connection && navigator.connection.downlink) {
+          speedEl.textContent = navigator.connection.downlink.toFixed(1);
+        } else {
+          speedEl.textContent = 'indisponible';
+        }
+      }
+      updateConnectionSpeed();
+      if (navigator.connection) {
+        navigator.connection.addEventListener('change', updateConnectionSpeed);
       }
     });
   </script>

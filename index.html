@@ -534,48 +534,51 @@
         }
       });
       
-      // —— Mesure réelle du débit via fetch+blob ——
-      async function measureDownloadSpeed() {
-        // on force le cache-busting
-        const url = 'https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_tableau_Complet.png'
-                  + '?_cb=' + Date.now();
-        const start = performance.now();
-        const response = await fetch(url, { cache: 'no-store' });
-        const blob     = await response.blob();
-        const duration = (performance.now() - start) / 1000; // en secondes
+      // —— Mesure réelle du débit via image ——
+      function measureDownloadSpeed() {
+        return new Promise((resolve, reject) => {
+          const imageAddr    = 'https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_tableau_Complet.png';
+          const downloadSize = 1500000; // octets réels du fichier
+          let startTime;
       
-        // débit en Mbps = (bytes×8) / (duration×1_000_000)
-        const bitsLoaded = blob.size * 8;
-        return bitsLoaded / (duration * 1_000_000);
+          const img = new Image();
+          img.onload = () => {
+            const duration   = (Date.now() - startTime) / 1000;        // en secondes
+            const bitsLoaded = downloadSize * 8;                      // en bits
+            const mbps       = bitsLoaded / duration / (1024 * 1024); // en Mbps
+            resolve(mbps);
+          };
+          img.onerror = () => reject(new Error('Erreur téléchargement image'));
+      
+          startTime   = Date.now();
+          img.src     = imageAddr + '?_cb=' + startTime;
+        });
       }
       
       // —— Mise à jour de la jauge (0–500 Mo/s) ——
       async function updateConnectionSpeed() {
         const speedEl = document.getElementById('connection-speed');
         const arc     = document.getElementById('gauge-arc');
-        let mbps = 0;
+        let speed;
       
         try {
-          mbps = await measureDownloadSpeed(); // en Mbps
+          speed = await measureDownloadSpeed();
         } catch {
-          mbps = 0;
+          speed = 0;
         }
-      
-        // Conversion en Mo/s
-        const mbs = mbps / 8;
-        speedEl.textContent = mbs.toFixed(2);
-      
-        // échelle 0–500 Mo/s (longueur totale du tracé ≃565)
-        const pct = Math.min(mbs / 500, 1);
-        arc.setAttribute('stroke-dasharray', `${pct * 565},565`);
-      
-        // seuils de couleur
-        let color = 'red';
-        if (mbs >= 100)      color = 'green';
-        else if (mbs >= 50)  color = 'yellow';
-        else if (mbs >= 20)  color = 'orange';
-        arc.setAttribute('stroke', color);
-      }
+
+        // affichage et jauge
+          speedEl.textContent = speed.toFixed(1);
+          const pct = Math.min(speed / 1000, 1);
+          arc.setAttribute('stroke-dasharray', `${pct * 565},565`);
+        
+          // couleur par seuils
+          let color = 'red';
+          if (speed >= 200)     color = 'green';
+          else if (speed >= 100) color = 'yellow';
+          else if (speed >= 30)  color = 'orange';
+          arc.setAttribute('stroke', color);
+        }
     });
   </script>
 

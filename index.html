@@ -510,63 +510,61 @@
       const connectionModal = document.getElementById('connection-modal');
       connectionTab.addEventListener('click', () => {
         connectionModal.classList.toggle('open');
-        if (connectionModal.classList.contains('open')) {
-          connectionTab.style.right = '320px';
-        } else {
-          connectionTab.style.right = '20px';
-        }
+        connectionTab.style.right = connectionModal.classList.contains('open') ? '320px' : '20px';
       });
       
-      // —— Mesure réelle du débit en Go/s ——
-      async function measureDownloadSpeed(iterations = 3) {
-        const urlBase = 'https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_tableau_Complet.png';
-        let totalBytes = 0, totalTime = 0;
+      // —— Mesure réelle du débit via un chargement d’image ——
+      function measureDownloadSpeed() {
+        return new Promise((resolve, reject) => {
+          // adapte cette URL au fichier volumineux que tu possèdes déjà
+          const imageAddr    = 'https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_tableau_Complet.png';
+          const downloadSize = 1_500_000; // <— taille en octets du fichier (à ajuster)
+          let startTime, endTime;
       
-        for (let i = 0; i < iterations; i++) {
-          const url   = `${urlBase}?_cb=${Date.now()}_${i}`;
-          const start = performance.now();
-          const resp  = await fetch(url);
-          const blob  = await resp.blob();
-          const dt    = (performance.now() - start) / 1000; // secondes
-          totalBytes += blob.size;
-          totalTime  += dt;
-        }
-      
-        // octets/sec -> Go/s (1 Go = 1024³ octets)
-        const avgBps     = totalBytes / totalTime;
-        const speedGops  = avgBps / (1024 ** 3);
-        return speedGops;
+          const download = new Image();
+          download.onload = () => {
+            endTime = Date.now();
+            const duration    = (endTime - startTime) / 1000;        // sec
+            const bitsLoaded  = downloadSize * 8;                   // bits
+            const speedMbps   = bitsLoaded / duration / (1024*1024); // Mbps
+            resolve(speedMbps);
+          };
+          download.onerror = () => reject(new Error('Erreur téléchargement image'));
+          
+          startTime    = Date.now();
+          download.src = imageAddr + '?_cb=' + startTime; // force cache‐busting
+        });
       }
       
       async function updateConnectionSpeed() {
         const speedEl = document.getElementById('connection-speed');
         const arc     = document.getElementById('gauge-arc');
         let speed;
-      
+        
         try {
-          speed = await measureDownloadSpeed(3);
+          speed = await measureDownloadSpeed();
         } catch (e) {
-          console.warn('Erreur mesure débit:', e);
+          console.warn(e);
           speed = 0;
         }
       
-        // Affiche en Go/s
-        speedEl.textContent = speed.toFixed(2);
+        // affiche en Mbps
+        speedEl.textContent = speed.toFixed(1);
       
-        // Jauge 0–1 Go/s (longueur totale ≃565)
-        const maxSpeed = 1;  
+        // jauge 0–1000 Mbps (longueur ≃565)
+        const maxSpeed = 1000;
         const pct      = Math.min(speed / maxSpeed, 1);
         arc.setAttribute('stroke-dasharray', `${pct * 565},565`);
       
-        // Couleurs (rouge → orange → jaune → vert)
+        // couleur selon seuils
         let color = 'red';
-        if (speed >= 0.75)      color = 'green';
-        else if (speed >= 0.50) color = 'yellow';
-        else if (speed >= 0.25) color = 'orange';
+        if (speed >= 300)     color = 'green';
+        else if (speed >= 100) color = 'yellow';
+        else if (speed >= 30)  color = 'orange';
         arc.setAttribute('stroke', color);
       }
       
-      // initialisation & mise à jour en temps réel
+      // initialisation + mise à jour en temps réel
       updateConnectionSpeed();
       if (navigator.connection && typeof navigator.connection.addEventListener === 'function') {
         navigator.connection.addEventListener('change', updateConnectionSpeed);

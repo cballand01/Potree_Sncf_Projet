@@ -505,34 +505,39 @@
         document.getElementById("mobile-warning").style.display = "block";
       }
   
-      // —— Slider connexion ——
+      // —— Slider connexion & déclenchement de la mesure ——
       const connectionTab   = document.getElementById('connection-tab');
       const connectionModal = document.getElementById('connection-modal');
-      connectionTab.addEventListener('click', () => {
+      
+      connectionTab.addEventListener('click', async () => {
+        // ouvre/ferme le slider
         connectionModal.classList.toggle('open');
         connectionTab.style.right = connectionModal.classList.contains('open') ? '320px' : '20px';
+      
+        if (connectionModal.classList.contains('open')) {
+          // quand on ouvre, mesure en direct et met à jour la jauge
+          await updateConnectionSpeed();
+        }
       });
       
-      // —— Mesure réelle du débit via un chargement d’image ——
+      // —— Mesure réelle du débit via image ——
       function measureDownloadSpeed() {
         return new Promise((resolve, reject) => {
-          // adapte cette URL au fichier volumineux que tu possèdes déjà
           const imageAddr    = 'https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_tableau_Complet.png';
-          const downloadSize = 1_500_000; // <— taille en octets du fichier (à ajuster)
-          let startTime, endTime;
+          const downloadSize = 1500000; // octets réels du fichier
+          let startTime;
       
-          const download = new Image();
-          download.onload = () => {
-            endTime = Date.now();
-            const duration    = (endTime - startTime) / 1000;        // sec
-            const bitsLoaded  = downloadSize * 8;                   // bits
-            const speedMbps   = bitsLoaded / duration / (1024*1024); // Mbps
-            resolve(speedMbps);
+          const img = new Image();
+          img.onload = () => {
+            const duration   = (Date.now() - startTime) / 1000;        // en secondes
+            const bitsLoaded = downloadSize * 8;                      // en bits
+            const mbps       = bitsLoaded / duration / (1024 * 1024); // en Mbps
+            resolve(mbps);
           };
-          download.onerror = () => reject(new Error('Erreur téléchargement image'));
-          
-          startTime    = Date.now();
-          download.src = imageAddr + '?_cb=' + startTime; // force cache‐busting
+          img.onerror = () => reject(new Error('Erreur téléchargement image'));
+      
+          startTime   = Date.now();
+          img.src     = imageAddr + '?_cb=' + startTime;
         });
       }
       
@@ -540,34 +545,24 @@
         const speedEl = document.getElementById('connection-speed');
         const arc     = document.getElementById('gauge-arc');
         let speed;
-        
+      
         try {
           speed = await measureDownloadSpeed();
-        } catch (e) {
-          console.warn(e);
+        } catch {
           speed = 0;
         }
       
-        // affiche en Mbps
+        // affichage et jauge
         speedEl.textContent = speed.toFixed(1);
-      
-        // jauge 0–1000 Mbps (longueur ≃565)
-        const maxSpeed = 1000;
-        const pct      = Math.min(speed / maxSpeed, 1);
+        const pct = Math.min(speed / 1000, 1);
         arc.setAttribute('stroke-dasharray', `${pct * 565},565`);
       
-        // couleur selon seuils
+        // couleur par seuils
         let color = 'red';
         if (speed >= 300)     color = 'green';
         else if (speed >= 100) color = 'yellow';
         else if (speed >= 30)  color = 'orange';
         arc.setAttribute('stroke', color);
-      }
-      
-      // initialisation + mise à jour en temps réel
-      updateConnectionSpeed();
-      if (navigator.connection && typeof navigator.connection.addEventListener === 'function') {
-        navigator.connection.addEventListener('change', updateConnectionSpeed);
       }
 
     });

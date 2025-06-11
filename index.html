@@ -210,11 +210,10 @@
     .bottom-banner a { color: #4a90e2; text-decoration: underline; }
 
     /* Onglet latéral “connexion” */
-    /* Onglet latéral “connexion” 🡇 déplacé en bas à droite */
     #connection-tab {
       position: fixed;
-      bottom: 20px;      /* on place 20px du bas */
-      right: 20px;       /* et 20px de la droite */
+      bottom: 20px;
+      right: 20px;
       width: 40px;
       height: 40px;
       background: #4a90e2;
@@ -226,22 +225,28 @@
       z-index: 2000;
     }
     #connection-tab img {
-      width: 24px;       /* taille de l’icône */
+      width: 24px;
       height: 24px;
     }
+    
+    /* Modal en slider */
     #connection-modal {
       position: fixed;
-      right: 50px;
       top: 50%;
+      right: -350px;             /* caché hors de l’écran à droite */
       transform: translateY(-50%);
+      width: 300px;
       background: #fff;
       border: 1px solid #ccc;
       padding: 1rem;
       box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-      display: none;
-      max-width: 300px;
+      transition: right 0.3s ease;  /* animation du slide */
       z-index: 2000;
     }
+    #connection-modal.open {
+      right: 20px;              /* position visible, à 20px du bord droit */
+    }
+    
     #connection-modal h3 {
       margin: 0 0 0.5rem;
       font-size: 1.1rem;
@@ -491,6 +496,18 @@
       if (navigator.connection) {
         navigator.connection.addEventListener('change', updateConnectionSpeed);
       }
+
+      // Onglet connexion modal en slider
+      const tab   = document.getElementById('connection-tab');
+      const modal = document.getElementById('connection-modal');
+      const close = modal.querySelector('.close');
+  
+      tab.addEventListener('click', () => {
+        modal.classList.add('open');
+      });
+      close.addEventListener('click', () => {
+        modal.classList.remove('open');
+      });
     });
   </script>
 </body>

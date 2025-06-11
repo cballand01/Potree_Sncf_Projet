@@ -229,34 +229,26 @@
       height: 24px;
     }
     
-    /* Modal en slider */
+    /* Modal en slider, aligné sur le bouton en bas */
     #connection-modal {
       position: fixed;
-      top: 50%;
-      right: -350px;             /* caché hors de l’écran à droite */
-      transform: translateY(-50%);
+      bottom: 20px;           /* même distance du bas que le tab */
+      right: -320px;          /* caché hors écran */
       width: 300px;
       background: #fff;
       border: 1px solid #ccc;
       padding: 1rem;
       box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-      transition: right 0.3s ease;  /* animation du slide */
+      transition: right 0.3s ease;
       z-index: 2000;
     }
     #connection-modal.open {
-      right: 20px;              /* position visible, à 20px du bord droit */
+      right: 20px;            /* slide jusqu’à 20px du bord droit */
     }
     
     #connection-modal h3 {
       margin: 0 0 0.5rem;
       font-size: 1.1rem;
-    }
-    #connection-modal .close {
-      position: absolute;
-      top: 5px;
-      right: 8px;
-      font-size: 1.2rem;
-      cursor: pointer;
     }
 
     /* Adaptation du header sur mobile */
@@ -397,7 +389,6 @@
     <img src="https://storage.googleapis.com/projet-potree-sncf/Images/Logo/wifi.svg" alt="Wi-Fi icon">
   </div>
   <div id="connection-modal">
-    <div class="close">×</div>
     <h3>Vérification de la connexion</h3>
     <p>Une bonne connexion Internet est primordiale pour que les viewers fonctionnent bien.</p>
     <p>Vitesse estimée : <strong><span id="connection-speed">–</span> Mbps</strong></p>
@@ -498,15 +489,17 @@
       }
 
       // Onglet connexion modal en slider
-      const connectionTab      = document.getElementById('connection-tab');
-      const connectionModal    = document.getElementById('connection-modal');
-      const connectionCloseBtn = connectionModal.querySelector('.close');
+      const connectionTab   = document.getElementById('connection-tab');
+      const connectionModal = document.getElementById('connection-modal');
     
       connectionTab.addEventListener('click', () => {
-        connectionModal.classList.add('open');
-      });
-      connectionCloseBtn.addEventListener('click', () => {
-        connectionModal.classList.remove('open');
+        connectionModal.classList.toggle('open');
+        // décale aussi le bouton pour qu'il suive la fenêtre
+        if (connectionModal.classList.contains('open')) {
+          connectionTab.style.right = '320px';
+        } else {
+          connectionTab.style.right = '20px';
+        }
       });
     });
   </script>

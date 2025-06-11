@@ -13,9 +13,12 @@
     /* Reset & box-sizing */
     *, *::before, *::after { box-sizing: border-box; }
     html, body {
-      margin: 0; padding: 0;
+      margin: 0;
+      padding: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #fafafa; color: #333; line-height: 1.6;
+      background: #fafafa;
+      color: #333;
+      line-height: 1.6;
       min-height: 100vh;
       position: relative;
       padding-bottom: 4rem; /* espace pour le banner */
@@ -24,9 +27,13 @@
 
     /* Header modernisé */
     header {
-      position: sticky; top: 0; z-index: 1000;
-      background-color: #111; color: #fff;
-      padding: 3rem 1rem; text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: #111;
+      color: #fff;
+      padding: 3rem 1rem;
+      text-align: center;
       transition: transform 0.3s ease;
       box-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
@@ -38,14 +45,17 @@
     main { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
     .section { margin-bottom: 2rem; }
     .section h2 {
-      font-size: 2rem; margin-bottom: 1rem; text-align: center; color: #222;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      color: #222;
     }
 
     /* Texte explicatif (largeur étendue + drop cap) */
     .section p.description {
       margin: 0 auto 2rem;
-      max-width: 900px;                  /* largeur maximale */
-      width: 100%;                       /* occupe tout l’espace disponible */
+      max-width: 900px;
+      width: 100%;
       font-size: 1rem;
       text-align: justify;
       text-align-last: left;
@@ -55,7 +65,7 @@
     }
     .section p.description::first-letter {
       float: left;
-      font-size: 3.5rem;                 /* taille “drop cap” */
+      font-size: 3.5rem; /* drop cap */
       line-height: 1;
       margin-right: 0.5rem;
       font-weight: bold;
@@ -63,86 +73,116 @@
     }
 
     /* Cartes 3DHOP */
-    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap:1.5rem; }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+      gap: 1.5rem;
+    }
     .card {
-      border-radius:8px; overflow:hidden;
-      background-size:cover; background-position:center;
-      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      overflow: hidden;
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      min-height: 180px; /* hauteur uniforme */
     }
-    .card:hover { transform:translateY(-5px); box-shadow:0 4px 12px rgba(0,0,0,0.15); }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
     .card a {
-      display:block; padding:2rem; text-align:center;
-      font-weight:500; font-size:1.2rem;
-      background:rgba(0,0,0,0.5); color:#fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      height: 100%;
+      width: 100%;
+      font-weight: 500;
+      font-size: 1.2rem;
+      background: rgba(0,0,0,0.5);
+      color: #fff;
     }
-    .hide-mobile { display:block; }
+    .hide-mobile { display: block; }
     .mobile-only { display: none; }
 
-    @media (max-width:480px) {
-      .hide-mobile { display:none; }
+    @media (max-width: 480px) {
+      .hide-mobile { display: none; }
       .cards { grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); }
-      .card a { padding:1rem; font-size:1rem; }
+      .card { min-height: 140px; }
+      .card a {
+        padding: 1rem;
+        font-size: 1rem;
+      }
     }
 
     /* Cartes POTREE modernisées */
     .potree-card {
-      position:relative; width:100%; height:280px;
-      margin-bottom:2rem; border-radius:12px; overflow:hidden;
-      background-color:#000;
+      position: relative;
+      width: 100%;
+      height: 280px;
+      margin-bottom: 2rem;
+      border-radius: 12px;
+      overflow: hidden;
+      background-color: #000;
     }
-    .potree-card a { display:block; width:100%; height:100%; position:relative; color:inherit; }
+    .potree-card a {
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      color: inherit;
+    }
     .potree-card .bg {
-      position:absolute; inset:0;
-      background-size:cover; background-position:center;
-      transition: transform 0.5s ease; z-index:1;
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.5s ease;
+      z-index: 1;
     }
     .potree-card .overlay {
-      position:absolute; inset:0;
-      display:flex; align-items:flex-end;
-      padding:2rem; background:rgba(0,0,0,0.2);
-      transition: background 0.5s ease; z-index:2;
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      padding: 2rem;
+      background: rgba(0,0,0,0.2);
+      transition: background 0.5s ease;
+      z-index: 2;
     }
     .potree-card .text {
-      background:#fff; color:#000;
-      padding:1.5rem; max-width:400px; border-radius:8px;
-      transform:translateX(-120%); transition: transform 0.5s ease;
+      background: #fff;
+      color: #000;
+      padding: 1.5rem;
+      max-width: 400px;
+      border-radius: 8px;
+      transform: translateX(-120%);
+      transition: transform 0.5s ease;
     }
-    .potree-card:hover .bg { transform:scale(1.1); }
-    .potree-card:hover .overlay { background:rgba(0,0,0,0.4); }
-    .potree-card:hover .text { transform:translateX(0); }
+    .potree-card:hover .bg { transform: scale(1.1); }
+    .potree-card:hover .overlay { background: rgba(0,0,0,0.4); }
+    .potree-card:hover .text { transform: translateX(0); }
 
-    /* Hauteur minimale pour mobile/tablette */
-    @media (max-width:768px) {
-      .potree-card {
-        min-height: 280px;
-      }
-      .potree-card .overlay { flex-direction:column; padding:1rem; }
-      .potree-card .text {
-        transform:translateY(100%);
-        max-width:100%;
-      }
-      .potree-card:hover .text { transform:translateY(0); }
-    }
+    @media (max-width: 768px) {
+      .potree-card { min-height: 280px; }
+      .potree-card .overlay { flex-direction: column; padding: 1rem; }
+      .potree-card .text { transform: translateY(100%); max-width: 100%; }
+      .potree-card:hover .text { transform: translateY(0); }
 
-    /* Version 3DHOP-like et 3DHOP restreint sur mobile ≤768px */
-    @media (max-width:768px) {
-      /* Masquer les potree-card */
+      /* Masquer les potree-card et afficher cartes mobile-only */
       .potree-card { display: none !important; }
-
-      /* Afficher les cartes “mobile-only” (liées à POTREE) */
       .cards.mobile-only {
         display: grid;
         grid-template-columns: 1fr;
         gap: 1rem;
         margin: 1rem;
       }
-
-      /* Dans la section 3DHOP (deuxième .section), masquer toutes les .card */
-      .section:nth-of-type(2) .cards .card {
-        display: none !important;
-      }
-      /* Puis réafficher uniquement PRS1, PRS2, PRS3, PRS4 et IDF */
+      .section:nth-of-type(2) .cards .card { display: none !important; }
       .section:nth-of-type(2) .cards .img-prs1,
       .section:nth-of-type(2) .cards .img-prs2,
       .section:nth-of-type(2) .cards .img-prs3,
@@ -154,15 +194,20 @@
 
     /* Bandeau bas (initialement masqué) */
     .bottom-banner {
-      position: fixed; bottom:0; left:0; width:100%;
-      background-color:#111; color:#fff;
-      text-align:center; padding:1rem;
-      box-shadow:0 -2px 10px rgba(0,0,0,0.3);
-      font-size:1rem;
-      display:none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #111;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+      font-size: 1rem;
+      display: none;
     }
-    .bottom-banner.show { display:block; }
-    .bottom-banner a { color:#4a90e2; text-decoration:underline; }
+    .bottom-banner.show { display: block; }
+    .bottom-banner a { color: #4a90e2; text-decoration: underline; }
 
     .dev-banner {
       position: absolute;
@@ -193,24 +238,20 @@
     /* Adaptation du header sur mobile */
     @media (max-width: 768px) {
       header {
-        padding: 1.5rem 1rem;    /* moins d’espace vertical */
+        padding: 1.5rem 1rem;
       }
-      header h1 {
-        font-size: 1.5rem;      /* titre plus petit */
-      }
-      header p {
-        font-size: 1rem;        /* sous-titre plus petit */
-      }
+      header h1 { font-size: 1.5rem; }
+      header p  { font-size: 1rem; }
     }
 
     /* Avertissement mobile (bannière en haut) */
     .mobile-warning {
-      display: none;                /* cachée par défaut */
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      background-color: #ffcc00;    /* fond jaune contrasté */
+      background-color: #ffcc00;
       color: #111;
       text-align: center;
       padding: 0.75rem 1rem;
@@ -218,26 +259,25 @@
       z-index: 2000;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
-    /* Le bandeau reste visible tant que l’on est sur mobile (quelque soit l’orientation) */
     @media (min-width: 768px) {
       .mobile-warning { display: none !important; }
     }
 
     /* Images de fond */
-    .img-prs1 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS1.png'); }
-    .img-prs2 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS2.png'); }
-    .img-prs3 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS3.png'); }
-    .img-prs4 { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS4.png'); }
-    .img-idf  { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_IDF.png'); }
-    .img-tab-haut  { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_Haut.png'); }
-    .img-tab-central { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_Central.png'); }
-    .img-tab-bas { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_Bas.png'); }
-    .img-tab-total { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_tableau_Complet.png'); }
-    .img-arm1-avant { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/SDR_Armoire1_Avant.png'); }
-    .img-arm2-arriere { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/SDR_Armoire2_Arriere.png'); }
-    .img-tco { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO.png'); }
-    .img-sdr { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/SDR.png'); }
-    .img-ext { background-image:url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/Exterieur.png'); }
+    .img-prs1 { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS1.png'); }
+    .img-prs2 { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS2.png'); }
+    .img-prs3 { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS3.png'); }
+    .img-prs4 { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_PRS4.png'); }
+    .img-idf  { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_IDF.png'); }
+    .img-tab-haut  { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_Haut.png'); }
+    .img-tab-central { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_Central.png'); }
+    .img-tab-bas { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_Tableau_Bas.png'); }
+    .img-tab-total { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_tableau_Complet.png'); }
+    .img-arm1-avant { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/SDR_Armoire1_Avant.png'); }
+    .img-arm2-arriere { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/SDR_Armoire2_Arriere.png'); }
+    .img-tco { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO.png'); }
+    .img-sdr { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/SDR.png'); }
+    .img-ext { background-image: url('https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/Exterieur.png'); }
   </style>
 </head>
 <body>
@@ -254,7 +294,6 @@
         E<span>xplorez librement les différentes zones du site, de l’extérieur du centre Henri Lang à l’intérieur du bâtiment.  
         Visitez la salle du Tableau de Contrôle Optique, centre de supervision de la ligne TGV Paris-Lyon, la salle des relais, ainsi que d’autres espaces clés du poste de régulation.  
         Déplacez-vous à votre rythme pour découvrir l’organisation des lieux.
-      </span>
       </p>
 
       <!-- Visite Extérieur -->
@@ -299,15 +338,9 @@
 
       <!-- cartes 3DHOP pour mobile -->
       <div class="cards mobile-only">
-        <div class="card img-ext">
-          <a href="#" id="ext-link-mobile">Extérieur du centre Henri Lang</a>
-        </div>
-        <div class="card img-tco">
-          <a href="#" id="tco-link-mobile">Salle du Tableau de Contrôle Optique</a>
-        </div>
-        <div class="card img-sdr">
-          <a href="#" id="sdr-link-mobile">Salle des Relais</a>
-        </div>
+        <div class="card img-ext"><a href="#" id="ext-link-mobile">Extérieur du centre Henri Lang</a></div>
+        <div class="card img-tco"><a href="#" id="tco-link-mobile">Salle du Tableau de Contrôle Optique</a></div>
+        <div class="card img-sdr"><a href="#" id="sdr-link-mobile">Salle des Relais</a></div>
       </div>
     </section>
 
@@ -411,7 +444,7 @@
         });
       }
 
-      // Si on est sur mobile (portrait ou paysage), masquer les potree-card
+      // Si on est sur mobile, masquer les potree-card
       if (isMobile) {
         document.querySelectorAll(".potree-card").forEach(card => {
           card.style.display = "none";
@@ -432,16 +465,13 @@
         banner.classList.toggle("show", atBottom);
       });
 
-      // Si c’est un mobile, on affiche la bannière d’avertissement
+      // Avertissement mobile
       if (isMobile) {
         const warning = document.getElementById("mobile-warning");
         warning.style.display = "block";
-
-        // Permettre de fermer la bannière manuellement
-        document.getElementById("mobile-warning-close")
-          .addEventListener("click", () => {
-            warning.style.display = "none";
-          });
+        document.getElementById("mobile-warning-close").addEventListener("click", () => {
+          warning.style.display = "none";
+        });
       }
     });
   </script>

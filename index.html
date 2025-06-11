@@ -482,18 +482,24 @@
         });
       });
   
-      // Mobile-only variants
-      ["ext", "tco", "sdr"].forEach(pref => {
+      // mapping “pref” → noms de fichiers
+      const mobileMap = {
+        ext: { desktop: "Potree_EXTERIEUR.html", phone: "Potree_EXTERIEUR_Phone.html" },
+        tco: { desktop: "Potree_TCO.html",       phone: "Potree_TCO_Phone.html"       },
+        sdr: { desktop: "Potree_SDR.html",       phone: "Potree_SDR_Phone.html"       }
+      };
+      
+      Object.entries(mobileMap).forEach(([pref, { desktop, phone }]) => {
         const mob = document.getElementById(`${pref}-link-mobile`);
         if (!mob) return;
         mob.addEventListener("click", e => {
           e.preventDefault();
           window.location.href = isMobile
-            ? `/Potree_Sncf_Projet/Potree_html/Potree_${pref.toUpperCase()}_Phone.html`
-            : `/Potree_Sncf_Projet/Potree_html/Potree_${pref.toUpperCase()}.html`;
+            ? `/Potree_Sncf_Projet/Potree_html/${phone}`
+            : `/Potree_Sncf_Projet/Potree_html/${desktop}`;
         });
       });
-  
+      
       // Masquer potree-card sur mobile
       if (isMobile) {
         document.querySelectorAll(".potree-card").forEach(card => card.style.display = "none");

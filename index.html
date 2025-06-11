@@ -516,11 +516,11 @@
           connectionTab.style.right = '20px';
         }
       });
-
+      
       // Affichage débit internet
       function updateConnectionSpeed() {
         const speedEl = document.getElementById('connection-speed');
-        const arc = document.getElementById('gauge-arc');
+        const arc     = document.getElementById('gauge-arc');
         let speed = 0;
       
         if (navigator.connection && navigator.connection.downlink) {
@@ -528,18 +528,26 @@
         }
         speedEl.textContent = speed.toFixed(1);
       
-        // Calcule la portion d'arc à afficher (la longueur totale du chemin est ≈ 565)
-        const maxSpeed = 100; // on fait une jauge sur 0–100 Mbps
-        const pct = Math.min(speed / maxSpeed, 1);
-        const dash = pct * 565;
+        // Calcule la portion d'arc à afficher (la longueur totale du tracé est ≃ 565)
+        const maxSpeed = 100;              // jauge 0–100 Mbps
+        const pct      = Math.min(speed / maxSpeed, 1);
+        const dash     = pct * 565;
         arc.setAttribute('stroke-dasharray', `${dash},565`);
       
         // Choix de la couleur selon seuils
         let color = 'red';
-        if (speed >= 60)       color = 'green';
-        else if (speed >= 30)  color = 'yellow';
-        else if (speed >= 10)  color = 'orange';
+        if (speed >= 60)      color = 'green';
+        else if (speed >= 30) color = 'yellow';
+        else if (speed >= 10) color = 'orange';
         arc.setAttribute('stroke', color);
+      }
+      
+      // Premier affichage dès le chargement
+      updateConnectionSpeed();
+      
+      // Surveille les modifications de connexion (Wi-Fi ↔ 4G, etc.)
+      if (navigator.connection && typeof navigator.connection.addEventListener === 'function') {
+        navigator.connection.addEventListener('change', updateConnectionSpeed);
       }
     });
   </script>

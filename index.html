@@ -541,6 +541,13 @@
         connectionTab.style.right = connectionModal.classList.contains('open') ? '300px' : '20px';
     
         if (connectionModal.classList.contains('open')) {
+          const speedEl  = document.getElementById('connection-speed');
+          const statusEl = document.getElementById('connection-status');
+          speedEl.textContent  = '…';
+          statusEl.textContent = 'Test en cours…';
+          statusEl.style.color = '#555';
+          arc.setAttribute('stroke', 'red');
+          arc.setAttribute('stroke-dasharray', `0 ${arcLength}`);
           await updateConnectionSpeed();
         }
       });

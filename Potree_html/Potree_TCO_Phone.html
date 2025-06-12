@@ -319,8 +319,10 @@
 
     /* réduction uniforme uniquement pour le pop-up texte */
     .is-ios #textAnnotationPopupCustom{
-      transform: scale(.8);          /* facteur 0,8 = 80 % */
-      transform-origin: top center;  /* ancre en haut – changez si besoin */
+      position: fixed !important;
+      top : 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(.8);
     }
   </style>
 </head>

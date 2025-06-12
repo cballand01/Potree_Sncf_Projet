@@ -1526,8 +1526,14 @@
     }
     
     function hideTextAnnotationCustom() {
-        const popup = document.getElementById('textAnnotationPopupCustom');
-        popup.style.display = 'none';
+        // On arrête et on remet à zéro tous les audios d’annotation
+        document.querySelectorAll('audio[id^="audioAnnotation"]').forEach(a => {
+            a.pause();
+            a.currentTime = 0;
+        });
+  
+        // On cache la popup
+        document.getElementById('textAnnotationPopupCustom').style.display = 'none';
     }
   </script>
   

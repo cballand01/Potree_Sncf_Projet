@@ -287,8 +287,6 @@
     }
 
     /* ===== 1. POP-UPS iOS « image / vidéo / Wi-Fi » : centrés + réduits à 80 % ===== */
-    .is-ios #popupContent,          /* image            */
-    .is-ios #videoPopupContent,     /* vidéo            */
     .is-ios #wifiPopupContent {     /* popup Wi-Fi      */
       position: fixed !important;
       top : 50%;
@@ -302,12 +300,32 @@
       z-index   : 10001;
     }
     
-    /* Pour conserver le ratio des médias internes */
-    .is-ios #popupImage,
-    .is-ios #videoPopupContent video{
-      max-width : 100%;
-      max-height: 100%;
-      object-fit: contain;
+    .is-ios #popupContent{                        /* le cadre blanc     */
+      position:fixed !important;
+      top:50%; left:50%;
+      transform:translate(-50%,-50%) scale(.9);  /* même réduction 0,9 */
+      transform-origin:center;
+    
+      display:flex;                /* centre l’image dans le cadre          */
+      align-items:center;
+      justify-content:center;
+    
+      overflow:hidden;             /* cache tout débordement                */
+      z-index:10001;
+    }
+    
+    /* le conteneur autour de l’image (au cas où il existe) */
+    .is-ios #popupImageContainer{
+      max-width :100%;
+      max-height:100%;
+    }
+    
+    /* l’image elle-même : toujours contenue dans le cadre */
+    .is-ios #popupImage{
+      max-width :100%;
+      max-height:100%;
+      object-fit:contain;          /* garde le ratio, ne rogne pas          */
+      display:block;
     }
     
     /* ===== 2. POP-UP iOS « annotation texte » : même réduction, sans autres contraintes ===== */

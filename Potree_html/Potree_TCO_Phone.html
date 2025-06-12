@@ -287,27 +287,47 @@
       font-weight: 500;
     }
 
-    /* Pop-ups réduits et centrés uniquement quand .is-ios est présent */
+    //* ===== POP-UPS IMAGE et VIDÉO (#popupContent / #videoPopupContent) ===== */
     .is-ios #popupContent,
-    .is-ios #videoPopupContent,
-    .is-ios #textAnnotationPopupCustom{
+    .is-ios #videoPopupContent{
       position: fixed !important;
       top : 50%;
       left: 50%;
-      transform: translate(-50%, -50%) scale(.8);   /* facteur 0,8 */
-      transform-origin: top center;
-      max-width : 90vw;   /* largeur max 90 % de l’écran */
-      max-height: 80vh;   /* hauteur max 80 %            */
-      overflow  : auto;   /* scroll interne si ça déborde */
-      z-index   : 10001;  /* reste au-dessus du viewer    */
+    
+      /* réduction homogène (80 %) + centrage parfait */
+      transform: translate(-50%, -50%) scale(.8);
+      transform-origin: center center;
+    
+      /* bornes pour éviter tout débordement */
+      max-width : 90vw;
+      max-height: calc(var(--vh) * 80);   /* 80 % de la hauteur réelle */
+      overflow  : auto;
+      z-index   : 10001;                  /* au-dessus du viewer Potree */
     }
     
-    /* Les médias intérieurs suivent la réduction */
+    /* Ajuste l’image ou la vidéo interne pour qu’elle tienne dans le conteneur */
     .is-ios #popupImage,
     .is-ios #videoPopupContent video{
       max-width : 100%;
       max-height: 100%;
       object-fit: contain;
+    }
+    
+    /* ===== POP-UP ANNOTATION TEXTE (#textAnnotationPopupCustom) ===== */
+    /* (garde exactement le style que vous avez demandé) */
+    .is-ios #textAnnotationPopupCustom{
+      /* place la fenêtre exactement au centre de l’écran */
+      position: fixed !important;
+      top : 50%;
+      left: 50%;
+    
+      /* translation pour centrer le point d’ancrage,
+         puis mise à l’échelle globale à 80 % */
+      transform: translate(-50%, -50%) scale(.8);
+    
+      /* si vous aviez déjà un z-index, laissez-le ;
+         sinon, vous pouvez en ajouter un pour rester au-dessus du viewer */
+      z-index: 10001;
     }
   </style>
 </head>
@@ -2520,22 +2540,18 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script>
-/* — Détection iOS + calcul de 1 % de la hauteur utile — */
 (function () {
   const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-  if (!isiOS) return;                      // Android / desktop : on sort
+  if (!isiOS) return;                              // Android / desktop : on sort
 
-  /* Ajoute la classe sur <html> */
-  document.documentElement.classList.add('is-ios');
+  document.documentElement.classList.add('is-ios');  // marque la page
 
-  /* Stocke 1 % de window.innerHeight dans --vh
-     (corrige le bug des "vh" sur TOUTES les versions iOS) */
+  /* Corrige les “vh” sur toutes les versions iOS */
   function setVH() {
-    document.documentElement.style.setProperty(
-      '--vh', (window.innerHeight * 0.01) + 'px');
+    document.documentElement.style.setProperty('--vh', window.innerHeight * .01 + 'px');
   }
-  setVH();                       // au chargement
-  window.addEventListener('resize', setVH);  // rotation + barre d’adresse
+  setVH();
+  window.addEventListener('resize', setVH);          // rotation + barre d’adresse
 })();
 </script>
 

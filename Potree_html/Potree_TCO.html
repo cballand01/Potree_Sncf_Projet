@@ -2658,6 +2658,75 @@
         document.getElementById('textAnnotationPopupCustom').style.display = 'none';
     }
   </script>
+
+  <!-- Script dédié à l’ouverture de la popup Wi-Fi -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const wifiBtn   = document.getElementById('wifiButton');
+      const wifiPop   = document.getElementById('wifiPopup');
+      const closeWifi = document.getElementById('closeWifiPopup');
+      const arc       = document.getElementById('wifi-gauge-arc');
+      const speedEl   = document.getElementById('wifiSpeed');
+      const statusEl  = document.getElementById('wifiStatus');
+  
+      // Initialise le demi-cercle à 0
+      const arcLen = arc.getTotalLength();
+      arc.setAttribute('stroke-dasharray', `0 ${arcLen}`);
+  
+      // Au clic sur votre bouton Wi-Fi…
+      wifiBtn.addEventListener('click', async () => {
+        wifiPop.style.display = 'flex';
+        let mbps = 0;
+  
+        try {
+          mbps = await measureDownloadSpeed();
+        } catch (_) {}
+  
+        // Mise à jour du texte
+        speedEl.textContent = mbps.toFixed(0);
+  
+        // Remplissage de la jauge
+        const pct  = Math.min(mbps / 1000, 1);
+        const dash = pct * arcLen;
+        arc.setAttribute('stroke-dasharray', `${dash} ${arcLen}`);
+  
+        // Choix de la couleur et du statut
+        let color, status;
+        if      (mbps >= 950) color='green',      status='EXCELLENTE';
+        else if (mbps >= 500) color='limegreen',  status='TRÈS BONNE';
+        else if (mbps >= 130) color='#DAA520',    status='BONNE';
+        else if (mbps >= 25)  color='orange',     status='CORRECTE';
+        else                  color='red',        status='MAUVAISE';
+  
+        arc.setAttribute('stroke', color);
+        statusEl.textContent = status;
+        statusEl.style.color = color;
+      });
+  
+      // Ferme la popup
+      closeWifi.addEventListener('click', () => {
+        wifiPop.style.display = 'none';
+      });
+    });
+  
+    // Copié depuis votre code original
+    function measureDownloadSpeed() {
+      return new Promise((resolve, reject) => {
+        const fileUrl      = 'https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_NXS/TCO_3DModel_PRS1.nxs';
+        const downloadSize = 66.9 * 1024 * 1024;
+        const startTime    = performance.now();
+  
+        fetch(fileUrl + '?_cb=' + startTime)
+          .then(r => { if (!r.ok) throw new Error(); return r.blob(); })
+          .then(() => {
+            const duration   = (performance.now() - startTime) / 1000;
+            const bitsLoaded = downloadSize * 8;
+            resolve(bitsLoaded / duration / 1e6);
+          })
+          .catch(err => reject(err));
+      });
+    }
+  </script>
   
 </body>
 </html>

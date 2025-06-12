@@ -443,6 +443,8 @@
       <div class="gauge-label">
         <span id="connection-speed">–</span> Mbps
       </div>
+      <div id="connection-status" style="margin-top:0.5rem; font-weight:bold; font-size:0.9rem;">
+      </div>
     </div>
   </div>
 
@@ -565,29 +567,47 @@
     
       // —— Mise à jour de la jauge (0–300 Mbps) ——
       async function updateConnectionSpeed() {
-        const speedEl = document.getElementById('connection-speed');
+        const speedEl  = document.getElementById('connection-speed');
+        const statusEl = document.getElementById('connection-status');
         let speed;
-    
+      
         try {
           speed = await measureDownloadSpeed(); // en Mbps
         } catch {
           speed = 0;
         }
-    
+      
         // affichage en Mbps
         speedEl.textContent = speed.toFixed(1);
-    
+      
         // fraction de remplissage
-        const pct  = Math.min(speed / 300, 1);
-        const dash = pct * arcLength;
+        const pct     = Math.min(speed / 300, 1);
+        const dash    = pct * arcLength;
         arc.setAttribute('stroke-dasharray', `${dash} ${arcLength}`);
-    
-        // seuils de couleur
-        let color = 'red';
-        if (speed >= 130)    color = 'green';   // excellent
-        else if (speed >= 80) color = 'yellow'; // bon
-        else if (speed >= 25) color = 'orange'; // correct
+      
+        // seuils de couleur et libellé
+        let color, status;
+        if (speed >= 130) {
+          color  = 'green';
+          status = 'EXCELLENTE';
+        }
+        else if (speed >= 80) {
+          color  = 'yellow';
+          status = 'BONNE';
+        }
+        else if (speed >= 25) {
+          color  = 'orange';
+          status = 'CORRECTE';
+        }
+        else {
+          color  = 'red';
+          status = 'MAUVAISE';
+        }
         arc.setAttribute('stroke', color);
+      
+        // mise à jour du statut
+        statusEl.textContent       = status;
+        statusEl.style.color       = color;
       }
     });
   </script>

@@ -286,33 +286,28 @@
       font-weight: 500;
     }
 
-    /* Facteur d’échelle modifiable (0.8 = 80 %) */
-    .ios-potree{
-      --popup-scale: .8;
-    }
+    /* ─── Style commun iOS : réduction 0,8 + centrage ─── */
+    .is-ios #popupContent,
+    .is-ios #videoPopupContent,
+    .is-ios #textAnnotationPopupCustom{
+      position: fixed !important;
+      top : 50%;
+      left: 50%;
     
-    /* Ciblez tous vos pop-ups/fenêtres fixes */
-    .ios-potree #videoPopup,
-    .ios-potree #imagePopup,
-    .ios-potree #popup360,
-    .ios-potree #fullscreen-popup,
-    .ios-potree #rotate-warning,
-    .ios-potree #wifiPopup,
-    .ios-potree #textAnnotationPopupCustom{
-      /* Mise à l’échelle proportionnelle */
-      transform: translate(-50%, -50%) scale(var(--popup-scale));
+      /* centrage + réduction à 80 % */
+      transform: translate(-50%, -50%) scale(.8);
       transform-origin: top center;
-      /* Conserve le centrage si vous aviez déjà position:fixed + top/left 50% */
+    
+      z-index: 10001;           /* reste au-dessus du viewer Potree */
     }
     
-    /* Le contenu interne (vidéo, image) suit automatiquement l’échelle.
-       Vous pouvez affiner, par exemple :              */
-    .ios-potree #videoPopupContent video,
-    .ios-potree #popupImage{
-      max-height: 80dvh;             /* hauteur réellement visible sur iOS 15+ */
-      max-height: calc(80 * var(--vh, 1vh)); /* fallback iOS < 15 (facultatif) */
+    /* Si vous souhaitez que l’image / la vidéo garde son ratio : */
+    .is-ios #popupImage,
+    .is-ios #videoPopupContent video{
+      max-width : 100%;
+      max-height: 100%;
+      object-fit: contain;
     }
-        
   </style>
 </head>
 
@@ -2106,13 +2101,20 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script>
-/* Active la classe .ios–potree si l’on est sur Safari iOS */
 (function () {
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-  if (isIOS) document.documentElement.classList.add('ios-potree');
+  const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  if (!isiOS) return;                              // Android / desktop : on sort
+
+  document.documentElement.classList.add('is-ios');  // marque la page
+
+  /* Corrige les “vh” sur toutes les versions iOS */
+  function setVH() {
+    document.documentElement.style.setProperty('--vh', window.innerHeight * .01 + 'px');
+  }
+  setVH();
+  window.addEventListener('resize', setVH);          // rotation + barre d’adresse
 })();
 </script>
-
 
 </body>
 </html>

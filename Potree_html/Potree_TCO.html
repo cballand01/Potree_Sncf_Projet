@@ -30,52 +30,6 @@
       overflow: hidden;
       position: relative;
     }
-
-    /* —— Bouton Wi-Fi en haut-gauche —— */
-    #wifiButton {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      width: 40px;
-      height: 40px;
-      background: #4a90e2;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 2000;
-    }
-    
-    /* —— Fenêtre de connexion glissant gauche→droite —— */
-    #connection-modal {
-      position: fixed;
-      top: 20px;           /* aligné sur le haut du bouton */
-      left: -320px;        /* hors écran à gauche */
-      width: 280px;
-      background: #fff;
-      border: 1px solid #ccc;
-      padding: 1rem;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-      transition: left 0.3s ease; /* anime left au lieu de right */
-      z-index: 2000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-    #connection-modal.open {
-      left: 20px;          /* apparaît 20px du bord gauche */
-    }
-    
-    /* —— Gauge Mbps (inchangé) —— */
-    .gauge-container { position: relative; width: 240px; margin: 1rem 0 0; }
-    .gauge { width: 100%; height: auto; display: block; }
-    .gauge-label {
-      position: absolute; top: 58%; left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 1.3rem; font-weight: bold; color: #333;
-    }
   </style>
 </head>
 
@@ -131,11 +85,6 @@
       <div id="fullscreenButton" class="buttonFrame tooltip-container tooltip-right">
         <img src="/Potree_Sncf_Projet/build/potree/resources/icons/fullscreen.svg" alt="Plein écran">
         <span class="custom-tooltip">Ouvrir/fermer le plein écran</span>
-      </div>
-      <!-- Bouton Connexion wifi -->
-      <div id="wifiButton" class="buttonFrame tooltip-container tooltip-right">
-        <img src="https://storage.googleapis.com/projet-potree-sncf/Images/Logo/wifi.svg" alt="Infos connexion">
-        <span class="custom-tooltip">Infos connexion</span>
       </div>
     </div>
   </div>
@@ -412,27 +361,6 @@
   <div id="popup360" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 9999;">
     <span id="close360" style="position: absolute; top: 20px; right: 30px; font-size: 30px; color: white; cursor: pointer; z-index: 1000;">&times;</span>
     <div id="panorama" style=" width: 100vw; height: 100vh;"></div>
-  </div>
-
-  <!-- Fenêtre de mesure de la connexion -->
-  <div id="connection-modal">
-    <h3>Vérification de la connexion</h3>
-    <p>Une bonne connexion Internet est primordiale pour que les viewers fonctionnent correctement.</p>
-    <div class="gauge-container">
-      <svg class="gauge" viewBox="0 0 200 100">
-        <path d="M10,100 A90,90 0 0,1 190,100" stroke="#eee" stroke-width="20" fill="none"/>
-        <path id="gauge-arc"
-              d="M10,100 A90,90 0 0,1 190,100"
-              stroke="red" stroke-width="20" fill="none"
-              stroke-dasharray="0,565" stroke-linecap="round"/>
-        <text x="8"   y="98" font-size="10" fill="#333">0</text>
-        <text x="181" y="98" font-size="10" fill="#333">300</text>
-      </svg>
-      <div class="gauge-label">
-        <span id="connection-speed">–</span> Mbps
-      </div>
-    </div>
-    <div id="connection-status" style="margin-top:0.5rem;font-weight:bold;"></div>
   </div>
 
   <!-- Éléments audio pour les hotspots -->
@@ -2659,76 +2587,6 @@
         document.getElementById('textAnnotationPopupCustom').style.display = 'none';
     }
   </script>
-
-  <!-- Gestion de la fenetre popup des textes -->
-  <script>
-  // —— Mesure réelle du débit via un fichier NXS de 66,9 Mo —— 
-  function measureDownloadSpeed() {
-    return new Promise((resolve, reject) => {
-      const fileUrl       = 'https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_NXS/TCO_3DModel_PRS1.nxs';
-      const fileSizeBytes = 66.9 * 1024 * 1024; // 66,9 Mo en octets
-      const startTime     = Date.now();
-  
-      fetch(fileUrl + '?_cb=' + startTime)
-        .then(res => res.blob())
-        .then(() => {
-          const duration   = (Date.now() - startTime) / 1000; // secondes
-          const bitsLoaded = fileSizeBytes * 8;              // bits
-          const mbps       = bitsLoaded / duration / (1024 * 1024);
-          resolve(mbps);
-        })
-        .catch(() => reject());
-    });
-  }
-  
-  // —— Mise à jour de la jauge (0–300 Mbps) + libellé coloré —— 
-  async function updateConnectionSpeed() {
-    const speedEl  = document.getElementById('connection-speed');
-    const statusEl = document.getElementById('connection-status');
-    const arc      = document.getElementById('gauge-arc');
-    const arcLength= arc.getTotalLength();
-    let speed;
-    try {
-      speed = await measureDownloadSpeed();
-    } catch {
-      speed = 0;
-    }
-  
-    // affichage numérique
-    speedEl.textContent = speed.toFixed(1);
-  
-    // remplissage de l’arc
-    const pct  = Math.min(speed / 300, 1);
-    const dash = pct * arcLength;
-    arc.setAttribute('stroke-dasharray', `${dash} ${arcLength}`);
-  
-    // choix couleur + mot
-    let color, status;
-    if (speed >= 130)      { color = 'green';           status = 'EXCELLENTE'; }
-    else if (speed >= 80)  { color = '#cca300';         status = 'BONNE';      } // jaune plus foncé
-    else if (speed >= 25)  { color = 'orange';          status = 'CORRECTE';   }
-    else                   { color = 'red';             status = 'MAUVAISE';   }
-    arc.setAttribute('stroke', color);
-  
-    // mise à jour du statut
-    statusEl.textContent = status;
-    statusEl.style.color = color;
-  }
-  
-  // —— Toggle fenêtre depuis le bouton Wi-Fi —— 
-  const wifiButton      = document.getElementById('wifiButton');
-  const connectionModal = document.getElementById('connection-modal');
-  
-  wifiButton.addEventListener('click', async () => {
-    connectionModal.classList.toggle('open');
-    // Décale le bouton à droite de la fenêtre lorsqu’elle est ouverte
-    wifiButton.style.left = connectionModal.classList.contains('open') ? '300px' : '20px';
-    if (connectionModal.classList.contains('open')) {
-      await updateConnectionSpeed();
-    }
-  });
-  </script>
-  
   
 </body>
 </html>

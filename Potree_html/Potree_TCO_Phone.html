@@ -253,7 +253,39 @@
       touch-action: none;    /* empêche le navigateur de déclencher scroll/pinch par défaut */
       pointer-events: none;  /* bloque tous les “pointer” (touch/clic) sur le canvas lui-même */
     }
+
+    #wifiButton img {
+      width: 24px;
+      height: 24px;
+      /* ajoute ça pour rendre l’icône blanche */
+      filter: invert(1);
+    }
+    /* Conteneur de la jauge */
+    .gauge-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
     
+    /* Espace sous la SVG */
+    .gauge {
+      width: 200px;
+      height: 100px;
+    }
+    
+    /* Label du débit */
+    .gauge-label {
+      margin-top: 0.5rem;
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+    
+    /* Texte de statut (couleur, message) */
+    .gauge-status {
+      margin-top: 0.25rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
   </style>
 </head>
 
@@ -341,6 +373,19 @@
       Tournez votre appareil
     </p>
   </div>
+  </div>
+
+  <!-- Boutons de contrôle pour la caméra et les outils -->
+  <div id="buttonAndCameraContainer">
+    <div id="cameraPosition" class="tooltip-container">
+      <span class="custom-tooltip">Position de la caméra</span>
+    </div>
+    <div id="buttonsContainer">
+      <div id="wifiButton" class="buttonFrame tooltip-container tooltip-right">
+        <img src="https://storage.googleapis.com/projet-potree-sncf/Images/Logo/wifi.svg" alt="Infos connexion">
+        <span class="custom-tooltip">Infos connexion</span>
+      </div>
+    </div>
   </div>
 
   <!-- Slidebar latérale avec menu et informations -->
@@ -491,6 +536,42 @@
       <!-- FLECHES GAUCHE / DROITE POUR NAVIGATION -->
       <span id="popupLeftArrow" class="arrow popupArrow" style="left: 20px;">‹</span>
       <span id="popupRightArrow" class="arrow popupArrow" style="right: 20px;">›</span>
+    </div>
+  </div>
+
+  <!-- Popup infos connexion -->
+  <div id="wifiPopup" style="display:none;">
+    <div id="wifiPopupContent">
+      <span class="closeWifiPopup" style="cursor:pointer;font-size:24px;">×</span>
+  
+      <h3 style="margin:0 0 .5rem;text-align:center;">
+        Vérification de la connexion
+      </h3>
+      <p style="text-align:center;margin:0 0 1rem;">
+        Une bonne connexion Internet est primordiale pour que les viewers fonctionnent correctement.
+      </p>
+  
+      <!-- La jauge -->
+      <div class="gauge-container">
+        <svg class="gauge" viewBox="0 0 200 100">
+          <!-- fond gris pâle -->
+          <path d="M10,100 A90,90 0 0,1 190,100"
+                stroke="#eee" stroke-width="20" fill="none" />
+          <!-- arc dynamique -->
+          <path id="gauge-arc"
+                d="M10,100 A90,90 0 0,1 190,100"
+                stroke="red" stroke-width="20" fill="none"
+                stroke-linecap="round" stroke-dasharray="0,565" />
+          <!-- repères -->
+          <text x="8"  y="98" font-size="10" fill="#333">0</text>
+          <text x="181" y="98" font-size="10" fill="#333">999</text>
+        </svg>
+  
+        <div class="gauge-label">
+          <span id="connection-speed">–</span> Mb/s
+        </div>
+        <div id="connection-status" class="gauge-status"></div>
+      </div>
     </div>
   </div>
 
@@ -2333,6 +2414,86 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
+</script>
+
+<script>
+  /* ---------- POPUP INFOS CONNEXION ---------- */
+  (function(){
+    const wifiBtn   = document.getElementById("wifiButton");
+    const wifiPopup = document.getElementById("wifiPopup");
+    const closeWiFi = wifiPopup.querySelector(".closeWifiPopup");
+    const arc       = document.getElementById("gauge-arc");
+    const arcLen    = arc.getTotalLength();          // longueur réelle du demi-cercle
+    arc.setAttribute("stroke-dasharray", `0 ${arcLen}`);
+  
+    wifiBtn.addEventListener("click", () => {
+      wifiPopup.style.display = "flex";
+      runConnectionTest();       // lance (ou relance) la mesure à chaque ouverture
+    });
+  
+    closeWiFi.addEventListener("click", () => {
+      wifiPopup.style.display = "none";
+    });
+    wifiPopup.addEventListener("click", e => {
+      if (e.target === wifiPopup) closeWiFi.click(); // clic hors contenu = fermeture
+    });
+  
+    /* ---- logique de mesure ---- */
+  
+    async function runConnectionTest(){
+      const speedEl  = document.getElementById("connection-speed");
+      const statusEl = document.getElementById("connection-status");
+  
+      speedEl.textContent  = "…";
+      statusEl.textContent = "Test en cours…";
+      statusEl.style.color = "#555";
+      arc.setAttribute("stroke", "red");
+      arc.setAttribute("stroke-dasharray", `0 ${arcLen}`);
+  
+      let mbps = 0;
+      try{
+        mbps = await measureDownloadSpeed();     // ← ci-dessous
+      }catch(e){
+        console.warn(e);
+      }
+      speedEl.textContent = mbps.toFixed(0);
+  
+      // remplissage jauge (0-1000 Mb/s max)
+      const pct  = Math.min(mbps / 1000, 1);
+      const dash = pct * arcLen;
+      arc.setAttribute("stroke-dasharray", `${dash} ${arcLen}`);
+  
+      /* couleur + texte */
+      let color, label;
+      if (mbps >= 950){ color="green";      label="EXCELLENTE"; }
+      else if (mbps >= 500){ color="limegreen"; label="TRÈS BONNE"; }
+      else if (mbps >= 130){ color="#DAA520";   label="BONNE"; }
+      else if (mbps >= 25) { color="orange";    label="CORRECTE"; }
+      else                 { color="red";       label="MAUVAISE"; }
+  
+      arc.setAttribute("stroke", color);
+      statusEl.textContent = label;
+      statusEl.style.color = color;
+    }
+  
+    /* ---- mesure réelle (même méthode que la page d’accueil) ---- */
+    function measureDownloadSpeed(){
+      return new Promise((resolve, reject) => {
+        const fileUrl      = 'https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_NXS/TCO_3DModel_PRS1.nxs';
+        const downloadSize = 66.9 * 1024 * 1024;   // octets (≈ 66,9 Mo)
+        const t0 = performance.now();
+  
+        fetch(fileUrl + '?_cb=' + t0)
+          .then(r => { if(!r.ok) throw new Error("réseau"); return r.blob(); })
+          .then(() => {
+            const duration = (performance.now() - t0) / 1000;  // s
+            const bits     = downloadSize * 8;
+            resolve(bits / duration / 1e6);                    // Mb/s
+          })
+          .catch(reject);
+      });
+    }
+  })();
 </script>
 
 </body>

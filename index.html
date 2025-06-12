@@ -531,12 +531,11 @@
       const connectionTab   = document.getElementById('connection-tab');
       const connectionModal = document.getElementById('connection-modal');
       const arc             = document.getElementById('gauge-arc');
-    
       // récupère la longueur réelle du demi-cercle et masque tout au départ
       const arcLength = arc.getTotalLength();
       arc.setAttribute('stroke-dasharray', `0 ${arcLength}`);
     
-      // —— Slider connexion & déclenchement de la mesure ——
+      // Ouvre/ferme le modal et lance la mesure
       connectionTab.addEventListener('click', async () => {
         connectionModal.classList.toggle('open');
         connectionTab.style.right = connectionModal.classList.contains('open') ? '300px' : '20px';
@@ -546,68 +545,72 @@
         }
       });
     
-      // —— Mesure réelle du débit via image ——
+      // —— Mesure réelle du débit via téléchargement du modèle NXS ——
       function measureDownloadSpeed() {
         return new Promise((resolve, reject) => {
-          const imageAddr    = 'https://storage.googleapis.com/projet-potree-sncf/Images/Images_Illustration_Index/TCO_tableau_Complet.png';
-          const downloadSize = 1500000; // octets du fichier
-          const startTime    = Date.now();
+          const fileUrl      = 'https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_NXS/TCO_3DModel_PRS1.nxs';
+          const downloadSize = 66.9 * 1024 * 1024; // 66,9 Mo en octets
+          const startTime    = performance.now();
     
-          const img = new Image();
-          img.onload = () => {
-            const duration   = (Date.now() - startTime) / 1000;        // s
-            const bitsLoaded = downloadSize * 8;                      // bits
-            const mbps       = bitsLoaded / duration / (1024 * 1024); // Mbps
-            resolve(mbps);
-          };
-          img.onerror = () => reject(new Error('Erreur téléchargement image'));
-          img.src = imageAddr + '?_cb=' + startTime; // cache-buster
+          // On utilise fetch + blob() plutôt qu’une <img> pour un gros fichier
+          fetch(fileUrl + '?_cb=' + startTime)
+            .then(response => {
+              if (!response.ok) throw new Error('Réponse réseau incorrecte');
+              return response.blob();
+            })
+            .then(() => {
+              const duration   = (performance.now() - startTime) / 1000; // en s
+              const bitsLoaded = downloadSize * 8;                      // en bits
+              // 1 Mb = 10^6 bits
+              const mbps       = bitsLoaded / duration / 1e6;          
+              resolve(mbps);
+            })
+            .catch(err => reject(err));
         });
       }
     
-      // —— Mise à jour de la jauge (0–300 Mbps) ——
+      // —— Mise à jour de la jauge et du libellé (en dessous) ——
       async function updateConnectionSpeed() {
         const speedEl  = document.getElementById('connection-speed');
         const statusEl = document.getElementById('connection-status');
         let speed;
-      
+    
         try {
-          speed = await measureDownloadSpeed(); // en Mbps
+          speed = await measureDownloadSpeed(); // en Mb/s
         } catch {
           speed = 0;
         }
-      
-        // affichage en Mbps
-        speedEl.textContent = speed.toFixed(1);
-      
-        // fraction de remplissage
-        const pct     = Math.min(speed / 300, 1);
-        const dash    = pct * arcLength;
+    
+        // Affichage arrondi
+        speedEl.textContent = speed.toFixed(0);
+    
+        // Remplissage de la jauge (ici on considère 1 000 Mb/s max pour le scale)
+        const pct  = Math.min(speed / 1000, 1);
+        const dash = pct * arcLength;
         arc.setAttribute('stroke-dasharray', `${dash} ${arcLength}`);
-      
-        // seuils de couleur et libellé
+    
+        // Choix de la couleur et du libellé
         let color, status;
-        if (speed >= 130) {
-          color  = 'green';
-          status = 'EXCELLENTE';
+        if (speed >= 950) {
+          color  = 'green';  status = 'EXCELLENTE';
         }
-        else if (speed >= 80) {
-          color  = 'yellow';
-          status = 'BONNE';
+        else if (speed >= 500) {
+          color  = 'lime';   status = 'TRÈS BONNE';
+        }
+        else if (speed >= 130) {
+          color  = 'yellow'; status = 'BONNE';
         }
         else if (speed >= 25) {
-          color  = 'orange';
-          status = 'CORRECTE';
+          color  = 'orange'; status = 'CORRECTE';
         }
         else {
-          color  = 'red';
-          status = 'MAUVAISE';
+          color  = 'red';    status = 'MAUVAISE';
         }
+    
+        // Applique couleur & texte
         arc.setAttribute('stroke', color);
-      
-        // mise à jour du statut
-        statusEl.textContent       = status;
-        statusEl.style.color       = color;
+        statusEl.textContent = status;
+        statusEl.style.color = color;
       }
     });
   </script>

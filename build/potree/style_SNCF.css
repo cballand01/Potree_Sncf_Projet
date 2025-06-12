@@ -1129,3 +1129,59 @@ html, body {
   transform: scale(0.6) translateY(-50%);
 }
 
+/* =========================
+   POP-UP INFOS CONNEXION
+   ========================= */
+
+#wifiPopup{
+  /* même overlay que #instructionsPopup */
+  display:none;                               /* masquée par défaut – contrôlé en JS */
+  position:fixed; top:0; left:0;
+  width:100vw; height:100vh;
+  background:rgba(0,0,0,.8);                  /* voile sombre */
+  z-index:9998;                               /* juste sous les annotations (10000) */
+  justify-content:center; align-items:center; /* centrage flex */
+  padding:0;                                  /* pas de marge interne */
+  animation:fadeIn .5s ease-in-out;           /* même anim’ d’apparition */
+}
+
+#wifiPopupContent{
+  /* même « carton » que #instructionsPopupContent mais un peu plus étroit */
+  background:#fff;
+  border-radius:10px;
+  max-width:420px; width:90%;                 /* largeur raisonnable pour mobile */
+  padding:30px 25px;
+  text-align:center;
+  box-shadow:0 10px 20px rgba(0,0,0,.25);
+  position:relative;                          /* pour le bouton × absolu */
+  display:flex; flex-direction:column;        /* empile le texte + jauge */
+  align-items:center; justify-content:center;
+}
+
+#wifiPopup h3{
+  margin:0 0 .5rem; font-size:1.3rem; color:#333;
+}
+#wifiPopup p{
+  margin:0 0 1rem; font-size:.95rem; color:#555;
+}
+
+/* bouton de fermeture – même look que .closeInstructionPopup */
+.closeWifiPopup{
+  position:absolute; top:10px; right:15px;
+  width:30px; height:30px;
+  font-size:24px; font-weight:bold;
+  color:#fff; background:#000;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:background-color .2s;
+  z-index:10000;
+}
+.closeWifiPopup:hover{ background:#444; }
+
+/* jauge = déjà stylée dans ton HTML, 
+   on centre simplement l’ensemble si nécessaire */
+#wifiPopup .gauge-container{ width:100%; }
+
+/* mini-rappel de l’animation utilisée plus haut */
+@keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+

@@ -592,25 +592,28 @@
         // Choix de la couleur et du libellé
         let color, status;
         if (speed >= 950) {
-          color  = 'green';  status = 'EXCELLENTE';
+          color  = 'green';
+          status = 'EXCELLENTE';
         }
         else if (speed >= 500) {
-          color  = 'lime';   status = 'TRÈS BONNE';
+          color  = 'limegreen';
+          status = 'TRÈS BONNE';
         }
         else if (speed >= 130) {
-          color  = '#DAA520';
+          color  = '#DAA520';  // jaune foncé
           status = 'BONNE';
+        }
         else if (speed >= 25) {
-          color  = 'orange'; status = 'CORRECTE';
+          color  = 'orange';
+          status = 'CORRECTE';
         }
         else {
-          color  = 'red';    status = 'MAUVAISE';
+          color  = 'red';
+          status = 'MAUVAISE';
         }
-    
-        // Applique couleur & texte
         arc.setAttribute('stroke', color);
         statusEl.textContent = status;
-        statusEl.style.color = color;
+        statusEl.style.color   = color;
       }
     });
   </script>

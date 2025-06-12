@@ -302,7 +302,6 @@
     .is-ios #videoPopupContent,
     .is-ios #popupContent,
     .is-ios #wifiPopupContent,
-    .is-ios #textAnnotationPopupCustom {
       max-width : var(--popup-max-w);
       max-height: var(--popup-max-h);
       overflow  : auto;              /* scroll interne si nécessaire          */
@@ -316,6 +315,12 @@
       height    : auto;
       width     : auto;
       object-fit: contain;
+    }
+
+    /* réduction uniforme uniquement pour le pop-up texte */
+    .is-ios #textAnnotationPopupCustom{
+      transform: scale(.8);          /* facteur 0,8 = 80 % */
+      transform-origin: top center;  /* ancre en haut – changez si besoin */
     }
   </style>
 </head>

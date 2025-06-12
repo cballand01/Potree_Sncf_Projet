@@ -400,33 +400,6 @@
     <div id="panorama" style=" width: 100vw; height: 100vh;"></div>
   </div>
 
-  <!-- Fenêtre “Wi-Fi” -->
-  <div id="wifiPopup" class="instructionPopup" style="display:none; align-items:center; justify-content:center;">
-    <div class="instructionPopupContent">
-      <span class="closeWifiPopup">&times;</span>
-      <!-- Contenu Wi-Fi -->
-      <h3>Infos connexion</h3>
-      <p>Une bonne connexion Internet est primordiale pour que le viewer fonctionne correctement.</p>
-  
-      <div class="gauge-container">
-        <svg class="gauge" viewBox="0 0 200 100">
-          <path d="M10,100 A90,90 0 0,1 190,100"
-                stroke="#eee" stroke-width="20" fill="none"/>
-          <path id="wifi-gauge-arc"
-                d="M10,100 A90,90 0 0,1 190,100"
-                stroke="red" stroke-width="20" fill="none"
-                stroke-dasharray="0,565" stroke-linecap="round"/>
-          <text x="8"  y="98" font-size="10" fill="#333">0</text>
-          <text x="181" y="98" font-size="10" fill="#333">999</text>
-        </svg>
-        <div class="gauge-label">
-          <span id="wifiSpeed">–</span> Mb/s
-        </div>
-        <div id="wifiStatus" class="gauge-status"></div>
-      </div>
-    </div>
-  </div>
-
   <!-- Éléments audio pour les hotspots -->
   <audio id="audioHotspot0" src="https://storage.googleapis.com/projet-potree-sncf/Audios/Visite1.mp3" preload="auto"></audio>
   <audio id="audioHotspot1" src="https://storage.googleapis.com/projet-potree-sncf/Audios/02.mp3" preload="auto"></audio>
@@ -2649,75 +2622,6 @@
   
         // On cache la popup
         document.getElementById('textAnnotationPopupCustom').style.display = 'none';
-    }
-  </script>
-
-  <!-- Script dédié à l’ouverture de la popup Wi-Fi -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const wifiBtn   = document.getElementById('wifiButton');
-      const wifiPop   = document.getElementById('wifiPopup');
-      const closeWifi = document.getElementById('closeWifiPopup');
-      const arc       = document.getElementById('wifi-gauge-arc');
-      const speedEl   = document.getElementById('wifiSpeed');
-      const statusEl  = document.getElementById('wifiStatus');
-  
-      // Initialise le demi-cercle à 0
-      const arcLen = arc.getTotalLength();
-      arc.setAttribute('stroke-dasharray', `0 ${arcLen}`);
-  
-      // Au clic sur votre bouton Wi-Fi…
-      wifiBtn.addEventListener('click', async () => {
-        wifiPop.style.display = 'flex';
-        let mbps = 0;
-  
-        try {
-          mbps = await measureDownloadSpeed();
-        } catch (_) {}
-  
-        // Mise à jour du texte
-        speedEl.textContent = mbps.toFixed(0);
-  
-        // Remplissage de la jauge
-        const pct  = Math.min(mbps / 1000, 1);
-        const dash = pct * arcLen;
-        arc.setAttribute('stroke-dasharray', `${dash} ${arcLen}`);
-  
-        // Choix de la couleur et du statut
-        let color, status;
-        if      (mbps >= 950) color='green',      status='EXCELLENTE';
-        else if (mbps >= 500) color='limegreen',  status='TRÈS BONNE';
-        else if (mbps >= 130) color='#DAA520',    status='BONNE';
-        else if (mbps >= 25)  color='orange',     status='CORRECTE';
-        else                  color='red',        status='MAUVAISE';
-  
-        arc.setAttribute('stroke', color);
-        statusEl.textContent = status;
-        statusEl.style.color = color;
-      });
-  
-      // Ferme la popup
-      closeWifi.addEventListener('click', () => {
-        wifiPop.style.display = 'none';
-      });
-    });
-  
-    // Copié depuis votre code original
-    function measureDownloadSpeed() {
-      return new Promise((resolve, reject) => {
-        const fileUrl      = 'https://storage.googleapis.com/projet-potree-sncf/3DModel/3DModel_NXS/TCO_3DModel_PRS1.nxs';
-        const downloadSize = 66.9 * 1024 * 1024;
-        const startTime    = performance.now();
-  
-        fetch(fileUrl + '?_cb=' + startTime)
-          .then(r => { if (!r.ok) throw new Error(); return r.blob(); })
-          .then(() => {
-            const duration   = (performance.now() - startTime) / 1000;
-            const bitsLoaded = downloadSize * 8;
-            resolve(bitsLoaded / duration / 1e6);
-          })
-          .catch(err => reject(err));
-      });
     }
   </script>
   

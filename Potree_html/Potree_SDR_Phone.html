@@ -286,29 +286,39 @@
       font-weight: 500;
     }
 
-    /* ===== POP-UPS iOS : centrés + réduits à 80 % ===== */
-      .is-ios #popupContent,           /* image */
-      .is-ios #videoPopupContent,      /* vidéo */
-      .is-ios #textAnnotationPopupCustom,  /* annotation texte */
-      .is-ios #wifiPopupContent {          /* popup Wi-Fi */
-        position: fixed !important;
-        top : 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(.8);   /* facteur 0,8 */
-        transform-origin: top center;
-        max-width : 90vw;
-        max-height: calc(var(--vh) * 80);   /* 80 % de la hauteur réelle */
-        overflow  : auto;
-        z-index: 10001;                     /* reste au-dessus du viewer */
-      }
-      
-      /* Si vous souhaitez que l’image / la vidéo garde son ratio : */
-      .is-ios #popupImage,
-      .is-ios #videoPopupContent video{
-        max-width : 100%;
-        max-height: 100%;
-        object-fit: contain;
-      }
+    /* ===== 1. POP-UPS iOS « image / vidéo / Wi-Fi » : centrés + réduits à 80 % ===== */
+    .is-ios #popupContent,          /* image            */
+    .is-ios #videoPopupContent,     /* vidéo            */
+    .is-ios #wifiPopupContent {     /* popup Wi-Fi      */
+      position: fixed !important;
+      top : 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(.8);   /* facteur 0,8 */
+      transform-origin: top center;
+    
+      max-width : 90vw;
+      max-height: calc(var(--vh) * 80);             /* 80 % de la hauteur réelle */
+      overflow  : auto;
+      z-index   : 10001;
+    }
+    
+    /* Pour conserver le ratio des médias internes */
+    .is-ios #popupImage,
+    .is-ios #videoPopupContent video{
+      max-width : 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    
+    /* ===== 2. POP-UP iOS « annotation texte » : même réduction, sans autres contraintes ===== */
+    .is-ios #textAnnotationPopupCustom{
+      position: fixed !important;
+      top : 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(.8);   /* facteur 0,8 */
+      transform-origin: top center;
+      z-index: 10001;
+    }
   </style>
 </head>
 

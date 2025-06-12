@@ -338,6 +338,11 @@
       transform-origin: top center;
       z-index: 10001;
     }
+
+    /* Masquer le pop-up plein écran uniquement sur iOS */
+    .is-ios #fullscreen-popup{
+      display:none !important;
+    }
   </style>
 </head>
 

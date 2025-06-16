@@ -65,6 +65,20 @@
     }
 
     /* === Styles pour la popup performance === */
+    .custom-popup {
+      position: fixed;
+      top:    0;
+      left:   0;
+      width:  100vw;
+      height: 100vh;
+      display: none;                       /* caché par défaut */
+      align-items: center;                 /* centrer verticalement */
+      justify-content: center;             /* centrer horizontalement */
+      background: rgba(0, 0, 0, 0.5);      /* voile sombre */
+      z-index: 10001;                      /* au-dessus de tout le reste */
+      padding: 20px;                       /* un peu d’air autour */
+      box-sizing: border-box;
+    }
     .custom-popup-content h3 {
       font-size: 1.4rem;
       color: #333;

@@ -2579,6 +2579,21 @@
         // Masquer la barre de visite guidée et la barre audio
         document.querySelector('.hotspot-controls-bar').style.display = 'none';
         document.getElementById('audioBar').style.display = 'none';
+
+        // === afficher le conseil performance ===
+        const perfPopup  = document.getElementById('performancePopup');
+        const perfClose  = perfPopup.querySelector('.custom-popup-close');
+        const perfOk     = document.getElementById('performanceOkBtn');
+      
+        // on ouvre la popup
+        perfPopup.style.display = 'flex';
+      
+        // on ferme la popup au clic sur la croix ou le bouton “J’ai compris”
+        [perfClose, perfOk].forEach(el =>
+          el.addEventListener('click', () => {
+            perfPopup.style.display = 'none';
+          })
+        );
     });
     
     document.getElementById('btnSimplified').addEventListener('click', function() {

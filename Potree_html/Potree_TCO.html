@@ -460,8 +460,8 @@
 
   <!-- Éléments audio pour les hotspots -->
   <audio id="audioHotspot0" src="https://storage.googleapis.com/projet-potree-sncf/Audios/Visite1.mp3" preload="auto"></audio>
-  <audio id="audioHotspot1" src="https://storage.googleapis.com/projet-potree-sncf/Audios/02.mp3" preload="auto"></audio>
-  <audio id="audioHotspot2" src="https://storage.googleapis.com/projet-potree-sncf/Audios/02.mp3" preload="auto"></audio>
+  <audio id="audioHotspot1" src="https://storage.googleapis.com/projet-potree-sncf/Audios/Gestion_ensemble.mp3" preload="auto"></audio>
+  <audio id="audioHotspot2" src="https://storage.googleapis.com/projet-potree-sncf/Audios/PRS.mp3" preload="auto"></audio>
 
   <!-- Éléments audio pour les annotations -->
   <audio id="audioAnnotation1" src="https://storage.googleapis.com/projet-potree-sncf/Audios/Extrait2.mp3" preload="auto"></audio>
@@ -1812,8 +1812,8 @@
     // Définition des hotspots pour la visite guidée
     const hotspots = [
       { name: "DÉBUT DE LA VISITE", position: new THREE.Vector3(8.34, 8.15, 4.92), target: new THREE.Vector3(3.31, 10.11, 1.31), audioId: "audioHotspot0" },
-      { name: "POSTES DE RELAIS À TRANSIT SOUPLE", position: new THREE.Vector3(8.19, 7.88, 2.12), target: new THREE.Vector3(1.14, 11.41, 1.73), audioId: null },
-      { name: "POSTES DE RELAIS À TRANSIT SOUPLE", position: new THREE.Vector3(6.83, 9.69, 1.88), target: new THREE.Vector3(6.55, 10.94, 1.41), audioId: null },
+      { name: "POSTES DE RELAIS À TRANSIT SOUPLE", position: new THREE.Vector3(8.19, 7.88, 2.12), target: new THREE.Vector3(1.14, 11.41, 1.73), audioId: "audioHotspot1" },
+      { name: "POSTES DE RELAIS À TRANSIT SOUPLE", position: new THREE.Vector3(6.83, 9.69, 1.88), target: new THREE.Vector3(6.55, 10.94, 1.41), audioId: "audioHotspot2" },
       { name: "POSTE ÎLE-DE-FRANCE", position: new THREE.Vector3(7.3, 4, 2.2), target: new THREE.Vector3(6.5, 2, 1.5), audioId: null },
       { name: "BUREAUX", position: new THREE.Vector3(7.88, 9.20, 2.17), target: new THREE.Vector3(10.64, 5.86, 1.54), audioId: null },
       { name: "TABLEAU", position: new THREE.Vector3(8.31, 11.09, 2.18), target: new THREE.Vector3(9.24, 11.47, 1.90), audioId: null },
